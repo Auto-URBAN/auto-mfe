@@ -12,7 +12,7 @@ const props = defineProps<{
 
 const classes = computed(() => {
     return [    
-        `col-span-${props.mobile ? props.mobile : 'auto'} lg:col-span-${props.desktop ? props.desktop : 'auto'}`
+        `col-span${props.desktop ? `-${props.desktop}` : ''}`
     ]
 })
 

@@ -19,14 +19,16 @@
                 </div>
             </div>
         </Row>
-        <Row type="grid" class="grid-cols-12">
-            <Col :desktop="8">
-                <VChart :option="option" />
-                Apiurl: {{ apiUrl }} {{ env }}
-            </Col>
-            <Col :desktop="4">
+        <Row type="grid" class="grid-cols-4 gap-4">
+            <div>
+                <!-- <VChart :option="option" /> -->
+                <hr>
+                <Typo as="h2">Ficha Técnica</Typo>
+                <Typo as="h2">Informações Urban</Typo>
+            </div>
+            <div>
                 sidebar
-            </Col>
+            </div>
         </Row>
     </Container>
 </template>
