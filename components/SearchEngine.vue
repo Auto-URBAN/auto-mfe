@@ -5,11 +5,11 @@
             <input type="text" placeholder="Digite o veículo que você esta procurando..." class="w-full p-1 outline-none" v-model="search" />
         </div>
         <div class="bg-white rounded-xl shadow-md absolute top-[30px] w-full pt-12" v-if="searchListCars.length">
-            <a :href="car.link" class="flex items-center p-6 hover:bg-black/10" v-for="(car, idx) in searchListCars" :key="car.name">
+            <router-link :to="`/valor-do-carro/${car.slug}`" class="flex items-center p-6 hover:bg-black/10" v-for="(car, idx) in searchListCars" :key="car.name">
                 <img :src="car.image" alt="Search Example" class="flex-none">
                 <Typo as="h5" class="grow px-4">{{car.name}}</Typo>
                 <Icon name="uil:external-link-alt" size="24px" class="flex-none" />
-            </a>
+            </router-link>
         </div>
     </div>
 </template>
@@ -18,24 +18,24 @@ const listMock = [
     {
         name: 'Honda Civic 2017/2018 - 1.5 16V TURBO GASOLINA TOURING 4P CVT',
         image: '/imgs/search-example.jpg',
-        link: 'https://www.google.com'
+        slug: 'honda-civic-2017-2018-1-5-16v-turbo-gasolina-touring-4p-cvt'
     },
     {
         name: 'Honda Civic 2017/2018 - 1.5 16V TURBO GASOLINA TOURING 4P CVT',
         image: '/imgs/search-example.jpg',
-        link: 'https://www.google.com'
+        slug: 'honda-civic-2017-2018-1-5-16v-turbo-gasolina-touring-4p-cvt'
     },
     {
         name: 'Honda Civic 2017/2018 - 1.5 16V TURBO GASOLINA TOURING 4P CVT',
         image: '/imgs/search-example.jpg',
-        link: 'https://www.google.com'
+        slug: 'honda-civic-2017-2018-1-5-16v-turbo-gasolina-touring-4p-cvt'
     }
 ]
 const search = ref('')
 const searchListCars = ref<{
     name: string,
     image: string,
-    link: string
+    slug: string
 }[]>([])
 
 watch(search, (value) => {
