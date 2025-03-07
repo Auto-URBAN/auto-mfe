@@ -22,7 +22,7 @@
         <Row type="grid" class="grid-cols-12">
             <Col :desktop="8">
                 <VChart :option="option" />
-                Apiurl: {{ apiUrl }}
+                Apiurl: {{ apiUrl }} {{ env }}
             </Col>
             <Col :desktop="4">
                 sidebar
@@ -34,6 +34,8 @@
 <script setup lang="ts">
 
 const {apiUrl} = useRuntimeConfig()
+
+const env = process.env
 
 const option = ref<any>({
   dataset: {
