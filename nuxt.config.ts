@@ -7,6 +7,6 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxtjs/tailwindcss', '@nuxt/icon', 'nuxt-echarts'],
   runtimeConfig: {
-    apiUrl: process.env.API_URL,
+    apiUrl: process.env.NUXT_API_URL,
   },
 })
