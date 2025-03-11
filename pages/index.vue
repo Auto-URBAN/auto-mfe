@@ -2,7 +2,7 @@
     <div class="bg-black h-screen bg-[url(/imgs/background.jpg)] bg-no-repeat">
         <Header variant="dark" />
         <Container>
-            <Row class="flex flex-col justify-center items-center min-h-[300px] px-6 text-center">
+            <Row class="flex-col justify-center items-center min-h-[300px] px-6 text-center">
                 <Typo as="h1" class="mb-8 lg:mb-4 text-white">Encontre o valor real do seu veículo!</Typo>
                 <SearchEngine />
             </Row>
