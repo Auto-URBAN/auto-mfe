@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Container>
+        <Container class="px-6 lg:px-0">
             <Row class="grid grid-cols-12 py-4">
                 <div class="col-span-3">
                     <img src="/imgs/Logo.svg" alt="Logo" v-if="variant === 'dark'" />
