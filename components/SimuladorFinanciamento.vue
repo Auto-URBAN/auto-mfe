@@ -72,6 +72,12 @@ const banks = computed(() => {
   })
 })
 
+watchEffect(() => {
+  if (bank.value) {
+    calculate()
+  }
+})
+
 const calculate = () => {
   const selectedBank = banksList.value?.[bank.value] as BankWithTax | undefined;
   console.log('input', {
