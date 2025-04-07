@@ -1,12 +1,7 @@
 <template>
     <Container class="px-6 lg:p-0">
-        <Row class="flex justify-center mb-6">
-            <div>
-                <SearchEngine />
-            </div>
-        </Row>
         <Row class="flex-col mb-8">
-            <Typo as="h1" class="mb-4">Audi RS3 2018/2018 - 2.5 TFSI GASOLINA SPORTBACK QUATTRO S-TRONIC</Typo>
+            <Typo as="h1" class="mb-4">{{carData?.name}}</Typo>
             <div class="flex flex-wrap justify-between">
                 <div class="flex flex-row gap-4">
                     <span class="flex items-center gap-2"><Icon name="uil:external-link-alt" size="16px" /><Typo>5.0</Typo></span>
@@ -21,88 +16,89 @@
         </Row>
         <Row type="grid" class="grid-cols-12 gap-4">
             <div class="col-span-12 lg:col-span-9">
-                <div class="h-[300px]">
+                <div class="h-[540px]">
                     <Chart type="line" 
-                    :data="{
-                    labels: ['2019', '2020', '2021', '2022', '2023', '2024', '2025'],
-                    datasets: [{
-                        data: [125.000, 130.000, 135.000, 145.000, 137.000, 140.000, 130.000, 125.000],
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1,
-                        fill: true
-                    }]
-                }" 
-                :options="{
-                    responsive: true,
-                    elements: {
-                        line:{
-                            tension: 0.4
-                        }
-                    },
-                    scales: {
-                        y: {
-                            display: true,
-                            suggestedMin: 120.000,
-                            suggestedMax: 160.000
-                        }
-                    }            
-                }" 
-                />
+                        :data="{
+                            labels: labels,
+                            datasets: datasets
+                        }" 
+                        :legend="true"
+                        :options="{
+                            responsive: true,
+                            elements: {
+                                line:{
+                                    tension: 0.3
+                                }
+                            }
+                        }" 
+                    />
                 </div>
-                <hr class="my-4">
-                <Typo as="h2" class="mb-4">Ficha Técnica</Typo>
-                <Row type="grid" class="grid-cols-4 gap-4 mb-4">
-                    <div class="flex flex-row gap-4" v-for="spec in data.specsList">
-                        <Icon :name="spec.icon" size="24px" />
-                        <Typo as="p">{{spec.type}}: <b>{{spec.value}}</b></Typo>
-                    </div>
-                </Row>
-                <hr class="my-4">
-                <Typo as="h2" class="mb-4">Informações Urban</Typo>
-                <Row class="flex-col gap-4 mb-4">
-                    <div class="flex flex-row gap-4" v-for="spec in data.specsList">
-                        <div>
+                <div v-if="false">
+                    <hr class="my-4">
+                    <Typo as="h2" class="mb-4">Ficha Técnica</Typo>
+                    <Row type="grid" class="grid-cols-4 gap-4 mb-4">
+                        <div class="flex flex-row gap-4" v-for="spec in data.specsList">
                             <Icon :name="spec.icon" size="24px" />
+                            <Typo as="p">{{spec.type}}: <b>{{spec.value}}</b></Typo>
                         </div>
-                        <div>
-                            <Typo as="h6"><b>{{spec.type}}</b></Typo>
-                            <Typo as="p">{{spec.value}}</Typo>
+                    </Row>
+                </div>
+                <div v-if="false">
+                    <hr class="my-4">
+                    <Typo as="h2" class="mb-4">Informações Urban</Typo>
+                    <Row class="flex-col gap-4 mb-4">
+                        <div class="flex flex-row gap-4" v-for="spec in data.specsList">
+                            <div>
+                                <Icon :name="spec.icon" size="24px" />
+                            </div>
+                            <div>
+                                <Typo as="h6"><b>{{spec.type}}</b></Typo>
+                                <Typo as="p">{{spec.value}}</Typo>
+                            </div>
                         </div>
-                    </div>
-                </Row>
-                <hr class="my-4">
-                <Typo as="h2" class="mb-4">Equipamentos</Typo>
-                <Row type="grid" class="grid-cols-4 gap-4 mb-4">
-                    <div class="flex flex-row gap-4" v-for="spec in data.specsList">
-                        <Icon :name="spec.icon" size="24px" />
-                        <Typo as="p">{{spec.type}}: <b>{{spec.value}}</b></Typo>
-                    </div>
-                </Row>
-                <hr class="my-4">
-                <Typo as="h2" class="mb-4">Valor médio de Manutenção</Typo>
-                <Row class="flex-col gap-4 mb-4">
-                    <div class="flex flex-row gap-4" v-for="spec in data.specsList">
-                        <Icon :name="spec.icon" size="24px" />
-                        <Typo as="p">{{spec.type}}: <b>{{spec.value}}</b></Typo>
-                    </div>
-                </Row>
-                <hr class="my-4">
+                    </Row>
+                </div>
+                <div v-if="false">
+                    <hr class="my-4">
+                    <Typo as="h2" class="mb-4">Equipamentos</Typo>
+                    <Row type="grid" class="grid-cols-4 gap-4 mb-4">
+                        <div class="flex flex-row gap-4" v-for="spec in data.specsList">
+                            <Icon :name="spec.icon" size="24px" />
+                            <Typo as="p">{{spec.type}}: <b>{{spec.value}}</b></Typo>
+                        </div>
+                    </Row>
+                </div>
+                <div v-if="false">
+                    <hr class="my-4">
+                    <Typo as="h2" class="mb-4">Valor médio de Manutenção</Typo>
+                    <Row class="flex-col gap-4 mb-4">
+                        <div class="flex flex-row gap-4" v-for="spec in data.specsList">
+                            <Icon :name="spec.icon" size="24px" />
+                            <Typo as="p">{{spec.type}}: <b>{{spec.value}}</b></Typo>
+                        </div>
+                    </Row>
+                </div>
             </div>
             <div class="col-span-12 lg:col-span-3">
+                <img :src="carData?.thumb" alt="" class="mb-4">
                 <div class="sidebar flex flex-col justify-center items-center shadow-lg rounded-lg p-4 mb-6">
                     <Typo as="h4" class="mb-4">Média de preços atual</Typo>
-                    <div v-for="price in data.pricing" class="flex flex-row justify-between w-full">
-                        <Typo as="p">{{price.name}}</Typo>
-                        <Typo as="p">{{price.value}}</Typo>
+                    <div class="flex flex-row justify-between w-full" v-for="item in carData?.partners">
+                        <Typo as="p">{{item.name}}</Typo>
+                        <Typo as="p">{{ new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item?.value || 0) }}</Typo>
                     </div>
                     <hr class="my-4">
                     <Typo as="p" class="mb-4">
                         Gostaria de simular um financiamento?
                     </Typo>
-                    <Button type="button" class="w-full" variant="primary">
-                        Simular
+                    <Button type="button" class="w-full" variant="primary" @click="showFinancial = !showFinancial" v-if="!showFinancial">
+                        Quero simular
                     </Button>
+                    <SimuladorFinanciamento 
+                        v-if="showFinancial"
+                        class="w-full mt-4" 
+                        :price="carData?.averageValue || 0"
+                     />
                 </div>
             </div>
         </Row>
@@ -110,17 +106,33 @@
 </template>
 
 <script setup lang="ts">
-const data = ref<{
-    specsList: {
-        type: string
-        value: string
-        icon: string
-    }[],
-    pricing: {
-        name: string
-        value: string
-    }[]
-}>({
+const showFinancial = ref(false)
+
+const { params } = useRoute()
+const { slug } = params
+const { data: carData } = useAsyncData('car-data', async () => await $fetch('/api/cars', {
+    query: {
+        slug: slug
+    }
+}))
+
+const labels = computed(() => carData?.value?.prices.map((item: any) => {
+    const date = new Date(item.referenceDate + 'T03:00:00')
+    return `${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`
+}).reverse() || [])
+
+const datasets = computed(() => ([{
+    label: 'R$',
+    data: (carData?.value?.prices || []).map((item: any) => item.value),
+    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+    borderColor: 'rgba(255, 99, 132, 1)',
+    pointStyle: 'circle',
+    pointRadius: 10,
+    pointHoverRadius: 15,
+}]))
+
+
+const data = computed(() => ({
     specsList: [
         {
             type: 'Potência',
@@ -152,20 +164,6 @@ const data = ref<{
             value: '8.0km/l',
             icon: 'uil:search'
         }
-    ],
-    pricing: [
-        {
-            name: 'Tabela fipe',
-            value: 'R$ 250.000,00'
-        },
-        {
-            name: 'Webmotors',
-            value: 'R$ 250.000,00'
-        },
-        {
-            name: 'Média de preços atual',
-            value: 'R$ 250.000,00'
-        }
     ]
-})
+}))
 </script>

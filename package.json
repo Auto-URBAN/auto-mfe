@@ -8,19 +8,23 @@
     "start": "node .output/server/index.mjs",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "prepare": "nuxt prepare"
   },
   "dependencies": {
+    "@nuxt/eslint": "^0.5.7",
     "@nuxt/icon": "1.10.3",
-    "@nuxtjs/tailwindcss": "^6.13.2",
+    "@nuxt/ui": "^2.21.0",
     "chart.js": "^4.4.8",
-    "nuxt": "^3.16.0",
-    "vue": "^3.5.13",
+    "maska": "^3.1.1",
+    "vue": "latest",
     "vue-chartjs": "^5.3.2",
-    "vue-router": "^4.5.0"
+    "zod": "^3.24.2"
   },
   "packageManager": "pnpm@9.10.0+sha512.73a29afa36a0d092ece5271de5177ecbf8318d454ecd701343131b8ebc0c1a91c487da46ab77c8e596d6acf1461e3594ced4becedf8921b074fbd8653ed7051c",
   "devDependencies": {
+    "@iconify-json/heroicons": "^1.2.2",
+    "@iconify-json/uil": "^1.2.3",
+    "nuxt": "^3.16.0",
     "typescript": "^5.8.2",
     "vue-tsc": "^2.2.8"
   }
