@@ -1,51 +1,23 @@
-# 🚗 Auto URBAN - Contexto de Desenvolvimento
+# Auto URBAN - Contexto de Desenvolvimento
 
-## 📋 Regras de Arquitetura e Desenvolvimento
+## Regras de Arquitetura
 
-### 🏗️ **Estrutura de Código**
+- **TypeScript obrigatório** em todo código
+- **Zod obrigatório** para schemas e validação
+- **Tailwind CSS** para estilização (sem CSS customizado)
+- **Mobile-first** design responsivo
+- **Componentes Vue** com responsabilidade única
+- **Sem arquivos .js** (apenas .ts e .vue)
 
-- **Funções sempre separadas**: Cada função deve ter responsabilidade única e ser bem isolada
-- **Componentes Vue (.vue)**: Evitar uso excessivo de composables internas
-- **Composables externas**: Usar apenas quando necessário para compartilhar contexto entre componentes
-- **Sem arquivos .js**: Todo código JavaScript deve estar em .ts ou dentro de componentes .vue
-- **Sem arquivos .css**: Todo estilo deve usar Tailwind CSS v4
-- **TypeScript obrigatório**: Tipagem forte em todo o código
-- **Zod obrigatório**: Todos os tipos TypeScript devem ser convertidos para schemas Zod para validação futura
-
-### 🎨 **Estilização**
-
-- **Tailwind v4**: Usar apenas Tailwind para estilização
-- **Classes utilitárias**: Preferir classes Tailwind a CSS customizado
-- **Mobile-first**: Design responsivo começando pelo mobile
-- **Touch targets**: Mínimo 44px para elementos tocáveis
-- **Consistência visual**: Seguir design system baseado no Nuxt UI
-
-### 🧩 **Estrutura de Componentes**
+## Estrutura do Projeto
 
 ```
-components/
-├── ui/              # Componentes base reutilizáveis
-├── forms/           # Formulários específicos
-├── layout/          # Componentes de layout (Header, Footer)
-└── features/        # Componentes específicos por feature
-```
-
-### 📁 **Estrutura de Pastas**
-
-```
-/
-├── assets/          # Assets estáticos
-├── components/      # Componentes Vue
-├── composables/     # Lógica compartilhada
-├── layouts/         # Layouts do Nuxt
-├── lib/            # Utilitários e helpers
-├── pages/          # Páginas/rotas
-├── plugins/        # Plugins do Nuxt
-├── public/         # Arquivos públicos
-├── schemas/        # Schemas Zod para validação
-├── server/         # API Nitro
-├── stores/         # Pinia stores
-└── utils/          # Funções utilitárias
+/components/     # Componentes Vue reutilizáveis
+/pages/         # Páginas/rotas do Nuxt
+/schemas/       # Schemas Zod para validação
+/stores/        # Pinia stores para estado
+/server/api/    # Endpoints Nitro
+/utils/         # Funções utilitárias
 ```
 
 ## 🎯 MVP - Plataforma de Carros Exclusivos
