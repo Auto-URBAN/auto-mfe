@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen container mx-auto">
+  <div class="min-h-screen bg-gray-50">
     <!-- Search Hero Section -->
-    <div class="bg-white shadow-sm ">
-      <div class="">
+    <div class="bg-white shadow-sm border-b border-gray-200">
+      <div class="container mx-auto px-4 py-8">
         <div class="max-w-2xl mx-auto text-center mb-6">
           <h1 class="text-3xl font-bold text-gray-900 mb-2">
             Encontre o seu carro ideal
@@ -24,17 +24,19 @@
     </div>
     
     <!-- Filter Bar -->
-    <FilterBar @filter-change="handleFilterChange" />
+    <div class="bg-white border-b border-gray-200">
+      <FilterBar @filter-change="handleFilterChange" />
+    </div>
     
     <!-- Results Section -->
-    <div class="mx-auto px-4 py-6">
+    <div class="container mx-auto px-4 py-6">
       <!-- Results header -->
       <div v-if="!vehiclesStore.loading.search" class="flex justify-between items-center mb-6">
         <div>
           <h2 class="text-xl font-semibold text-gray-900">
             {{ searchResultsTitle }}
           </h2>
-          <p class="text-sm text-gray-500">
+          <p class="text-sm text-gray-600">
             {{ vehiclesStore.vehicles.length }} de {{ vehiclesStore.pagination.total }} resultados
           </p>
         </div>
@@ -46,6 +48,7 @@
             :options="sortOptions"
             @change="handleSortChange"
             size="sm"
+            class="min-w-[140px]"
           />
         </div>
       </div>
@@ -61,7 +64,6 @@
         @clear-filters="handleClearFilters"
       />
     </div>
-    
   </div>
 </template>
 

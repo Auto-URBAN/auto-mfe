@@ -21,7 +21,18 @@ export const useAuthStore = defineStore('auth', {
 
   getters: {
     isAdmin: (state) => state.user?.role === 'ADMIN',
-    currentUser: (state) => state.user
+    currentUser: (state) => state.user,
+    userName: (state): string => {
+      if (state.user?.phone) return state.user.phone
+      return 'Usuário'
+    },
+    userInitials: (state): string => {
+      if (state.user?.phone) {
+        const phoneDigits = state.user.phone.replace(/\D/g, '')
+        return phoneDigits.slice(-2).toUpperCase()
+      }
+      return 'U'
+    }
   },
 
   actions: {

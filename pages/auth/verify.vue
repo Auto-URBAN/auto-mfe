@@ -40,7 +40,7 @@
             size="lg"
             block
             :loading="loading"
-            :disabled="code.length !== 6"
+            :disabled="code?.length !== 6"
           >
             {{ loading ? 'Verificando...' : 'Verificar código' }}
           </UButton>
@@ -124,14 +124,14 @@ const startResendCountdown = () => {
 
 // Methods
 const formatPhone = (phoneNumber: string) => {
-  if (phoneNumber.length === 11) {
+  if (phoneNumber?.length === 11) {
     return phoneNumber.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
   }
   return phoneNumber
 }
 
 const handleVerification = async () => {
-  if (code.value.length !== 6) return
+  if (code.value?.length !== 6) return
 
   loading.value = true
 
