@@ -1,5 +1,6 @@
 <template>
-  <UiFlex
+  <div
+    class="flex"
     v-if="type === 'flex'"
     :direction="flexDirection"
     :justify="flexJustify"
@@ -8,14 +9,15 @@
     v-bind="$attrs"
   >
     <slot />
-  </UiFlex>
+  </div>
   
-  <UiGrid
+  <div
+    class="grid"
     v-else
     v-bind="$attrs"
   >
     <slot />
-  </UiGrid>
+  </div>
 </template>
 
 <script setup lang="ts">

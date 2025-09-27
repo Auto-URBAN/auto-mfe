@@ -17,7 +17,7 @@
               :key="car.name"
             >
                 <img :src="car.image" alt="Search Example" class="flex-none">
-                <Typo as="h5" class="grow px-4">{{car.name}}</Typo>
+                <UiText as="h5" class="grow px-4">{{car.name}}</UiText>
                 <Icon name="uil:external-link-alt" size="24px" class="flex-none text-gray-500 dark:text-gray-400" />
             </router-link>
         </div>

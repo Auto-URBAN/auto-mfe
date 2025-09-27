@@ -1,20 +1,20 @@
 <template>
-    <Container class="px-6 lg:p-0">
-        <Row class="flex-col mb-8">
-            <Typo as="h1" class="mb-4">{{carData?.name}}</Typo>
+    <UiContainer>
+        <UiRow class="flex-col mb-8">
+            <UiText as="h1" class="mb-4">{{carData?.name}}</UiText>
             <div class="flex flex-wrap justify-between">
                 <div class="flex flex-row gap-4">
-                    <span class="flex items-center gap-2"><Icon name="uil:external-link-alt" size="16px" /><Typo>5.0</Typo></span>
-                    <span class="flex items-center gap-2"><Icon name="uil:external-link-alt" size="16px" /><Typo>Venda rápido</Typo></span>
-                    <span class="flex items-center gap-2"><Icon name="uil:external-link-alt" size="16px" /><Typo>Brasil</Typo></span>
+                    <span class="flex items-center gap-2"><Icon name="uil:external-link-alt" size="16px" /><UiText>5.0</UiText></span>
+                    <span class="flex items-center gap-2"><Icon name="uil:external-link-alt" size="16px" /><UiText>Venda rápido</UiText></span>
+                    <span class="flex items-center gap-2"><Icon name="uil:external-link-alt" size="16px" /><UiText>Brasil</UiText></span>
                 </div>
                 <div class="flex flex-row gap-4">
-                    <span class="flex items-center gap-2"><Icon name="uil:external-link-alt" size="16px" /><Typo>Compartilhar</Typo></span>
-                    <span class="flex items-center gap-2"><Icon name="uil:external-link-alt" size="16px" /><Typo>Salvar</Typo></span>
+                    <span class="flex items-center gap-2"><Icon name="uil:external-link-alt" size="16px" /><UiText>Compartilhar</UiText></span>
+                    <span class="flex items-center gap-2"><Icon name="uil:external-link-alt" size="16px" /><UiText>Salvar</UiText></span>
                 </div>
             </div>
-        </Row>
-        <Row type="grid" class="grid-cols-12 gap-4">
+        </UiRow>
+        <UiRow type="grid" class="grid-cols-12 gap-4">
             <div class="col-span-12 lg:col-span-9">
                 <div class="h-[540px]">
                     <Chart type="line" 
@@ -35,65 +35,65 @@
                 </div>
                 <div v-if="false">
                     <hr class="my-4">
-                    <Typo as="h2" class="mb-4">Ficha Técnica</Typo>
-                    <Row type="grid" class="grid-cols-4 gap-4 mb-4">
+                    <UiText as="h2" class="mb-4">Ficha Técnica</UiText>
+                    <UiRow type="grid" class="grid-cols-4 gap-4 mb-4">
                         <div class="flex flex-row gap-4" v-for="spec in data.specsList">
                             <Icon :name="spec.icon" size="24px" />
-                            <Typo as="p">{{spec.type}}: <b>{{spec.value}}</b></Typo>
+                            <UiText as="p">{{spec.type}}: <b>{{spec.value}}</b></UiText>
                         </div>
-                    </Row>
+                    </UiRow>
                 </div>
                 <div v-if="false">
                     <hr class="my-4">
-                    <Typo as="h2" class="mb-4">Informações Urban</Typo>
-                    <Row class="flex-col gap-4 mb-4">
+                    <UiText as="h2" class="mb-4">Informações Urban</UiText>
+                    <UiRow class="flex-col gap-4 mb-4">
                         <div class="flex flex-row gap-4" v-for="spec in data.specsList">
                             <div>
                                 <Icon :name="spec.icon" size="24px" />
                             </div>
                             <div>
-                                <Typo as="h6"><b>{{spec.type}}</b></Typo>
-                                <Typo as="p">{{spec.value}}</Typo>
+                                <UiText as="h6"><b>{{spec.type}}</b></UiText>
+                                <UiText as="p">{{spec.value}}</UiText>
                             </div>
                         </div>
-                    </Row>
+                    </UiRow>
                 </div>
                 <div v-if="false">
                     <hr class="my-4">
-                    <Typo as="h2" class="mb-4">Equipamentos</Typo>
-                    <Row type="grid" class="grid-cols-4 gap-4 mb-4">
+                    <UiText as="h2" class="mb-4">Equipamentos</UiText>
+                    <UiRow type="grid" class="grid-cols-4 gap-4 mb-4">
                         <div class="flex flex-row gap-4" v-for="spec in data.specsList">
                             <Icon :name="spec.icon" size="24px" />
-                            <Typo as="p">{{spec.type}}: <b>{{spec.value}}</b></Typo>
+                            <UiText as="p">{{spec.type}}: <b>{{spec.value}}</b></UiText>
                         </div>
-                    </Row>
+                    </UiRow>
                 </div>
                 <div v-if="false">
                     <hr class="my-4">
-                    <Typo as="h2" class="mb-4">Valor médio de Manutenção</Typo>
-                    <Row class="flex-col gap-4 mb-4">
+                    <UiText as="h2" class="mb-4">Valor médio de Manutenção</UiText>
+                    <UiRow class="flex-col gap-4 mb-4">
                         <div class="flex flex-row gap-4" v-for="spec in data.specsList">
                             <Icon :name="spec.icon" size="24px" />
-                            <Typo as="p">{{spec.type}}: <b>{{spec.value}}</b></Typo>
+                            <UiText as="p">{{spec.type}}: <b>{{spec.value}}</b></UiText>
                         </div>
-                    </Row>
+                    </UiRow>
                 </div>
             </div>
             <div class="col-span-12 lg:col-span-3">
                 <img :src="carData?.thumb" alt="" class="mb-4">
                 <div class="sidebar flex flex-col justify-center items-center shadow-lg rounded-lg p-4 mb-6">
-                    <Typo as="h4" class="mb-4">Média de preços atual</Typo>
+                    <UiText as="h4" class="mb-4">Média de preços atual</UiText>
                     <div class="flex flex-row justify-between w-full" v-for="item in carData?.partners">
-                        <Typo as="p">{{item.name}}</Typo>
-                        <Typo as="p">{{ new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item?.value || 0) }}</Typo>
+                        <UiText as="p">{{item.name}}</UiText>
+                        <UiText as="p">{{ new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item?.value || 0) }}</UiText>
                     </div>
                     <hr class="my-4">
-                    <Typo as="p" class="mb-4">
+                    <UiText as="p" class="mb-4">
                         Gostaria de simular um financiamento?
-                    </Typo>
-                    <Button type="button" class="w-full" variant="primary" @click="showFinancial = !showFinancial" v-if="!showFinancial">
+                    </UiText>
+                    <UiButton type="button" class="w-full" variant="primary" @click="showFinancial = !showFinancial" v-if="!showFinancial">
                         Quero simular
-                    </Button>
+                    </UiButton>
                     <SimuladorFinanciamento 
                         v-if="showFinancial"
                         class="w-full mt-4" 
@@ -101,8 +101,8 @@
                      />
                 </div>
             </div>
-        </Row>
-    </Container>
+        </UiRow>
+    </UiContainer>
 </template>
 
 <script setup lang="ts">

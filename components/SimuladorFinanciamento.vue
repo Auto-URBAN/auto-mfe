@@ -31,16 +31,16 @@
             />
           </UFormGroup>
           <UFormGroup label="Valor da parcela" required>
-            <Typo as="h2" v-if="installment">{{ new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(installment) }}</Typo>
-            <Typo as="h2" v-else>R$ *,**</Typo>
+            <UiText as="h2" v-if="installment">{{ new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(installment) }}</UiText>
+            <UiText as="h2" v-else>R$ *,**</UiText>
           </UFormGroup>
           <UFormGroup label="CET" required>
-            <Typo as="h2">%{{(banksList?.[bank]?.taxMonth ?? 0)}} am</Typo>
+            <UiText as="h2">%{{(banksList?.[bank]?.taxMonth ?? 0)}} am</UiText>
           </UFormGroup>         
       </div>
       
       <hr class="my-4">
-      <Button type="button" class="w-full" variant="primary" @click="calculate">Calcular</Button>
+      <UiButton type="button" class="w-full" variant="primary" @click="calculate">Calcular</UiButton>
         </div>
       </ClientOnly>
 </template>
