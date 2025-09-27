@@ -1,0 +1,20 @@
+/* Main CSS file for Auto URBAN */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom utilities for mobile-first design */
+.touch-target {
+	min-height: 44px;
+	min-width: 44px;
+}
+
+/* Skeleton animations */
+.skeleton {
+	@apply animate-pulse bg-gray-200 rounded;
+}
+
+/* Custom grid utilities */
+.vehicle-grid {
+	@apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4;
+}
