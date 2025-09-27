@@ -111,7 +111,6 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const toast = useToast()
 
 // Reactive data
 const sendingWhatsApp = ref(false)

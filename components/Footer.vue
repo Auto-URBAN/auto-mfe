@@ -1,6 +1,6 @@
 <template>
   <footer class="bg-gray-900 text-white">
-    <Container class="py-12 px-6 lg:px-8">
+    <UiContainer size="lg" padding="lg">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <!-- Brand section -->
         <div class="lg:col-span-2">
@@ -10,15 +10,13 @@
             com segurança e transparência.
           </p>
           <div class="flex space-x-4">
-            <UButton
-              variant="ghost"
-              size="sm"
-              icon="i-heroicons-phone"
-              color="white"
+            <button
+              class="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors"
               @click="openWhatsApp"
             >
-              (11) 99999-9999
-            </UButton>
+              <Icon name="heroicons:phone-20-solid" class="w-4 h-4" />
+              <span class="text-sm">(11) 99999-9999</span>
+            </button>
           </div>
         </div>
 
@@ -62,35 +60,32 @@
             
             <!-- Social links -->
             <div class="flex space-x-3 ml-6">
-              <UButton
-                variant="ghost"
-                size="sm"
-                icon="i-heroicons-phone"
-                color="white"
-                square
+              <button
+                class="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
                 @click="openWhatsApp"
-              />
-              <UButton
-                variant="ghost"
-                size="sm"
-                icon="i-simple-icons-instagram"
-                color="white"
-                square
+                title="WhatsApp"
+              >
+                <Icon name="heroicons:phone-20-solid" class="w-5 h-5" />
+              </button>
+              <button
+                class="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
                 @click="openInstagram"
-              />
-              <UButton
-                variant="ghost"
-                size="sm"
-                icon="i-simple-icons-facebook"
-                color="white"
-                square
+                title="Instagram"
+              >
+                <Icon name="simple-icons:instagram" class="w-5 h-5" />
+              </button>
+              <button
+                class="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-gray-800 transition-colors"
                 @click="openFacebook"
-              />
+                title="Facebook"
+              >
+                <Icon name="simple-icons:facebook" class="w-5 h-5" />
+              </button>
             </div>
           </div>
         </div>
       </div>
-    </Container>
+    </UiContainer>
   </footer>
 </template>
 

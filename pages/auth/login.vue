@@ -13,25 +13,31 @@
       </div>
 
       <!-- Login Form -->
-      <UCard>
+      <UiCard>
         <form @submit.prevent="handleLogin" class="space-y-6">
           <!-- Phone Input -->
-          <UFormGroup label="Telefone" name="phone">
-            <UInput
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Telefone</label>
+            <UiInput
               v-model="phone"
               type="tel"
               placeholder="(11) 99999-9999"
-              icon="i-heroicons-phone"
+              icon-left="heroicons:phone-20-solid"
               size="lg"
               :disabled="loading"
               @input="formatPhone"
             />
-          </UFormGroup>
+          </div>
 
           <!-- Terms -->
           <div class="flex items-start">
             <div class="flex items-center h-5">
-              <UCheckbox v-model="acceptTerms" :disabled="loading" />
+              <input 
+                v-model="acceptTerms" 
+                type="checkbox" 
+                :disabled="loading"
+                class="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 focus:ring-2 disabled:opacity-50"
+              />
             </div>
             <div class="ml-3 text-sm">
               <span class="text-gray-600">
@@ -48,16 +54,15 @@
           </div>
 
           <!-- Submit Button -->
-          <UButton
+          <UiButton
             type="submit"
-            color="blue"
             size="lg"
-            block
+            class="w-full"
             :loading="loading"
             :disabled="!isFormValid"
           >
             {{ loading ? 'Enviando código...' : 'Continuar' }}
-          </UButton>
+          </UiButton>
 
           <!-- Or Divider -->
           <div class="relative">
@@ -79,7 +84,7 @@
             </NuxtLink>
           </div>
         </form>
-      </UCard>
+      </UiCard>
 
       <!-- Back to Home -->
       <div class="text-center">
@@ -96,7 +101,6 @@ definePageMeta({
   layout: false
 })
 
-const toast = useToast()
 const router = useRouter()
 
 // Reactive data
@@ -139,12 +143,8 @@ const handleLogin = async () => {
     })
 
     if (response.otpSent) {
-      toast.add({
-        title: 'Código enviado!',
-        description: 'Verifique seu WhatsApp ou SMS',
-        color: 'green'
-      })
-
+      console.log('Código enviado com sucesso!')
+      
       // Navigate to OTP verification with phone in query
       await router.push({
         path: '/auth/verify',
@@ -153,12 +153,7 @@ const handleLogin = async () => {
     }
   } catch (error: any) {
     console.error('Login error:', error)
-    
-    toast.add({
-      title: 'Erro no login',
-      description: error?.data?.message || 'Tente novamente em alguns instantes',
-      color: 'red'
-    })
+    alert('Erro no login. Tente novamente em alguns instantes.')
   } finally {
     loading.value = false
   }

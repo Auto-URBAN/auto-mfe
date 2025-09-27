@@ -98,7 +98,7 @@
 </template>
 
 <script setup lang="ts">
-import { useAdminStore } from '~/stores/admin'
+import { useAdmin } from '~/composables/useAdmin'
 
 definePageMeta({
   middleware: 'admin-auth',

@@ -2,10 +2,9 @@
 export default defineNuxtConfig({
   modules: [
     '@nuxt/icon',
-    '@nuxt/ui',
-    '@pinia/nuxt',
     '@vite-pwa/nuxt',
-    '@nuxt/image'
+    '@nuxt/image',
+    '@nuxtjs/tailwindcss'
   ],
   
   compatibilityDate: '2024-11-01',
@@ -17,6 +16,11 @@ export default defineNuxtConfig({
       apiBase: process.env.VITE_API_BASE || '/api',
       whatsappPrefix: process.env.VITE_WHATSAPP_PREFIX || '55'
     }
+  },
+
+  // Tailwind CSS Configuration
+  tailwindcss: {
+    configPath: '~/tailwind.config.js'
   },
 
   // PWA Configuration via module options
@@ -76,6 +80,9 @@ export default defineNuxtConfig({
 
   // Auto-import composables and utils
   imports: {
-    dirs: ['stores', 'composables', 'utils']
-  }
+    dirs: ['composables', 'utils']
+  },
+
+  // Global CSS
+  css: ['~/assets/css/main.css']
 })

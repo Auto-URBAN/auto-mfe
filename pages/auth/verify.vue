@@ -13,11 +13,12 @@
       </div>
 
       <!-- Verification Form -->
-      <UCard>
+      <UiCard>
         <form @submit.prevent="handleVerification" class="space-y-6">
           <!-- OTP Input -->
-          <UFormGroup label="Código de verificação" name="code">
-            <UInput
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">Código de verificação</label>
+            <UiInput
               v-model="code"
               type="text"
               placeholder="123456"
@@ -26,24 +27,21 @@
               :disabled="loading"
               class="text-center text-2xl tracking-widest"
             />
-            <template #help>
-              <p class="text-xs text-gray-500">
-                Digite o código de 6 dígitos recebido
-              </p>
-            </template>
-          </UFormGroup>
+            <p class="text-xs text-gray-500">
+              Digite o código de 6 dígitos recebido
+            </p>
+          </div>
 
           <!-- Submit Button -->
-          <UButton
+          <UiButton
             type="submit"
-            color="blue"
             size="lg"
-            block
+            class="w-full"
             :loading="loading"
             :disabled="code?.length !== 6"
           >
             {{ loading ? 'Verificando...' : 'Verificar código' }}
-          </UButton>
+          </UiButton>
 
           <!-- Resend -->
           <div class="text-center">
@@ -71,13 +69,11 @@
             </NuxtLink>
           </div>
         </form>
-      </UCard>
+      </UiCard>
 
       <!-- Demo Codes -->
-      <UAlert
-        icon="i-heroicons-information-circle"
-        color="blue"
-        variant="soft"
+      <UiAlert
+        variant="info"
         title="Códigos de demonstração"
         description="Use 123456 para simular login bem-sucedido ou 000000 para erro"
       />
@@ -92,7 +88,6 @@ definePageMeta({
 
 const route = useRoute()
 const router = useRouter()
-const toast = useToast()
 
 // Get phone from query or redirect
 const phone = route.query.phone as string
@@ -150,11 +145,7 @@ const handleVerification = async () => {
       localStorage.setItem('refreshToken', response.refreshToken)
       localStorage.setItem('user', JSON.stringify(response.user))
 
-      toast.add({
-        title: 'Login realizado!',
-        description: 'Bem-vindo ao Auto URBAN',
-        color: 'green'
-      })
+      console.log('Login realizado com sucesso!')
 
       // Redirect to intended page or home
       const redirectTo = route.query.redirect as string || '/'
@@ -163,11 +154,7 @@ const handleVerification = async () => {
   } catch (error: any) {
     console.error('Verification error:', error)
     
-    toast.add({
-      title: 'Código inválido',
-      description: 'Verifique o código e tente novamente',
-      color: 'red'
-    })
+    alert('Código inválido. Verifique o código e tente novamente.')
 
     // Clear code on error
     code.value = ''
@@ -185,19 +172,11 @@ const resendCode = async () => {
       body: { phone }
     })
 
-    toast.add({
-      title: 'Código reenviado!',
-      description: 'Verifique seu WhatsApp ou SMS',
-      color: 'green'
-    })
+    console.log('Código reenviado com sucesso!')
 
     startResendCountdown()
   } catch (error) {
-    toast.add({
-      title: 'Erro ao reenviar',
-      description: 'Tente novamente em alguns instantes',
-      color: 'red'
-    })
+    alert('Erro ao reenviar código. Tente novamente em alguns instantes.')
   } finally {
     resendLoading.value = false
   }

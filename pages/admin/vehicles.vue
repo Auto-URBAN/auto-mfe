@@ -23,12 +23,12 @@
           ]"
         >
           {{ tab.label }}
-          <UBadge
+          <UiBadge
             v-if="tab.count > 0"
             :label="tab.count.toString()"
             variant="solid"
             size="xs"
-            :color="tab.key === 'pending' ? 'yellow' : 'gray'"
+            :color="tab.key === 'pending' ? 'warning' : 'accent'"
             class="ml-2"
           />
         </button>
@@ -37,21 +37,19 @@
 
     <!-- Loading State -->
     <div v-if="adminStore.isLoading" class="space-y-4">
-      <USkeleton v-for="i in 5" :key="i" class="h-24" />
+      <div v-for="i in 5" :key="i" class="h-24 bg-gray-200 animate-pulse rounded-lg" />
     </div>
 
     <!-- Error State -->
-    <UAlert
+    <UiAlert
       v-else-if="adminStore.error"
-      icon="i-heroicons-exclamation-triangle"
-      color="red"
-      variant="subtle"
+      variant="danger"
       :title="adminStore.error"
       class="mb-6"
     />
 
     <!-- Vehicles Table -->
-    <UCard v-else>
+    <UiCard v-else>
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
@@ -113,37 +111,37 @@
               <!-- Actions -->
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <div class="flex justify-end space-x-2">
-                  <UButton
-                    variant="ghost"
+                  <UiButton
+                    variant="outline"
                     size="sm"
-                    icon="i-heroicons-eye"
+                    icon-left="heroicons:eye-20-solid"
                     @click="viewVehicle(vehicle.id)"
                   >
                     Ver
-                  </UButton>
+                  </UiButton>
                   
-                  <UButton
+                  <UiButton
                     v-if="vehicle.status === 'PENDING'"
                     variant="solid"
-                    color="green"
+                    color="success"
                     size="sm"
-                    icon="i-heroicons-check"
+                    icon-left="heroicons:check-20-solid"
                     :loading="moderatingId === vehicle.id"
                     @click="approveVehicle(vehicle.id)"
                   >
                     Aprovar
-                  </UButton>
+                  </UiButton>
                   
-                  <UButton
+                  <UiButton
                     v-if="vehicle.status === 'PENDING'"
                     variant="solid"
-                    color="red"
+                    color="danger"
                     size="sm"
-                    icon="i-heroicons-x-mark"
+                    icon-left="heroicons:x-mark-20-solid"
                     @click="openRejectModal(vehicle)"
                   >
                     Rejeitar
-                  </UButton>
+                  </UiButton>
                 </div>
               </td>
             </tr>
@@ -163,11 +161,11 @@
           </tbody>
         </table>
       </div>
-    </UCard>
+    </UiCard>
 
     <!-- Reject Modal -->
-    <UModal v-model="showRejectModal">
-      <UCard>
+    <UiModal v-model="showRejectModal">
+      <UiCard>
         <template #header>
           <h3 class="text-lg font-semibold">Rejeitar Anúncio</h3>
         </template>
@@ -187,29 +185,29 @@
 
         <template #footer>
           <div class="flex justify-end space-x-3">
-            <UButton
-              variant="ghost"
+            <UiButton
+              variant="outline"
               @click="closeRejectModal"
             >
               Cancelar
-            </UButton>
-            <UButton
-              color="red"
+            </UiButton>
+            <UiButton
+              color="danger"
               :loading="moderatingId !== null"
               :disabled="!rejectionReason.trim()"
               @click="confirmReject"
             >
               Rejeitar Anúncio
-            </UButton>
+            </UiButton>
           </div>
         </template>
-      </UCard>
-    </UModal>
+      </UiCard>
+    </UiModal>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useAdminStore } from '~/stores/admin'
+import { useAdmin } from '~/composables/useAdmin'
 import StatusBadge from '~/components/StatusBadge.vue'
 import type { VehicleStatus } from '~/schemas/vehicle'
 
@@ -220,8 +218,8 @@ definePageMeta({
 
 const route = useRoute()
 const router = useRouter()
-const adminStore = useAdminStore()
-const toast = useToast()
+const admin = useAdmin()
+const { vehicles, loading, error, loadVehicles, updateVehicleStatus, deleteVehicle } = admin
 
 // Reactive data
 const selectedTab = ref<VehicleStatus | 'all'>('pending')
@@ -295,17 +293,9 @@ const approveVehicle = async (vehicleId: string) => {
     const result = await adminStore.approveVehicle(vehicleId)
     
     if (result.success) {
-      toast.add({
-        title: 'Sucesso',
-        description: 'Veículo aprovado com sucesso',
-        color: 'green'
-      })
+      console.log('Veículo aprovado com sucesso')
     } else {
-      toast.add({
-        title: 'Erro',
-        description: result.error || 'Erro ao aprovar veículo',
-        color: 'red'
-      })
+      alert('Erro ao aprovar veículo: ' + (result.error || 'Erro desconhecido'))
     }
   } finally {
     moderatingId.value = null
@@ -336,18 +326,10 @@ const confirmReject = async () => {
     )
     
     if (result.success) {
-      toast.add({
-        title: 'Sucesso',
-        description: 'Veículo rejeitado com sucesso',
-        color: 'green'
-      })
+      console.log('Veículo rejeitado com sucesso')
       closeRejectModal()
     } else {
-      toast.add({
-        title: 'Erro', 
-        description: result.error || 'Erro ao rejeitar veículo',
-        color: 'red'
-      })
+      alert('Erro ao rejeitar veículo: ' + (result.error || 'Erro desconhecido'))
     }
   } finally {
     moderatingId.value = null

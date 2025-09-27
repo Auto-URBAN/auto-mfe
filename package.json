@@ -13,24 +13,23 @@
   "dependencies": {
     "@nuxt/eslint": "^0.5.7",
     "@nuxt/icon": "1.10.3",
-    "@nuxt/ui": "^2.21.0",
-    "@pinia/nuxt": "^0.11.2",
     "@vite-pwa/nuxt": "^1.0.4",
-    "chart.js": "^4.4.8",
+    "chart.js": "^4.5.0",
     "idb": "^8.0.3",
-    "maska": "^3.1.1",
-    "pinia": "^3.0.3",
+    "maska": "^3.2.0",
     "vue": "latest",
     "vue-chartjs": "^5.3.2",
-    "zod": "^3.24.2"
+    "zod": "^3.25.76"
   },
   "packageManager": "pnpm@9.10.0+sha512.73a29afa36a0d092ece5271de5177ecbf8318d454ecd701343131b8ebc0c1a91c487da46ab77c8e596d6acf1461e3594ced4becedf8921b074fbd8653ed7051c",
   "devDependencies": {
-    "@iconify-json/heroicons": "^1.2.2",
+    "@iconify-json/heroicons": "^1.2.3",
     "@iconify-json/uil": "^1.2.3",
     "@nuxt/image": "1.11.0",
-    "nuxt": "^3.16.0",
-    "typescript": "^5.8.2",
-    "vue-tsc": "^2.2.8"
+    "@nuxtjs/tailwindcss": "^6.14.0",
+    "nuxt": "^3.19.2",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.9.2",
+    "vue-tsc": "^2.2.12"
   }
 }

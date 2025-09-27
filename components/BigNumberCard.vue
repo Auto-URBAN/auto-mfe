@@ -1,5 +1,6 @@
 <template>
-  <UCard 
+  <UiCard 
+    :clickable="clickable"
     :class="[
       'transition-all duration-200',
       clickable ? 'hover:shadow-lg cursor-pointer hover:scale-[1.02]' : ''
@@ -11,7 +12,7 @@
         'flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center',
         colorClasses
       ]">
-        <UIcon :name="icon" class="w-6 h-6 text-white" />
+        <Icon :name="icon" class="w-6 h-6 text-white" />
       </div>
       
       <div class="ml-4 flex-1 min-w-0">
@@ -23,13 +24,13 @@
         </p>
       </div>
       
-      <UIcon 
+      <Icon 
         v-if="clickable"
-        name="i-heroicons-chevron-right-20-solid" 
+        name="heroicons:chevron-right-20-solid" 
         class="w-5 h-5 text-gray-400 ml-2"
       />
     </div>
-  </UCard>
+  </UiCard>
 </template>
 
 <script setup lang="ts">
@@ -65,10 +66,10 @@ const formattedValue = computed(() => {
 
 const colorClasses = computed(() => {
   const colors = {
-    blue: 'bg-blue-500',
-    green: 'bg-green-500', 
-    yellow: 'bg-yellow-500',
-    red: 'bg-red-500',
+    blue: 'bg-primary-500',
+    green: 'bg-success-500', 
+    yellow: 'bg-warning-500',
+    red: 'bg-danger-500',
     purple: 'bg-purple-500',
     gray: 'bg-gray-500'
   }

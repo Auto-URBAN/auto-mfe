@@ -1,10 +1,11 @@
 <template>
-  <UBadge
+  <UiBadge
     :variant="badgeVariant"
     :color="badgeColor"
-    :label="badgeLabel"
     size="xs"
-  />
+  >
+    {{ badgeLabel }}
+  </UiBadge>
 </template>
 
 <script setup lang="ts">
@@ -35,8 +36,8 @@ const badgeConfig = computed(() => {
       label: 'Rejeitado'
     }
   }
-  
-  return configs[props.status] || configs['PENDING']
+
+  return configs[props.status] || configs.PENDING
 })
 
 const badgeColor = computed(() => badgeConfig.value.color)

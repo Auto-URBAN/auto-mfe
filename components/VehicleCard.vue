@@ -13,22 +13,22 @@
       >
       <!-- Status badge -->
       <div class="absolute top-3 right-3">
-        <UBadge 
+        <UiBadge 
           v-if="vehicle.status === 'PENDING'"
           color="yellow" 
           variant="solid"
           size="xs"
         >
           Aguardando
-        </UBadge>
-        <UBadge 
+        </UiBadge>
+        <UiBadge 
           v-else-if="vehicle.status === 'APPROVED'"
           color="green" 
           variant="solid"
           size="xs"
         >
           Aprovado
-        </UBadge>
+        </UiBadge>
       </div>
     </div>
 
@@ -48,20 +48,20 @@
 
       <!-- Vehicle info -->
       <div class="flex flex-wrap gap-2 mb-3">
-        <UBadge color="gray" variant="soft" size="xs">
+        <UiBadge color="gray" variant="soft" size="xs">
           {{ vehicle.year }}
-        </UBadge>
-        <UBadge color="gray" variant="soft" size="xs">
+        </UiBadge>
+        <UiBadge color="gray" variant="soft" size="xs">
           {{ formatKm(vehicle.km) }}
-        </UBadge>
-        <UBadge color="blue" variant="soft" size="xs">
+        </UiBadge>
+        <UiBadge color="blue" variant="soft" size="xs">
           {{ vehicle.uf }}
-        </UBadge>
+        </UiBadge>
       </div>
 
       <!-- Location -->
       <p class="text-sm text-gray-600 mb-4">
-        <UIcon name="i-heroicons-map-pin" class="w-4 h-4 inline mr-1" />
+        <Icon name="heroicons:map-pin-20-solid" class="w-4 h-4 inline mr-1" />
         {{ vehicle.city }}, {{ vehicle.uf }}
       </p>
 
@@ -70,7 +70,7 @@
         <span class="text-blue-600 font-medium group-hover:text-blue-700">
           Ver Detalhes
         </span>
-        <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 text-gray-400 group-hover:text-blue-600 transition-colors" />
+        <Icon name="heroicons:arrow-right-20-solid" class="w-4 h-4 text-gray-400 group-hover:text-blue-600 transition-colors" />
       </div>
     </div>
   </NuxtLink>

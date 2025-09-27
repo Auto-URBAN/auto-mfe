@@ -31,14 +31,14 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <BigNumberCard
           title="Total de Veículos"
-          :value="metrics?.totals.vehicles || 0"
+          :value="metrics?.totalVehicles || 0"
           icon="i-heroicons-truck"
           color="blue"
         />
         
         <BigNumberCard
           title="Aguardando Aprovação"
-          :value="metrics?.totals.pending || 0"
+          :value="metrics?.pendingApprovals || 0"
           icon="i-heroicons-clock"
           color="yellow"
           :clickable="true"
@@ -47,14 +47,14 @@
         
         <BigNumberCard
           title="Aprovados"
-          :value="metrics?.totals.approved || 0"
+          :value="metrics?.totalAds || 0"
           icon="i-heroicons-check-circle"
           color="green"
         />
         
         <BigNumberCard
           title="Total de Usuários"
-          :value="metrics?.totals.users || 0"
+          :value="metrics?.totalUsers || 0"
           icon="i-heroicons-users"
           color="purple"
           :clickable="true"
@@ -160,7 +160,7 @@
 </template>
 
 <script setup lang="ts">
-import { useAdminStore } from '~/stores/admin'
+import { useAdmin } from '~/composables/useAdmin'
 import BigNumberCard from '~/components/BigNumberCard.vue'
 
 definePageMeta({
@@ -168,10 +168,11 @@ definePageMeta({
   middleware: 'admin-auth'
 })
 
-const adminStore = useAdminStore()
+const admin = useAdmin()
+const { stats, loading, error, loadStats } = admin
 
 // Computed
-const metrics = computed(() => adminStore.metrics)
+const metrics = computed(() => stats.value)
 
 const topBrands = computed(() => {
   if (!metrics.value?.byBrand) return []

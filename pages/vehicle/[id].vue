@@ -9,7 +9,7 @@
           </NuxtLink>
         </li>
         <li>
-          <UIcon name="i-heroicons-chevron-right" class="w-4 h-4 text-gray-400" />
+          <Icon name="heroicons:chevron-right-20-solid" class="w-4 h-4 text-gray-400" />
         </li>
         <li>
           <NuxtLink 
@@ -20,7 +20,7 @@
           </NuxtLink>
         </li>
         <li>
-          <UIcon name="i-heroicons-chevron-right" class="w-4 h-4 text-gray-400" />
+          <Icon name="heroicons:chevron-right-20-solid" class="w-4 h-4 text-gray-400" />
         </li>
         <li class="text-gray-600">
           {{ vehicle?.model }} {{ vehicle?.year }}
@@ -30,31 +30,29 @@
 
     <!-- Loading State -->
     <div v-if="pending" class="space-y-6">
-      <USkeleton class="h-64 lg:h-96" />
+      <div class="h-64 lg:h-96 bg-gray-200 animate-pulse rounded-lg" />
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-6">
-          <USkeleton class="h-48" />
-          <USkeleton class="h-32" />
+          <div class="h-48 bg-gray-200 animate-pulse rounded-lg" />
+          <div class="h-32 bg-gray-200 animate-pulse rounded-lg" />
         </div>
-        <USkeleton class="h-64" />
+        <div class="h-64 bg-gray-200 animate-pulse rounded-lg" />
       </div>
     </div>
 
     <!-- Error State -->
-    <UAlert
+    <UiAlert
       v-else-if="error"
-      icon="i-heroicons-exclamation-triangle"
-      color="red"
-      variant="subtle"
+      variant="danger"
       :title="error.message || 'Erro ao carregar veículo'"
       class="mb-6"
     >
       <template #actions>
-        <UButton variant="ghost" @click="refresh()">
+        <UiButton variant="outline" @click="refresh()">
           Tentar novamente
-        </UButton>
+        </UiButton>
       </template>
-    </UAlert>
+    </UiAlert>
 
     <!-- Vehicle Content -->
     <div v-else-if="vehicle" class="space-y-8">
@@ -150,13 +148,6 @@ const { data: relatedVehicles } = await useFetch(`/api/vehicles/${vehicleId}/rel
   default: () => []
 })
 
-// Error handling for invalid vehicle ID
-if (!vehicle.value && !pending.value && !error.value) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: 'Veículo não encontrado'
-  })
-}
 
 // Formatting methods
 const formatCurrency = (value: number) => {

@@ -34,26 +34,26 @@
     </div>
 
     <!-- Empty state -->
+        <!-- Empty state -->
     <div v-else class="text-center py-12">
-      <UIcon name="i-heroicons-magnifying-glass" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
+      <Icon name="heroicons:magnifying-glass-20-solid" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
       <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhum veículo encontrado</h3>
       <p class="text-gray-500 mb-4">Tente ajustar os filtros ou buscar por outros termos.</p>
-      <UButton @click="$emit('clearFilters')" color="primary" variant="outline">
+      <UiButton @click="$emit('clearFilters')" variant="outline">
         Limpar filtros
-      </UButton>
+      </UiButton>
     </div>
 
-    <!-- Load more button -->
-    <div v-if="!loading && vehicles.length > 0 && hasMore" class="text-center mt-8">
-      <UButton 
+    <!-- Load More Button -->
+    <div v-if="vehicles.length > 0 && hasMore && !loading" class="text-center mt-8">
+      <UiButton 
         @click="$emit('loadMore')"
         :loading="loadingMore"
-        color="primary" 
         variant="outline"
         size="lg"
       >
-        Carregar mais veículos
-      </UButton>
+        {{ loadingMore ? 'Carregando...' : 'Carregar mais veículos' }}
+      </UiButton>
     </div>
 
     <!-- Results counter -->

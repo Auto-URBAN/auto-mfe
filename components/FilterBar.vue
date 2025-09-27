@@ -2,19 +2,18 @@
   <div class="bg-white border-b sticky top-0 z-20">
     <!-- Mobile filter button -->
     <div class="md:hidden p-4">
-      <UButton 
+      <UiButton 
         @click="showMobileFilters = true"
-        color="gray" 
         variant="outline" 
         size="lg"
         class="w-full"
+        icon-left="heroicons:adjustments-horizontal-20-solid"
       >
-        <UIcon name="i-heroicons-adjustments-horizontal" class="mr-2" />
         Filtros
-        <UBadge v-if="activeFiltersCount > 0" color="primary" class="ml-2">
+        <UiBadge v-if="activeFiltersCount > 0" color="primary" class="ml-2">
           {{ activeFiltersCount }}
-        </UBadge>
-      </UButton>
+        </UiBadge>
+      </UiButton>
     </div>
 
     <!-- Desktop filters -->
@@ -39,7 +38,7 @@
         />
         
         <!-- Price range -->
-        <UInput
+        <UiInput
           v-model="filters.priceMin"
           placeholder="Preço mín"
           type="number"
@@ -47,7 +46,7 @@
           @input="handleFilterChange"
         />
         
-        <UInput
+        <UiInput
           v-model="filters.priceMax"
           placeholder="Preço máx"
           type="number" 
@@ -56,7 +55,7 @@
         />
         
         <!-- Year range -->
-        <UInput
+        <UiInput
           v-model="filters.yearMin"
           placeholder="Ano mín"
           type="number"
@@ -64,7 +63,7 @@
           @input="handleFilterChange"
         />
         
-        <UInput
+        <UiInput
           v-model="filters.yearMax"
           placeholder="Ano máx"
           type="number"

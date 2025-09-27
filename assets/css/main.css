@@ -1,4 +1,4 @@
-/* Main CSS file for Auto URBAN */
+/* Auto URBAN - Tailwind CSS */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,7 +11,7 @@
 
 /* Skeleton animations */
 .skeleton {
-	@apply animate-pulse bg-gray-200 rounded;
+	@apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded;
 }
 
 /* Custom grid utilities */

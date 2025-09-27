@@ -35,10 +35,10 @@ export class APIClient {
 
     // Add auth token if available and not skipped
     if (!skipAuth && import.meta.client) {
-      const { useAuthStore } = await import('#imports')
-      const authStore = useAuthStore()
-      if (authStore.accessToken) {
-        headers.Authorization = `Bearer ${authStore.accessToken}`
+      const { useAuth } = await import('#imports')
+      const auth = useAuth()
+      if (auth.accessToken.value) {
+        headers.Authorization = `Bearer ${auth.accessToken.value}`
       }
     }
 
@@ -55,17 +55,17 @@ export class APIClient {
       // Handle 401 - try refresh token
       if (error.statusCode === 401 && retry && !skipAuth && import.meta.client) {
         try {
-          const { useAuthStore } = await import('#imports')
-          const authStore = useAuthStore()
-          await authStore.refreshTokens()
+          const { useAuth } = await import('#imports')
+          const auth = useAuth()
+          await auth.refreshTokens()
           
           // Retry original request
           return this.request<T>(url, { ...options, retry: false })
         } catch (refreshError) {
           // Refresh failed, redirect to login
-          const { useAuthStore } = await import('#imports')
-          const authStore = useAuthStore()
-          authStore.clearAuth()
+          const { useAuth } = await import('#imports')
+          const auth = useAuth()
+          auth.clearAuth()
           
           if (import.meta.client) {
             await navigateTo('/auth/login')

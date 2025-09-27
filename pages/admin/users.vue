@@ -207,7 +207,7 @@
 </template>
 
 <script setup lang="ts">
-import { useAdminStore } from '~/stores/admin'
+import { useAdmin } from '~/composables/useAdmin'
 import BigNumberCard from '~/components/BigNumberCard.vue'
 
 definePageMeta({
@@ -216,7 +216,6 @@ definePageMeta({
 })
 
 const adminStore = useAdminStore()
-const toast = useToast()
 
 // Reactive data
 const selectedFilter = ref('all')

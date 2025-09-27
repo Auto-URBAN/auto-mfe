@@ -1,181 +1,174 @@
 <template>
-  <header class="sticky top-0 z-50 w-full border-b" :class="headerClasses">
-    <Container class="px-6 lg:px-8">
-      <div class="flex h-16 items-center justify-between">
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        
         <!-- Logo -->
-        <div class="flex items-center cursor-pointer" @click="$router.push('/')">
+        <div class="flex items-center cursor-pointer" @click="router.push('/')">
           <img 
-            :src="variant === 'dark' ? '/imgs/Logo.svg' : '/imgs/Logo-dark.svg'" 
+            src="/imgs/Logo-dark.svg" 
             alt="Auto URBAN" 
-            class="h-8 w-auto"
+            class="h-10 w-auto"
           />
         </div>
-        
-        <!-- Search -->
-        <div v-if="showSearch" class="flex-1 max-w-lg mx-8">
+
+        <!-- Search (desktop) -->
+        <div v-if="showSearch" class="hidden md:flex w-full max-w-2xl mx-6">
           <SearchEngine />
         </div>
-        
+
         <!-- Actions -->
-        <div class="flex items-center space-x-4">
-          <!-- Auth Section -->
-          <div v-if="!authStore.isAuthenticated" class="hidden md:flex items-center space-x-2">
-            <UButton
+        <div class="flex items-center space-x-3">
+          <!-- Not Authenticated -->
+          <div v-if="!isAuthenticated" class="hidden md:flex items-center space-x-3">
+            <UiButton
               variant="ghost"
-              size="sm"
-              @click="$router.push('/auth/login')"
-              :class="buttonClasses"
+              size="md"
+              @click="router.push('/auth/login')"
             >
               Entrar
-            </UButton>
-            <UButton
-              color="blue"
-              size="sm"
-              @click="$router.push('/auth/login')"
+            </UiButton>
+            <UiButton
+              variant="primary"
+              size="md"
+              @click="router.push('/auth/register')"
             >
               Anunciar
-            </UButton>
+            </UiButton>
           </div>
           
-          <!-- User Menu -->
+          <!-- Authenticated User -->
           <div v-else class="flex items-center space-x-3">
             <!-- Quick Actions -->
-            <UButton
+            <UiButton
               variant="ghost"
-              size="sm"
-              icon="i-heroicons-plus"
-              @click="$router.push('/sell')"
-              :class="buttonClasses"
+              size="md"
+              icon-left="heroicons:plus-20-solid"
+              @click="router.push('/sell')"
             >
               <span class="hidden md:inline">Anunciar</span>
-            </UButton>
+            </UiButton>
             
             <!-- Notifications -->
-            <UButton
-              variant="ghost"
-              size="sm"
-              icon="i-heroicons-bell"
-              :class="buttonClasses"
+            <UiButton 
+              variant="ghost" 
+              size="md" 
+              icon-left="heroicons:bell-20-solid"
             />
             
             <!-- User Dropdown -->
-            <UDropdown :items="userMenuItems">
-              <template #default>
-                <div class="flex items-center cursor-pointer">
-                  <UAvatar
-                    :text="authStore.userInitials"
-                    size="sm"
-                    :ui="{ background: 'bg-blue-500' }"
-                  />
-                  <UIcon 
-                    name="i-heroicons-chevron-down-20-solid" 
-                    class="w-4 h-4 ml-1"
-                    :class="iconClasses"
+            <UiDropdown
+              :trigger-text="userName || 'Usuário'"
+              trigger-variant="ghost"
+              placement="bottom-end"
+            >
+              <template #trigger>
+                <div class="flex items-center cursor-pointer hover:bg-gray-50 rounded-lg px-3 py-2 transition-colors">
+                  <!-- Avatar -->
+                  <div class="w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center text-white text-sm font-medium mr-2">
+                    {{ userInitials }}
+                  </div>
+                  
+                  <!-- User Info (desktop) -->
+                  <div class="hidden lg:block text-left mr-2">
+                    <div class="text-sm font-medium text-gray-900">
+                      {{ userName }}
+                    </div>
+                    <div class="text-xs text-gray-500">
+                      {{ isAdmin ? 'Admin' : 'Usuário' }}
+                    </div>
+                  </div>
+                  
+                  <Icon 
+                    name="heroicons:chevron-down-20-solid" 
+                    class="w-4 h-4 text-gray-400"
                   />
                 </div>
               </template>
-            </UDropdown>
+
+              <template #panel="{ close }">
+                <!-- User Menu Items -->
+                <div class="py-1">
+                  <button
+                    class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    @click="() => { router.push('/profile'); close() }"
+                  >
+                    <Icon name="heroicons:user-20-solid" class="w-4 h-4 mr-3" />
+                    Meu perfil
+                  </button>
+                  
+                  <button
+                    class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    @click="() => { router.push('/my-ads'); close() }"
+                  >
+                    <Icon name="heroicons:document-text-20-solid" class="w-4 h-4 mr-3" />
+                    Meus anúncios
+                  </button>
+                  
+                  <button
+                    v-if="isAdmin"
+                    class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    @click="() => { router.push('/admin'); close() }"
+                  >
+                    <Icon name="heroicons:shield-check-20-solid" class="w-4 h-4 mr-3" />
+                    Admin
+                  </button>
+                  
+                  <hr class="my-1 border-gray-200">
+                  
+                  <button
+                    class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                    @click="() => { handleLogout(); close() }"
+                  >
+                    <Icon name="heroicons:arrow-left-on-rectangle-20-solid" class="w-4 h-4 mr-3" />
+                    Sair
+                  </button>
+                </div>
+              </template>
+            </UiDropdown>
           </div>
           
-          <!-- Mobile menu -->
-          <UButton
-            variant="ghost"
-            size="sm"
-            icon="i-heroicons-bars-3"
+          <!-- Mobile menu button -->
+          <UiButton 
+            variant="ghost" 
+            size="md" 
+            icon-left="heroicons:bars-3-20-solid"
             class="md:hidden"
-            :class="buttonClasses"
           />
         </div>
       </div>
-    </Container>
+      
+      <!-- Mobile Search -->
+      <div v-if="showSearch" class="md:hidden pb-4">
+        <SearchEngine />
+      </div>
+    </div>
   </header>
 </template>
 
 <script setup lang="ts">
 interface Props {
-  variant?: 'light' | 'dark' | 'transparent'
   showSearch?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  variant: 'light',
   showSearch: true
 })
 
-// Store
-const authStore = useAuthStore()
-
-// Computed classes for theming
-const headerClasses = computed(() => {
-  switch (props.variant) {
-    case 'dark':
-      return 'bg-gray-900 border-gray-800'
-    case 'transparent':
-      return 'bg-white/80 backdrop-blur-sm border-gray-200/50'
-    default:
-      return 'bg-white border-gray-200'
-  }
-})
-
-const buttonClasses = computed(() => {
-  return props.variant === 'dark' 
-    ? 'text-white hover:text-gray-200' 
-    : 'text-gray-700 hover:text-gray-900'
-})
-
-const iconClasses = computed(() => {
-  return props.variant === 'dark' 
-    ? 'text-gray-300' 
-    : 'text-gray-500'
-})
-
-// User menu items
+// Auth & Router
+const auth = useAuth()
 const router = useRouter()
 
-const userMenuItems = computed(() => {
-  const baseItems = [
-    {
-      label: 'Meu perfil',
-      icon: 'i-heroicons-user',
-      click: () => router.push('/profile')
-    },
-    {
-      label: 'Meus anúncios', 
-      icon: 'i-heroicons-cog-6-tooth',
-      click: () => router.push('/my-ads')
-    }
-  ]
-  
-  if (authStore.isAdmin) {
-    baseItems.push({
-      label: 'Admin',
-      icon: 'i-heroicons-shield-check',
-      click: () => router.push('/admin')
-    })
-  }
-  
-  return [
-    baseItems,
-    [{
-      label: 'Sair',
-      icon: 'i-heroicons-arrow-left-on-rectangle',
-      click: handleLogout
-    }]
-  ]
-})
+// Destructure auth composable for easier template usage
+const { isAuthenticated, userName, userInitials, isAdmin, logout } = auth
 
 // Methods
 async function handleLogout() {
   try {
-    await authStore.logout()
+    await logout()
     await router.push('/')
   } catch (error) {
     console.error('Logout error:', error)
   }
 }
-
-// Initialize auth on mount
-onMounted(() => {
-  authStore.loadPersistedAuth()
-})
 </script>

@@ -1,17 +1,14 @@
 <template>
   <div class="relative">
     <div class="relative">
-      <UInput
+      <UiInput
         v-model="searchQuery"
         :placeholder="placeholder"
         size="lg"
         class="w-full pr-10"
+        icon-left="heroicons:magnifying-glass-20-solid"
         @keyup.enter="handleSearch"
-      >
-        <template #leading>
-          <UIcon name="i-heroicons-magnifying-glass" class="text-gray-400" />
-        </template>
-      </UInput>
+      />
       
       <!-- Clear button -->
       <button
@@ -19,7 +16,7 @@
         @click="clearSearch"
         class="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-gray-600"
       >
-        <UIcon name="i-heroicons-x-mark" class="w-4 h-4" />
+        <Icon name="heroicons:x-mark-20-solid" class="w-4 h-4" />
       </button>
     </div>
 

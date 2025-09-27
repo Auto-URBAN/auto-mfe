@@ -1,5 +1,5 @@
 <template>
-  <UCard>
+  <UiCard>
     <template #header>
       <h3 class="text-lg font-semibold text-gray-900">
         Especificações
@@ -88,7 +88,7 @@
         </div>
       </div>
     </div>
-  </UCard>
+  </UiCard>
 </template>
 
 <script setup lang="ts">
