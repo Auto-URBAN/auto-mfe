@@ -1,3 +1,5 @@
+import { BrazilianState, VehicleStatus } from '~/schemas/vehicle'
+
 export default defineEventHandler(async (event) => {
     const query = getQuery(event)
     
@@ -15,9 +17,9 @@ export default defineEventHandler(async (event) => {
             price: 89000,
             km: 35000,
             city: 'São Paulo',
-            uf: 'SP',
+            uf: 'SP' as const,
             coverImageUrl: '/imgs/search-example.jpg',
-            status: 'APPROVED',
+            status: 'APPROVED' as const,
             createdAt: new Date('2024-01-15')
         },
         {
@@ -29,9 +31,9 @@ export default defineEventHandler(async (event) => {
             price: 82000,
             km: 42000,
             city: 'Rio de Janeiro',
-            uf: 'RJ',
+            uf: 'RJ' as const,
             coverImageUrl: '/imgs/search-example.jpg',
-            status: 'APPROVED',
+            status: 'APPROVED' as const,
             createdAt: new Date('2024-02-10')
         },
         {
@@ -43,9 +45,9 @@ export default defineEventHandler(async (event) => {
             price: 75000,
             km: 28000,
             city: 'Belo Horizonte',
-            uf: 'MG',
+            uf: 'MG' as const,
             coverImageUrl: '/imgs/search-example.jpg',
-            status: 'APPROVED',
+            status: 'APPROVED' as const,
             createdAt: new Date('2024-03-05')
         },
         {
@@ -57,9 +59,9 @@ export default defineEventHandler(async (event) => {
             price: 68000,
             km: 15000,
             city: 'Porto Alegre',
-            uf: 'RS',
+            uf: 'RS' as const,
             coverImageUrl: '/imgs/search-example.jpg',
-            status: 'APPROVED',
+            status: 'APPROVED' as const,
             createdAt: new Date('2024-04-20')
         },
         {
@@ -71,9 +73,9 @@ export default defineEventHandler(async (event) => {
             price: 72000,
             km: 38000,
             city: 'Salvador',
-            uf: 'BA',
+            uf: 'BA' as const,
             coverImageUrl: '/imgs/search-example.jpg',
-            status: 'APPROVED',
+            status: 'APPROVED' as const,
             createdAt: new Date('2024-05-15')
         },
         {
@@ -85,9 +87,9 @@ export default defineEventHandler(async (event) => {
             price: 48000,
             km: 51000,
             city: 'Recife',
-            uf: 'PE',
+            uf: 'PE' as const,
             coverImageUrl: '/imgs/search-example.jpg',
-            status: 'APPROVED',
+            status: 'APPROVED' as const,
             createdAt: new Date('2024-07-05')
         },
         {
@@ -99,9 +101,9 @@ export default defineEventHandler(async (event) => {
             price: 89000,
             km: 22000,
             city: 'Fortaleza',
-            uf: 'CE',
+            uf: 'CE' as const,
             coverImageUrl: '/imgs/search-example.jpg',
-            status: 'APPROVED',
+            status: 'APPROVED' as const,
             createdAt: new Date('2024-06-10')
         },
         {
@@ -113,9 +115,9 @@ export default defineEventHandler(async (event) => {
             price: 52000,
             km: 18000,
             city: 'Brasília',
-            uf: 'DF',
+            uf: 'DF' as const,
             coverImageUrl: '/imgs/search-example.jpg',
-            status: 'APPROVED',
+            status: 'APPROVED' as const,
             createdAt: new Date('2024-08-12')
         },
         {
@@ -127,9 +129,9 @@ export default defineEventHandler(async (event) => {
             price: 63000,
             km: 35000,
             city: 'Curitiba',
-            uf: 'PR',
+            uf: 'PR' as const,
             coverImageUrl: '/imgs/search-example.jpg',
-            status: 'APPROVED',
+            status: 'APPROVED' as const,
             createdAt: new Date('2024-05-20')
         },
         {
@@ -141,9 +143,9 @@ export default defineEventHandler(async (event) => {
             price: 98000,
             km: 45000,
             city: 'Goiânia',
-            uf: 'GO',
+            uf: 'GO' as const,
             coverImageUrl: '/imgs/search-example.jpg',
-            status: 'APPROVED',
+            status: 'APPROVED' as const,
             createdAt: new Date('2024-03-15')
         },
         {
@@ -155,9 +157,9 @@ export default defineEventHandler(async (event) => {
             price: 71000,
             km: 28000,
             city: 'Manaus',
-            uf: 'AM',
+            uf: 'AM' as const,
             coverImageUrl: '/imgs/search-example.jpg',
-            status: 'APPROVED',
+            status: 'APPROVED' as const,
             createdAt: new Date('2024-04-08')
         },
         {
@@ -169,9 +171,9 @@ export default defineEventHandler(async (event) => {
             price: 105000,
             km: 15000,
             city: 'Florianópolis',
-            uf: 'SC',
+            uf: 'SC' as const,
             coverImageUrl: '/imgs/search-example.jpg',
-            status: 'APPROVED',
+            status: 'APPROVED' as const,
             createdAt: new Date('2024-07-25')
         },
         {
@@ -183,9 +185,9 @@ export default defineEventHandler(async (event) => {
             price: 92000,
             km: 41000,
             city: 'Belém',
-            uf: 'PA',
+            uf: 'PA' as const,
             coverImageUrl: '/imgs/search-example.jpg',
-            status: 'APPROVED',
+            status: 'APPROVED' as const,
             createdAt: new Date('2024-02-18')
         },
         {
@@ -197,9 +199,9 @@ export default defineEventHandler(async (event) => {
             price: 115000,
             km: 12000,
             city: 'Campo Grande',
-            uf: 'MS',
+            uf: 'MS' as const,
             coverImageUrl: '/imgs/search-example.jpg',
-            status: 'APPROVED',
+            status: 'APPROVED' as const,
             createdAt: new Date('2024-08-03')
         },
         {
@@ -211,9 +213,9 @@ export default defineEventHandler(async (event) => {
             price: 78000,
             km: 33000,
             city: 'João Pessoa',
-            uf: 'PB',
+            uf: 'PB' as const,
             coverImageUrl: '/imgs/search-example.jpg',
-            status: 'APPROVED',
+            status: 'APPROVED' as const,
             createdAt: new Date('2024-06-22')
         },
         {
@@ -225,9 +227,9 @@ export default defineEventHandler(async (event) => {
             price: 88000,
             km: 38000,
             city: 'Natal',
-            uf: 'RN',
+            uf: 'RN' as const,
             coverImageUrl: '/imgs/search-example.jpg',
-            status: 'APPROVED',
+            status: 'APPROVED' as const,
             createdAt: new Date('2024-01-30')
         }
     ]

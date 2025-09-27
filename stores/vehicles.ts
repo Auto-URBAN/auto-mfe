@@ -60,9 +60,6 @@ export const useVehiclesStore = defineStore('vehicles', {
       this.pagination.page = 1
       
       try {
-        // Mock API call - replace with real endpoint  
-        await new Promise(resolve => setTimeout(resolve, 500))
-        
         const response = await $fetch('/api/cars/search', {
           query: {
             ...filters,
