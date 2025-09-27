@@ -37,39 +37,33 @@ export const useAdminStore = defineStore('admin', () => {
     const activeUsers = computed(() => state.value.users.length) // All loaded users are considered active
     const hasMetrics = computed(() => state.value.metrics !== null)
 
+    // Vehicle getters
+    const vehiclesByStatus = (status: 'PENDING' | 'APPROVED' | 'REJECTED') => {
+        return state.value.vehiclesByStatus[status.toLowerCase() as keyof typeof state.value.vehiclesByStatus] || []
+    }
+
+    const allVehicles = computed(() => {
+        return [
+            ...state.value.vehiclesByStatus.pending,
+            ...state.value.vehiclesByStatus.approved,
+            ...state.value.vehiclesByStatus.rejected
+        ]
+    })
+
+    // User getters
+    const users = computed(() => state.value.users)
+    const metrics = computed(() => state.value.metrics)
+    const adminUsers = computed(() => state.value.users.filter(u => u.role === 'ADMIN'))
+    const regularUsers = computed(() => state.value.users.filter(u => u.role === 'USER'))
+
     // Actions
     async function loadMetrics() {
         state.value.loading.metrics = true
         error.value = null
 
         try {
-            // Mock metrics - replace with real API
-            await new Promise(resolve => setTimeout(resolve, 800))
-
-            state.value.metrics = {
-                totals: {
-                    vehicles: 1247,
-                    approved: 1180,
-                    pending: 23,
-                    rejected: 44,
-                    users: 856
-                },
-                byBrand: [
-                    { brand: 'Toyota', count: 234 },
-                    { brand: 'Honda', count: 189 },
-                    { brand: 'Volkswagen', count: 167 },
-                    { brand: 'Ford', count: 145 },
-                    { brand: 'Chevrolet', count: 134 }
-                ],
-                byUF: [
-                    { uf: 'SP', count: 423 },
-                    { uf: 'RJ', count: 312 },
-                    { uf: 'MG', count: 189 },
-                    { uf: 'RS', count: 156 },
-                    { uf: 'PR', count: 134 }
-                ]
-            }
-
+            const response = await $fetch('/api/admin/metrics')
+            state.value.metrics = response
         } catch (err) {
             error.value = 'Erro ao carregar métricas'
             console.error('Metrics loading error:', err)
@@ -134,28 +128,16 @@ export const useAdminStore = defineStore('admin', () => {
         error.value = null
 
         try {
-            // Mock users - replace with real API
-            await new Promise(resolve => setTimeout(resolve, 400))
-
-            state.value.users = [
-                {
-                    id: 'user_1',
-                    phone: '+5511999999999',
-                    role: 'USER',
-                    adsCount: 3,
-                    createdAt: new Date('2024-01-15T10:30:00Z'),
-                    updatedAt: new Date()
-                },
-                {
-                    id: 'user_2',
-                    phone: '+5511888888888',
-                    role: 'USER',
-                    adsCount: 1,
-                    createdAt: new Date('2024-02-20T14:45:00Z'),
-                    updatedAt: new Date()
-                }
-            ]
-
+            const response = await $fetch('/api/admin/users')
+            // Map API response to store format
+            state.value.users = response.map((user: any) => ({
+                id: user.id,
+                phone: user.phone,
+                role: user.role,
+                adsCount: user.ads?.total || 0,
+                createdAt: new Date(user.createdAt),
+                updatedAt: new Date()
+            }))
         } catch (err) {
             error.value = 'Erro ao carregar usuários'
             console.error('Users loading error:', err)
@@ -284,6 +266,74 @@ export const useAdminStore = defineStore('admin', () => {
         ])
     }
 
+    async function loadVehicles(status?: string) {
+        try {
+            state.value.loading.vehicles = true
+            error.value = null
+            
+            const response = await $fetch('/api/admin/vehicles', {
+                query: status ? { status } : {}
+            })
+            
+            // Clear all status arrays and populate based on response
+            state.value.vehiclesByStatus = {
+                pending: [],
+                approved: [], 
+                rejected: []
+            }
+            
+            response.forEach((vehicle: any) => {
+                const statusKey = vehicle.status.toLowerCase() as 'pending' | 'approved' | 'rejected'
+                if (state.value.vehiclesByStatus[statusKey]) {
+                    state.value.vehiclesByStatus[statusKey].push(vehicle)
+                }
+            })
+            
+        } catch (err) {
+            error.value = 'Erro ao carregar veículos'
+            console.error('Load vehicles error:', err)
+        } finally {
+            state.value.loading.vehicles = false
+        }
+    }
+
+    async function approveVehicle(vehicleId: string) {
+        try {
+            state.value.loading.moderating = true
+            await $fetch(`/api/admin/vehicles/${vehicleId}/approve`, {
+                method: 'POST'
+            })
+            
+            // Reload vehicles to get updated state
+            await loadVehicles()
+            return { success: true }
+        } catch (err) {
+            error.value = 'Erro ao aprovar veículo'
+            return { success: false, error: 'Erro ao aprovar veículo' }
+        } finally {
+            state.value.loading.moderating = false
+        }
+    }
+
+    async function rejectVehicle(vehicleId: string, reason: string) {
+        try {
+            state.value.loading.moderating = true
+            await $fetch(`/api/admin/vehicles/${vehicleId}/reject`, {
+                method: 'POST',
+                body: { reason }
+            })
+            
+            // Reload vehicles to get updated state
+            await loadVehicles()
+            return { success: true }
+        } catch (err) {
+            error.value = 'Erro ao rejeitar veículo'
+            return { success: false, error: 'Erro ao rejeitar veículo' }
+        } finally {
+            state.value.loading.moderating = false
+        }
+    }
+
     function clearError() {
         error.value = null
     }
@@ -308,8 +358,19 @@ export const useAdminStore = defineStore('admin', () => {
         loadVehiclesByStatus,
         loadUsers,
         loadDashboard,
+        loadVehicles,
         moderateVehicle,
+        approveVehicle,
+        rejectVehicle,
         initializeAdmin,
-        clearError
+        clearError,
+        
+        // Getters as properties
+        vehiclesByStatus,
+        allVehicles,
+        users,
+        metrics,
+        adminUsers,
+        regularUsers
     }
 })

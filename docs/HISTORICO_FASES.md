@@ -55,9 +55,97 @@
 
 ---
 
-## 🎯 Próximo: Sprint 2
+## ✅ Fase 3 - Admin Dashboard (Concluída)
 
-- Páginas de detalhes `/vehicle/[slug]`
-- Sistema de autenticação OTP
-- Galeria de imagens com swiper
-- Formulário de venda wizard
+**Objetivo**: Sistema administrativo completo para moderação e gestão
+
+**Implementado:**
+
+### Páginas Admin:
+
+- `/admin` - Dashboard com métricas e big numbers
+- `/admin/vehicles` - Moderação de anúncios por status
+- `/admin/users` - Gerenciamento de usuários
+
+### Componentes Admin:
+
+- `AdminLayout.vue` - Layout com sidebar e navegação
+- `BigNumberCard.vue` - Cards de métricas clicáveis
+- `StatusBadge.vue` - Badges de status dos veículos
+
+### APIs Admin:
+
+- `GET /api/admin/metrics` - Métricas da plataforma
+- `GET /api/admin/vehicles?status=X` - Veículos por status
+- `POST /api/admin/vehicles/{id}/approve` - Aprovar anúncio
+- `POST /api/admin/vehicles/{id}/reject` - Rejeitar anúncio
+- `GET /api/admin/users` - Lista de usuários
+
+### Funcionalidades:
+
+- Dashboard com métricas (totais, gráficos por marca/UF)
+- Tabelas de moderação com filtros por status
+- Sistema de aprovação/rejeição com motivos
+- Gerenciamento básico de usuários
+- Layout responsivo desktop/mobile
+- Middleware de autenticação admin
+
+**Status**: ✅ Sistema admin funcional completo
+
+---
+
+## ✅ Fase 4 - Detalhes + Auth (Concluída)
+
+**Objetivo**: Sistema completo de detalhes de veículos e autenticação
+
+**Implementado:**
+
+### Páginas de Detalhes:
+
+- `/vehicle/[id]` - Página completa de detalhes
+- Galeria de imagens com lightbox e navegação
+- Especificações detalhadas e descrição
+- CTA WhatsApp com mensagem pré-formatada
+- Breadcrumb de navegação contextual
+- Veículos relacionados/similares
+
+### Sistema de Autenticação:
+
+- `/auth/login` - Login com telefone
+- `/auth/verify` - Verificação OTP mock
+- Store auth com persistência localStorage
+- Middleware de autenticação preparado
+
+### Componentes Criados:
+
+- `VehicleGallery.vue` - Galeria com thumbs e lightbox
+- `VehicleSpecs.vue` - Tabela de especificações
+- `VehicleContact.vue` - CTA WhatsApp + contato
+- Páginas auth mobile-first
+
+### APIs Implementadas:
+
+- `GET /api/vehicles/{id}` - Detalhes completos
+- `GET /api/vehicles/{id}/related` - Similares
+- `POST /api/auth/login` - Login com OTP mock
+- `POST /api/auth/verify-otp` - Verificação código
+
+### Funcionalidades:
+
+- Galeria responsiva com navegação por teclado
+- WhatsApp integrado com mensagem contextual
+- Sistema OTP demonstrativo (123456 = sucesso)
+- Persistência de sessão entre reloads
+- Meta tags e SEO otimizado
+- Schema.org structured data
+
+**Status**: ✅ Experiência completa usuário final
+
+---
+
+## 🎯 Próximo: Fase 5 - Publicação de Anúncios
+
+- Formulário wizard `/sell` com 3 etapas
+- Upload múltiplo de imagens com preview
+- Sistema de conta `/account` com meus anúncios
+- Validação Zod end-to-end
