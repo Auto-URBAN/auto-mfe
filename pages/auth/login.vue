@@ -102,6 +102,7 @@ definePageMeta({
 })
 
 const router = useRouter()
+const route = useRoute()
 
 // Reactive data
 const phone = ref('')
@@ -148,7 +149,10 @@ const handleLogin = async () => {
       // Navigate to OTP verification with phone in query
       await router.push({
         path: '/auth/verify',
-        query: { phone: cleanPhone }
+        query: { 
+          phone: cleanPhone,
+          redirect: route.query.redirect as string
+        }
       })
     }
   } catch (error: any) {

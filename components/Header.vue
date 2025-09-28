@@ -11,7 +11,9 @@
             class="h-10 w-auto"
           />
           <!-- Admin Badge -->
-          <span v-if="isAdmin" class="ml-3 text-sm font-medium text-gray-500">Admin</span>
+          <span v-if="isAdmin" class="ml-3 px-2 py-1 text-xs font-medium text-white bg-red-600 rounded-full">
+            Admin
+          </span>
         </div>
 
         <!-- Search (desktop) - hide in admin layout -->
@@ -61,9 +63,9 @@
             </button>
             
             <!-- User Dropdown -->
-            <div class="relative" @click.away="dropdownOpen = false">
+            <div class="relative" ref="dropdownRef">
               <button 
-                @click="dropdownOpen = !dropdownOpen"
+                @click="toggleDropdown"
                 class="flex items-center cursor-pointer hover:bg-gray-50 rounded-lg px-3 py-2 transition-colors"
               >
                 <!-- Avatar -->
@@ -83,68 +85,78 @@
                 
                 <Icon 
                   name="heroicons:chevron-down" 
-                  class="w-4 h-4 text-gray-400"
+                  class="w-4 h-4 text-gray-400 transition-transform"
+                  :class="{ 'rotate-180': dropdownOpen }"
                 />
               </button>
 
               <!-- Dropdown Menu -->
-              <div 
-                v-show="dropdownOpen"
-                class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50"
+              <Transition
+                enter-active-class="transition ease-out duration-200"
+                enter-from-class="transform opacity-0 scale-95"
+                enter-to-class="transform opacity-100 scale-100"
+                leave-active-class="transition ease-in duration-150"
+                leave-from-class="transform opacity-100 scale-100"
+                leave-to-class="transform opacity-0 scale-95"
               >
-                <div class="py-1">
-                  <!-- Profile -->
-                  <button
-                    v-if="!isAdmin"
-                    class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                    @click="router.push('/profile'); dropdownOpen = false"
-                  >
-                    <Icon name="heroicons:user" class="w-4 h-4 mr-3" />
-                    Meu perfil
-                  </button>
-                  
-                  <!-- My Ads -->
-                  <button
-                    v-if="!isAdmin"
-                    class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                    @click="router.push('/my-ads'); dropdownOpen = false"
-                  >
-                    <Icon name="heroicons:document-text" class="w-4 h-4 mr-3" />
-                    Meus anúncios
-                  </button>
-                  
-                  <!-- Admin Access -->
-                  <button
-                    v-if="isAdmin"
-                    class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                    @click="router.push('/admin'); dropdownOpen = false"
-                  >
-                    <Icon name="heroicons:shield-check" class="w-4 h-4 mr-3" />
-                    Admin
-                  </button>
-                  
-                  <!-- Exit Admin (go back to main site) -->
-                  <button
-                    v-if="isAdmin"
-                    class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                    @click="router.push('/'); dropdownOpen = false"
-                  >
-                    <Icon name="heroicons:arrow-left" class="w-4 h-4 mr-3" />
-                    Voltar ao Site
-                  </button>
-                  
-                  <hr class="my-1 border-gray-200">
-                  
-                  <!-- Logout -->
-                  <button
-                    class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                    @click="handleLogout(); dropdownOpen = false"
-                  >
-                    <Icon name="heroicons:arrow-left-on-rectangle" class="w-4 h-4 mr-3" />
-                    Sair
-                  </button>
+                <div 
+                  v-if="dropdownOpen"
+                  class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50"
+                >
+                  <div class="py-1">
+                    <!-- Profile -->
+                    <button
+                      v-if="!isAdmin"
+                      class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      @click="handleMenuClick('/profile')"
+                    >
+                      <Icon name="heroicons:user" class="w-4 h-4 mr-3" />
+                      Meu perfil
+                    </button>
+                    
+                    <!-- My Ads -->
+                    <button
+                      v-if="!isAdmin"
+                      class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      @click="handleMenuClick('/my-ads')"
+                    >
+                      <Icon name="heroicons:document-text" class="w-4 h-4 mr-3" />
+                      Meus anúncios
+                    </button>
+                    
+                    <!-- Admin Access -->
+                    <button
+                      v-if="isAdmin"
+                      class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      @click="handleMenuClick('/admin')"
+                    >
+                      <Icon name="heroicons:shield-check" class="w-4 h-4 mr-3" />
+                      Painel Admin
+                    </button>
+                    
+                    <!-- Exit Admin (go back to main site) -->
+                    <button
+                      v-if="isAdmin"
+                      class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      @click="handleMenuClick('/')"
+                    >
+                      <Icon name="heroicons:arrow-left" class="w-4 h-4 mr-3" />
+                      Voltar ao Site
+                    </button>
+                    
+                    <hr v-if="isAdmin || !isAdmin" class="my-1 border-gray-200">
+                    
+                    <!-- Logout -->
+                    <button
+                      class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                      @click="handleLogout"
+                    >
+                      <Icon name="heroicons:arrow-left-on-rectangle" class="w-4 h-4 mr-3" />
+                      Sair
+                    </button>
+                  </div>
                 </div>
-              </div>
+              </Transition>
             </div>
           </div>
           
@@ -178,6 +190,7 @@ const router = useRouter()
 
 // Local state
 const dropdownOpen = ref(false)
+const dropdownRef = ref<HTMLElement>()
 
 // Destructure auth composable para uso no template
 const { isAuthenticated, userName, userInitials, isAdmin, logout, adminStats } = useAuth()
@@ -186,12 +199,38 @@ const { isAuthenticated, userName, userInitials, isAdmin, logout, adminStats } =
 const pendingCount = computed(() => adminStats.value?.totals?.pending || 0)
 
 // Methods
+const toggleDropdown = () => {
+  dropdownOpen.value = !dropdownOpen.value
+}
+
+const handleMenuClick = async (path: string) => {
+  dropdownOpen.value = false
+  await router.push(path)
+}
+
 async function handleLogout() {
   try {
+    dropdownOpen.value = false
     await logout()
     await router.push('/')
   } catch (error) {
     console.error('Logout error:', error)
   }
 }
+
+// Click outside handler
+const handleClickOutside = (event: MouseEvent) => {
+  if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
+    dropdownOpen.value = false
+  }
+}
+
+// Lifecycle
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
 </script>

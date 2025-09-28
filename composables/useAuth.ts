@@ -160,20 +160,19 @@ export const useAuth = () => {
   const verifyOTP = async (phone: string, otp: string) => {
     authState.loading = true
     try {
+      console.log('verifyOTP called with:', { phone, otp })
+      
       // Validate inputs with Zod
-      const validatedData = VerifyOTPRequest.parse({ phone, otp })
+      const validatedData = VerifyOTPRequest.parse({ phone, code: otp }) // Corrigindo: usar 'code' em vez de 'otp'
       
-      // Additional validation schemas
-      const PhoneSchema = z.string().min(10).max(15).regex(/^[+]?[1-9][\d]{0,15}$/)
-      const OTPSchema = z.string().length(6).regex(/^\d{6}$/) // 6-digit numeric OTP
-      
-      PhoneSchema.parse(phone)
-      OTPSchema.parse(otp)
+      console.log('Validated data:', validatedData)
       
       const response = await $fetch('/api/auth/verify-otp', {
         method: 'POST',
         body: validatedData
       })
+
+      console.log('API response:', response)
 
       // Parse and validate response with Zod
       const validatedResponse = VerifyOTPResponse.parse(response)
@@ -196,6 +195,8 @@ export const useAuth = () => {
       
       // Persist to storage
       persistTokens()
+      
+      console.log('Auth state updated:', { user: validatedUser, isAuthenticated: true })
       
       return validatedResponse
     } catch (error) {
@@ -312,10 +313,18 @@ export const useAuth = () => {
           const validatedData = PersistedAuthSchema.parse(parsed)
           
           if (validatedData.accessToken && validatedData.user) {
+            // Validate the user data with proper User schema
+            const validUser = User.parse(validatedData.user)
+            
             authState.accessToken = validatedData.accessToken
             authState.refreshToken = validatedData.refreshToken
-            authState.user = validatedData.user
+            authState.user = validUser
             authState.isAuthenticated = true
+            
+            console.log('[useAuth] Persisted auth loaded:', { 
+              phone: validUser.phone, 
+              role: validUser.role 
+            })
           }
         }
       } catch (error) {
@@ -346,10 +355,10 @@ export const useAuth = () => {
     }
   }
 
-  // Initialize auth on first use
-  if (import.meta.client && !authState.user) {
-    loadPersistedAuth()
-  }
+  // Initialize auth on first use (remove this since we'll use the plugin)
+  // if (import.meta.client && !authState.user) {
+  //   loadPersistedAuth()
+  // }
 
   // Admin functions (only available for admin users)
   const loadAdminStats = async () => {

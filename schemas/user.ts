@@ -11,10 +11,10 @@ export type UserRole = z.infer<typeof UserRole>
 // Base User schema
 export const User = z.object({
   id: z.string().min(1),
-  phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number format'),
+  phone: z.string().min(10).max(15), // Removendo regex restritivo
   role: UserRole.default('USER'),
-  createdAt: z.date().optional(),
-  updatedAt: z.date().optional()
+  createdAt: z.string().optional(), // Mudando para string para aceitar ISO string
+  updatedAt: z.string().optional()  // Mudando para string para aceitar ISO string
 })
 export type User = z.infer<typeof User>
 
@@ -26,17 +26,17 @@ export type UserWithAds = z.infer<typeof UserWithAds>
 
 // Auth request schemas
 export const RegisterRequest = z.object({
-  phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number format')
+  phone: z.string().min(10).max(15) // Removendo regex restritivo
 })
 export type RegisterRequest = z.infer<typeof RegisterRequest>
 
 export const LoginRequest = z.object({
-  phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number format')
+  phone: z.string().min(10).max(15) // Removendo regex restritivo
 })
 export type LoginRequest = z.infer<typeof LoginRequest>
 
 export const VerifyOTPRequest = z.object({
-  phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number format'),
+  phone: z.string().min(10).max(15), // Removendo regex restritivo
   code: z.string().length(6, 'OTP must be 6 digits').regex(/^\d{6}$/, 'OTP must contain only numbers')
 })
 export type VerifyOTPRequest = z.infer<typeof VerifyOTPRequest>

@@ -72,11 +72,13 @@
       </UiCard>
 
       <!-- Demo Codes -->
-      <UiAlert
-        variant="info"
-        title="Códigos de demonstração"
-        description="Use 123456 para simular login bem-sucedido ou 000000 para erro"
-      />
+      <UiAlert variant="info" title="Códigos de demonstração">
+        <div class="text-sm space-y-1">
+          <p><strong>123456:</strong> Usuário normal</p>
+          <p><strong>654321:</strong> Usuário admin</p>
+          <p><strong>000000:</strong> Código inválido (teste de erro)</p>
+        </div>
+      </UiAlert>
     </div>
   </div>
 </template>
@@ -130,21 +132,13 @@ const handleVerification = async () => {
 
   loading.value = true
 
-  try {
-    const response = await $fetch('/api/auth/verify-otp', {
-      method: 'POST',
-      body: {
-        phone,
-        code: code.value
-      }
-    })
+  try {    
+    
+    const { verifyOTP } = useAuth()
+    
+    const response = await verifyOTP(phone, code.value)
 
     if (response.accessToken) {
-      // Store tokens (in a real app, use secure storage)
-      localStorage.setItem('accessToken', response.accessToken)
-      localStorage.setItem('refreshToken', response.refreshToken)
-      localStorage.setItem('user', JSON.stringify(response.user))
-
       console.log('Login realizado com sucesso!')
 
       // Redirect to intended page or home
@@ -154,7 +148,18 @@ const handleVerification = async () => {
   } catch (error: any) {
     console.error('Verification error:', error)
     
-    alert('Código inválido. Verifique o código e tente novamente.')
+    // Mensagem de erro mais específica
+    let errorMessage = 'Código inválido. Verifique o código e tente novamente.'
+    
+    if (error?.statusCode === 401) {
+      errorMessage = 'Código OTP inválido. Tente novamente.'
+    } else if (error?.message?.includes('Invalid phone')) {
+      errorMessage = 'Número de telefone inválido.'
+    } else if (error?.message?.includes('must be 6 digits')) {
+      errorMessage = 'O código deve ter 6 dígitos.'
+    }
+    
+    alert(errorMessage)
 
     // Clear code on error
     code.value = ''

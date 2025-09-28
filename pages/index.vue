@@ -5,9 +5,10 @@
           <h1 class="text-3xl font-bold text-gray-900 mb-2">
             Encontre o seu carro ideal
           </h1>
-          <p class="text-gray-600">
+          <p class="text-gray-600 mb-4">
             Milhares de veículos seminovos e novos esperando por você
           </p>
+          
         </div>
     </div>
     
@@ -70,7 +71,17 @@ const searchQuery = ref('')
 const vehicles = ref<any[]>([])
 const loading = ref(false)
 
+// Auth
+const { isAuthenticated, userName, logout } = useAuth()
+
 // Methods
+const handleLogout = async () => {
+  try {
+    await logout()
+  } catch (error) {
+    console.error('Logout error:', error)
+  }
+}
 async function loadVehicles() {
   loading.value = true
   

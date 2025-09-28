@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
     // Mock OTP verification
     // In a real app, this would verify against stored OTP
     if (code === '123456') {
-      // Success case
+      // Success case - Normal User
       const mockUser = {
         id: `user_${phone}`,
         phone,
@@ -34,6 +34,26 @@ export default defineEventHandler(async (event) => {
         refreshToken,
         user: mockUser,
         message: 'Login successful'
+      }
+    } else if (code === '654321') {
+      // Success case - Admin User
+      const mockAdminUser = {
+        id: `admin_${phone}`,
+        phone,
+        role: 'ADMIN' as const,
+        createdAt: new Date().toISOString()
+      }
+      
+      // Generate mock JWT tokens
+      const accessToken = `mock_admin_access_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+      const refreshToken = `mock_admin_refresh_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+      
+      return {
+        success: true,
+        accessToken,
+        refreshToken,
+        user: mockAdminUser,
+        message: 'Admin login successful'
       }
     } else if (code === '000000') {
       // Error case for testing
