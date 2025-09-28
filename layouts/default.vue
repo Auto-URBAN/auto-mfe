@@ -1,10 +1,8 @@
 <template>
   <div>
     <Header />
-    <main class="py-6">
-      <UiContainer>
-        <slot />
-      </UiContainer>
+    <main>
+      <slot />
     </main>
     <Footer />
   </div>

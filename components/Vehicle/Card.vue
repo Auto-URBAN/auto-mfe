@@ -27,7 +27,7 @@
           variant="solid"
           size="xs"
         >
-          Aprovado
+          <Icon name="mdi:check-bold" class="w-4 h-4" />
         </UiBadge>
       </div>
     </div>

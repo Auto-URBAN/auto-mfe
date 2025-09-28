@@ -1,24 +1,30 @@
 <template>
   <div class="space-y-3">
     <!-- Input Fields - More compact grid -->
-    <div class="grid grid-cols-6 gap-2 text-xs">
-      <div class="col-span-2">
+    <div class="grid grid-cols-4 gap-2 text-xs">
+      <div>
         <label class="block text-gray-600 mb-1 text-[10px] font-medium">VALOR</label>
         <input
-          v-model="vehicleValueFormatted"
+          v-model="vehicleValueDisplay"
+          @input="updateVehicleValue"
+          @focus="handleFocus('vehicle')"
+          @blur="handleBlur('vehicle')"
           type="text"
           class="w-full px-2 py-1.5 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-          placeholder="R$ 50.000"
+          placeholder="R$ 50k"
         />
       </div>
       
-      <div class="col-span-2">
+      <div>
         <label class="block text-gray-600 mb-1 text-[10px] font-medium">ENTRADA</label>
         <input
-          v-model="downPaymentFormatted"
+          v-model="downPaymentDisplay"
+          @input="updateDownPayment"
+          @focus="handleFocus('down')"
+          @blur="handleBlur('down')"
           type="text"
           class="w-full px-2 py-1.5 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-          placeholder="R$ 10.000"
+          placeholder="R$ 10k"
         />
       </div>
       
@@ -112,27 +118,89 @@ const downPayment = ref(Math.round(props.price * 0.2)) // 20% default
 const months = ref(48)
 const interestRate = ref(1.5) // 1.5% per month default
 
-// Formatted inputs for money
-const vehicleValueFormatted = computed({
-  get: () => formatCurrency(vehicleValue.value),
-  set: (val: string) => {
-    const num = parseFloat(val.replace(/[^\d,.-]/g, '').replace(',', '.'))
-    vehicleValue.value = isNaN(num) ? 0 : num
-  }
-})
+// Display values for inputs (more fluid UX)
+const vehicleValueDisplay = ref('')
+const downPaymentDisplay = ref('')
+const focusState = ref({ vehicle: false, down: false })
 
-const downPaymentFormatted = computed({
-  get: () => formatCurrency(downPayment.value),
-  set: (val: string) => {
-    const num = parseFloat(val.replace(/[^\d,.-]/g, '').replace(',', '.'))
-    downPayment.value = isNaN(num) ? 0 : num
+// Initialize display values
+const initializeDisplayValues = () => {
+  vehicleValueDisplay.value = formatDisplayValueWithCurrency(vehicleValue.value)
+  downPaymentDisplay.value = formatDisplayValueWithCurrency(downPayment.value)
+}
+
+// Handle focus events
+const handleFocus = (field: 'vehicle' | 'down') => {
+  focusState.value[field] = true
+  // Show raw number when focused
+  if (field === 'vehicle') {
+    vehicleValueDisplay.value = vehicleValue.value.toString()
+  } else {
+    downPaymentDisplay.value = downPayment.value.toString()
   }
-})
+}
+
+// Handle blur events
+const handleBlur = (field: 'vehicle' | 'down') => {
+  focusState.value[field] = false
+  // Format display when not focused
+  if (field === 'vehicle') {
+    vehicleValueDisplay.value = formatDisplayValueWithCurrency(vehicleValue.value)
+  } else {
+    downPaymentDisplay.value = formatDisplayValueWithCurrency(downPayment.value)
+  }
+}
+
+// Update vehicle value
+const updateVehicleValue = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  const cleanValue = input.value.replace(/[^\d]/g, '')
+  const numValue = parseInt(cleanValue) || 0
+  vehicleValue.value = numValue
+  vehicleValueDisplay.value = focusState.value.vehicle ? numValue.toString() : formatDisplayValueWithCurrency(numValue)
+}
+
+// Update down payment
+const updateDownPayment = (event: Event) => {
+  const input = event.target as HTMLInputElement
+  const cleanValue = input.value.replace(/[^\d]/g, '')
+  const numValue = parseInt(cleanValue) || 0
+  downPayment.value = numValue
+  downPaymentDisplay.value = focusState.value.down ? numValue.toString() : formatDisplayValueWithCurrency(numValue)
+}
+
+// Format display value (compact, user-friendly)
+const formatDisplayValue = (value: number) => {
+  if (value === 0) return ''
+  if (value >= 1000) {
+    return `${(value / 1000).toFixed(0)}k`
+  }
+  return value.toString()
+}
+
+// Format display value with currency
+const formatDisplayValueWithCurrency = (value: number) => {
+  if (value === 0) return ''
+  if (value >= 1000000) {
+    const mValue = (value / 1000000).toFixed(1)
+    return `R$ ${mValue.endsWith('.0') ? mValue.slice(0, -2) : mValue}M`
+  } else if (value >= 1000) {
+    const kValue = (value / 1000).toFixed(0)
+    return `R$ ${kValue}k`
+  }
+  return `R$ ${value.toString()}`
+}
 
 // Watch price changes
 watch(() => props.price, (newPrice) => {
   vehicleValue.value = newPrice
   downPayment.value = Math.round(newPrice * 0.2)
+  initializeDisplayValues()
+})
+
+// Initialize on mount
+onMounted(() => {
+  initializeDisplayValues()
 })
 
 // Computed values

@@ -1,18 +1,44 @@
 <template>
   <div class="min-h-screen">
-    <div class="">
-        <div class="max-w-2xl mx-auto text-center mb-6">
-          <h1 class="text-3xl font-bold text-gray-900 mb-2">
-            Encontre o seu carro ideal
+    <!-- Hero Section -->
+    <div class="relative bg-[url('/imgs/background.jpg')] bg-cover bg-center">
+      <!-- Overlay -->
+      <div class="absolute inset-0 bg-black/0"></div>
+      
+      <!-- Content -->
+      <div class="relative py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto text-center">
+          <h1 class="text-4xl sm:text-5xl lg:text-4xl font-black text-white mb-2 leading-tight">
+            Busque por 
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
+              carros legais
+            </span>
           </h1>
-          <p class="text-gray-600 mb-4">
-            Milhares de veículos seminovos e novos esperando por você
+          
+          <p class="text-md text-gray-200 mb-8 max-w-2xl mx-auto font-medium">
+            Carros esportivos, clássicos e únicos. 
+            <span class="text-blue-300">Chega de carros sem graça!</span>
           </p>
           
+          <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <NuxtLink to="/sell" class="group">
+              <button class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-2 px-4 rounded-xl text-md transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-blue-500/25">
+                <Icon name="heroicons:plus-20-solid" class="w-5 h-5 inline-block mr-2" />
+                Anuncie Grátis
+              </button>
+            </NuxtLink>
+            
+          </div>
         </div>
+      </div>
+      
+      <!-- Scroll indicator -->
+      <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <Icon name="heroicons:chevron-down-20-solid" class="w-6 h-6 text-white/60" />
+      </div>
     </div>
     
-    <!-- Results Section -->
+      <UiContainer class="py-6 vehicles-section">
     <div>
       <!-- Results header -->
       <div v-if="!loading && vehicles.length > 0" class="flex justify-between items-center mb-6">
@@ -56,6 +82,7 @@
         </UiButton>
       </div>
     </div>
+    </UiContainer>
   </div>
 </template>
 
@@ -82,6 +109,14 @@ const handleLogout = async () => {
     console.error('Logout error:', error)
   }
 }
+
+const scrollToVehicles = () => {
+  const vehiclesSection = document.querySelector('.vehicles-section')
+  if (vehiclesSection) {
+    vehiclesSection.scrollIntoView({ behavior: 'smooth' })
+  }
+}
+
 async function loadVehicles() {
   loading.value = true
   

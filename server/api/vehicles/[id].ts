@@ -15,20 +15,20 @@ export default defineEventHandler(async (event) => {
     // Mock vehicle details - in a real app this would come from database
     const mockVehicle = {
       id: vehicleId,
-      title: 'Honda Civic 1.5 VTEC TURBO Sport 2021',
+      title: 'Honda Civic Type R 2021',
       brand: 'Honda',
       model: 'Civic',
       year: 2021,
-      price: 89000,
+      price: 350000,
       km: 25000,
       city: 'São Paulo',
       uf: 'SP' as const,
       status: 'APPROVED' as const,
-      coverImageUrl: '/imgs/search-example.jpg',
+      coverImageUrl: 'https://cdn.motor1.com/images/mgl/Oo376A/s3/honda-civic-type-r---brasil.jpg',
       images: [
-        '/imgs/search-example.jpg',
-        '/imgs/search-latest-example.jpg',
-        '/imgs/background.jpg'
+        'https://cdn.motor1.com/images/mgl/Oo376A/s3/honda-civic-type-r---brasil.jpg',
+        'https://garagem360.com.br/wp-content/uploads/2023/06/unnamed-3.jpg',
+        'https://www.honda.com/content/dam/site/honda/vehicles/civic/type-r/2021/overview/exterior/2021-honda-civic-type-r-side-profile.jpg'
       ],
       description: `Honda Civic Sport 1.5 Turbo 2021 em excelente estado de conservação.
 

@@ -1,78 +1,114 @@
 import type { CarList } from '@/schemas/car'
 
 export default defineEventHandler(async (event): Promise<CarList> => {
-    // Mock data for development - avoiding external API dependency
+    // Mock data com carros esportivos premium mais buscados
     const mockCars: CarList = [
         {
             id: 1,
-            name: "Honda Civic 2018/2019 - 1.5 VTEC TURBO GASOLINA SEDAN 4P CVT",
-            model: "Civic",
-            branch: { id: "1", name: 1 }, // Honda
-            modelYear: 2019,
+            name: "Porsche 911 Turbo Cabriolet 2023 - 3.8 24V H6 GASOLINA PDK",
+            model: "911",
+            branch: { id: "1", name: 1 }, // Porsche
+            modelYear: 2023,
             fipeCode: "001001-1",
-            slug: "honda-civic-2018-2019-1-5-vtec-turbo-gasolina-sedan-4p-cvt",
-            thumb: "/imgs/search-latest-example.jpg",
-            averageValue: 85000,
-            minValue: 78000,
-            maxValue: 92000,
-            prices: generateMockPrices(1, 85000),
+            slug: "porsche-911-turbo-cabriolet-2023-3-8-24v-h6-gasolina-pdk",
+            thumb: "https://s3.sa-east-1.amazonaws.com/revista.mobiauto/Porsche/911+Turbo+S/Porsche-911-Turbo-S-Traseira.jpg",
+            averageValue: 1449000,
+            minValue: 1380000,
+            maxValue: 1520000,
+            prices: generateMockPrices(1, 1449000),
             partners: [
-                { name: "Banco do Brasil", value: 84500 },
-                { name: "Santander", value: 85200 }
+                { name: "Banco do Brasil", value: 1445000 },
+                { name: "Santander", value: 1450000 }
             ]
         },
         {
             id: 2,
-            name: "Toyota Corolla 2020/2021 - 2.0 VVT-IE FLEX XEI DIRECT SHIFT",
-            model: "Corolla",
-            branch: { id: "2", name: 2 }, // Toyota
-            modelYear: 2021,
+            name: "BMW M3 Competition 2022 - 3.0 24V I6 GASOLINA M XDRIVE AUTOMÁTICO",
+            model: "M3",
+            branch: { id: "2", name: 2 }, // BMW
+            modelYear: 2022,
             fipeCode: "001002-2",
-            slug: "toyota-corolla-2020-2021-2-0-vvt-ie-flex-xei-direct-shift",
-            thumb: "/imgs/search-latest-example.jpg",
-            averageValue: 92000,
-            minValue: 88000,
-            maxValue: 96000,
-            prices: generateMockPrices(2, 92000),
+            slug: "bmw-m3-competition-2022-3-0-24v-i6-gasolina-m-xdrive-automatico",
+            thumb: "https://s3.ecompletocarros.dev/images/lojas/108/veiculos/206897/veiculoInfoVeiculoImagesMobile/vehicle_image_1724358685_d41d8cd98f00b204e9800998ecf8427e.jpeg",
+            averageValue: 685000,
+            minValue: 650000,
+            maxValue: 720000,
+            prices: generateMockPrices(2, 685000),
             partners: [
-                { name: "Itaú", value: 91800 },
-                { name: "Bradesco", value: 92300 }
+                { name: "Itaú", value: 682000 },
+                { name: "Bradesco", value: 688000 }
             ]
         },
         {
             id: 3,
-            name: "Volkswagen Jetta 2019/2020 - 1.4 250 TSI TOTAL FLEX TIPTRONIC",
-            model: "Jetta",
+            name: "Volkswagen Golf GTI Performance 2024 - 2.0 350 TSI GASOLINA DSG",
+            model: "Golf GTI",
             branch: { id: "3", name: 3 }, // Volkswagen
-            modelYear: 2020,
+            modelYear: 2024,
             fipeCode: "001003-3",
-            slug: "volkswagen-jetta-2019-2020-1-4-250-tsi-total-flex-tiptronic",
-            thumb: "/imgs/search-latest-example.jpg",
-            averageValue: 78000,
-            minValue: 74000,
-            maxValue: 82000,
-            prices: generateMockPrices(3, 78000),
+            slug: "volkswagen-golf-gti-performance-2024-2-0-350-tsi-gasolina-dsg",
+            thumb: "https://cdn.motor1.com/images/mgl/0eeNl/s1/2022-volkswagen-golf-gti.jpg",
+            averageValue: 185000,
+            minValue: 175000,
+            maxValue: 195000,
+            prices: generateMockPrices(3, 185000),
             partners: [
-                { name: "Caixa", value: 77500 },
-                { name: "Banco do Brasil", value: 78200 }
+                { name: "Caixa", value: 183000 },
+                { name: "Banco do Brasil", value: 186000 }
             ]
         },
         {
             id: 4,
-            name: "Hyundai HB20 2021/2022 - 1.0 TGDI FLEX PLATINUM AUTOMÁTICO",
-            model: "HB20",
-            branch: { id: "4", name: 4 }, // Hyundai
-            modelYear: 2022,
+            name: "Nissan GT-R Premium 2020 - 3.8 24V V6 GASOLINA 4WD AUTOMÁTICO",
+            model: "GT-R",
+            branch: { id: "4", name: 4 }, // Nissan
+            modelYear: 2020,
             fipeCode: "001004-4",
-            slug: "hyundai-hb20-2021-2022-1-0-tgdi-flex-platinum-automatico",
-            thumb: "/imgs/search-latest-example.jpg",
-            averageValue: 68000,
-            minValue: 65000,
-            maxValue: 71000,
-            prices: generateMockPrices(4, 68000),
+            slug: "nissan-gt-r-premium-2020-3-8-24v-v6-gasolina-4wd-automatico",
+            thumb: "https://bringatrailer.com/wp-content/uploads/2022/09/2020_nissan_gt-r_f8e4ca0c-0d74-4a1e-b272-74c158057b14-73286.jpeg?fit=940%2C627",
+            averageValue: 950000,
+            minValue: 900000,
+            maxValue: 1000000,
+            prices: generateMockPrices(4, 950000),
             partners: [
-                { name: "Santander", value: 67800 },
-                { name: "Itaú", value: 68400 }
+                { name: "Santander", value: 945000 },
+                { name: "Itaú", value: 952000 }
+            ]
+        },
+        {
+            id: 5,
+            name: "BMW M2 Competition 2021 - 3.0 24V I6 GASOLINA M DCT",
+            model: "M2",
+            branch: { id: "5", name: 5 }, // BMW
+            modelYear: 2021,
+            fipeCode: "001005-5",
+            slug: "bmw-m2-competition-2021-3-0-24v-i6-gasolina-m-dct",
+            thumb: "https://image.webmotors.com.br/_fotos/anunciousados/gigante/2025/202507/20250718/bmw-m2-3.0-i6-twinturbo-gasolina-coupe-m-steptronic-wmimagem15234356261.jpg",
+            averageValue: 525000,
+            minValue: 500000,
+            maxValue: 550000,
+            prices: generateMockPrices(5, 525000),
+            partners: [
+                { name: "Bradesco", value: 522000 },
+                { name: "Santander", value: 527000 }
+            ]
+        },
+        {
+            id: 6,
+            name: "Mercedes-AMG C63 S 2019 - 4.0 V8 BI-TURBO GASOLINA SPEEDSHIFT MCT 9G",
+            model: "AMG C63 S",
+            branch: { id: "6", name: 6 }, // Mercedes-Benz
+            modelYear: 2019,
+            fipeCode: "001006-6",
+            slug: "mercedes-amg-c63-s-2019-4-0-v8-bi-turbo-gasolina-speedshift-mct-9g",
+            thumb: "https://www.cnet.com/a/img/resize/1f48abe6116fb1467ca90b0585de44205b1e4f38/hub/2018/07/23/54caf845-a70d-47d5-bfb9-1a7a6a873dcc/010-2019-mercedes-amg-c63-coupe.jpg?auto=webp&width=1200",
+            averageValue: 450000,
+            minValue: 420000,
+            maxValue: 480000,
+            prices: generateMockPrices(6, 450000),
+            partners: [
+                { name: "Itaú", value: 448000 },
+                { name: "Banco do Brasil", value: 452000 }
             ]
         }
     ]

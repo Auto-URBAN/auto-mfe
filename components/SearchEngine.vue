@@ -1,18 +1,18 @@
 <template>
     <div class="relative min-w-[350px] lg:min-w-[700px]">
-        <div class="bg-white w-full p-2 rounded-full shadow-lg border flex justify-center items-center outline-4 outline-offset-2 relative z-10">
+        <div class="bg-white w-full py-2 px-4 rounded-full shadow-lg border flex justify-center items-center outline-4 outline-offset-2 relative z-10">
             <Icon name="uil:search" size="24px" class="me-4 text-gray-500 dark:text-gray-400" />
             <input 
               type="text" 
               placeholder="Digite o veículo que você está procurando..." 
-              class="w-full p-1 outline-none text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 bg-transparent" 
+              class="w-full p-1 outline-none text-gray-900   bg-transparent" 
               v-model="search" 
             />
         </div>
         <div class="bg-white border rounded-xl shadow-xl absolute top-[30px] w-full pt-12" v-if="searchListCars.length">
             <router-link 
               :to="`/valor-do-carro/${car.slug}`" 
-              class="flex items-center p-4 text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors" 
+              class="flex items-center p-4 text-gray-900  hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors" 
               v-for="(car, idx) in searchListCars" 
               :key="car.name"
             >

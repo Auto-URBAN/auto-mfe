@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <UiContainer class="py-6">
     <!-- Breadcrumb -->
     <nav class="mb-6">
       <ol class="flex items-center space-x-2 text-sm">
@@ -593,7 +593,7 @@
         Voltar às buscas
       </UiButton>
     </div>
-  </div>
+  </UiContainer>
 </template>
 
 <script setup lang="ts">

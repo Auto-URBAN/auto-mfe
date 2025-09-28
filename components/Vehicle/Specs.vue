@@ -72,22 +72,6 @@
       </p>
     </div>
 
-    <!-- Price Highlight -->
-    <div class="mt-6 pt-6 border-t border-gray-100">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm text-gray-600">Preço anunciado</p>
-          <p class="text-2xl font-bold text-green-600">
-            {{ formatCurrency(vehicle.price) }}
-          </p>
-        </div>
-        
-        <div class="text-right">
-          <p class="text-xs text-gray-500 mb-1">Publicado em</p>
-          <p class="text-sm text-gray-700">{{ formatDate(vehicle.createdAt) }}</p>
-        </div>
-      </div>
-    </div>
   </UiCard>
 </template>
 
