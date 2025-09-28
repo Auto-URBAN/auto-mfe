@@ -12,36 +12,43 @@
           
           <!-- Admin Actions -->
           <div class="flex items-center space-x-4">
-            <UButton
-              variant="ghost"
-              size="sm"
-              icon="i-heroicons-bell"
-              :badge="pendingCount"
-            />
-            <UDropdown>
-              <UButton
-                variant="ghost" 
-                size="sm"
-                icon="i-heroicons-user-circle"
-                trailing-icon="i-heroicons-chevron-down-20-solid"
+            <!-- Notification Bell -->
+            <div class="relative">
+              <button class="p-2 text-gray-400 hover:text-gray-600 transition-colors">
+                <Icon name="heroicons:bell" class="w-5 h-5" />
+                <span v-if="pendingCount > 0" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {{ pendingCount }}
+                </span>
+              </button>
+            </div>
+            
+            <!-- User Dropdown -->
+            <div class="relative">
+              <button 
+                @click="dropdownOpen = !dropdownOpen"
+                class="flex items-center space-x-2 text-gray-700 hover:text-gray-900 p-2 rounded-md transition-colors"
               >
-                Admin
-              </UButton>
+                <Icon name="heroicons:user-circle" class="w-5 h-5" />
+                <span class="text-sm font-medium">Admin</span>
+                <Icon name="heroicons:chevron-down" class="w-4 h-4" />
+              </button>
               
-              <template #panel>
-                <div class="p-2">
-                  <UButton 
-                    variant="ghost"
-                    size="sm"
-                    icon="i-heroicons-arrow-left-on-rectangle"
-                    class="w-full justify-start"
-                    @click="logout"
+              <div 
+                v-show="dropdownOpen" 
+                @click.away="dropdownOpen = false"
+                class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50"
+              >
+                <div class="py-1">
+                  <button 
+                    @click="logout(); dropdownOpen = false"
+                    class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                   >
+                    <Icon name="heroicons:arrow-left-on-rectangle" class="w-4 h-4 mr-2" />
                     Sair
-                  </UButton>
+                  </button>
                 </div>
-              </template>
-            </UDropdown>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -57,7 +64,7 @@
               class="group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
               :class="isActive('/admin') ? activeClasses : inactiveClasses"
             >
-              <UIcon name="i-heroicons-home" class="mr-3 h-5 w-5" />
+              <Icon name="heroicons:home" class="mr-3 h-5 w-5" />
               Dashboard
             </NuxtLink>
             
@@ -66,15 +73,14 @@
               class="group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
               :class="isActive('/admin/vehicles') ? activeClasses : inactiveClasses"
             >
-              <UIcon name="i-heroicons-truck" class="mr-3 h-5 w-5" />
+              <Icon name="heroicons:truck" class="mr-3 h-5 w-5" />
               Veículos
-              <UBadge
+              <span 
                 v-if="pendingCount > 0"
-                :label="pendingCount.toString()"
-                variant="solid"
-                size="xs"
-                class="ml-auto"
-              />
+                class="ml-auto bg-blue-500 text-white text-xs px-2 py-1 rounded-full"
+              >
+                {{ pendingCount }}
+              </span>
             </NuxtLink>
             
             <NuxtLink
@@ -82,7 +88,7 @@
               class="group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
               :class="isActive('/admin/users') ? activeClasses : inactiveClasses"
             >
-              <UIcon name="i-heroicons-users" class="mr-3 h-5 w-5" />
+              <Icon name="heroicons:users" class="mr-3 h-5 w-5" />
               Usuários
             </NuxtLink>
           </nav>
@@ -102,15 +108,19 @@ import { useAdmin } from '~/composables/useAdmin'
 
 definePageMeta({
   middleware: 'admin-auth',
-  layout: false
+  layout: 'admin'
 })
 
 const route = useRoute()
 const router = useRouter()
-const adminStore = useAdminStore()
+const admin = useAdmin()
+const { stats, loading, error, loadStats } = admin
+
+// Local state
+const dropdownOpen = ref(false)
 
 // Computed
-const pendingCount = computed(() => adminStore.metrics?.totals.pending || 0)
+const pendingCount = computed(() => stats.value?.totals?.pending || 0)
 
 const activeClasses = 'bg-blue-50 border-blue-200 text-blue-700'
 const inactiveClasses = 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
@@ -129,7 +139,11 @@ const logout = () => {
 }
 
 // Load initial data
-onMounted(() => {
-  adminStore.loadMetrics()
+onMounted(async () => {
+  try {
+    await loadStats()
+  } catch (err) {
+    console.error('Failed to load admin metrics:', err)
+  }
 })
 </script>

@@ -131,11 +131,6 @@
 </template>
 
 <script setup lang="ts">
-import VehicleGallery from '~/components/VehicleGallery.vue'
-import VehicleSpecs from '~/components/VehicleSpecs.vue'
-import VehicleContact from '~/components/VehicleContact.vue'
-import VehicleCard from '~/components/VehicleCard.vue'
-
 // Get route params
 const route = useRoute()
 const vehicleId = route.params.id as string

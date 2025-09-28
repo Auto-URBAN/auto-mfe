@@ -92,7 +92,6 @@
 </template>
 
 <script setup lang="ts">
-import StatusBadge from './StatusBadge.vue'
 import type { VehicleStatus } from '~/schemas/vehicle'
 
 interface VehicleDetail {

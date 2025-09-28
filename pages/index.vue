@@ -1,7 +1,6 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <!-- Search Hero Section -->
-    <div class="bg-white shadow-sm border-b border-gray-200">
+  <div class="min-h-screen">
+    <div class="">
         <div class="max-w-2xl mx-auto text-center mb-6">
           <h1 class="text-3xl font-bold text-gray-900 mb-2">
             Encontre o seu carro ideal
@@ -9,17 +8,6 @@
           <p class="text-gray-600">
             Milhares de veículos seminovos e novos esperando por você
           </p>
-        </div>
-        
-        <!-- Simple Search Input -->
-        <div class="max-w-xl mx-auto mb-4">
-          <UiInput
-            v-model="searchQuery"
-            placeholder="Busque por marca, modelo, cor..."
-            size="lg"
-            icon-left="heroicons:magnifying-glass-20-solid"
-            @keyup.enter="performSearch"
-          />
         </div>
     </div>
     
@@ -71,7 +59,6 @@
 </template>
 
 <script setup lang="ts">
-// Meta tags
 useHead({
   title: 'Auto URBAN - Encontre o seu carro ideal',
   meta: [
@@ -79,7 +66,6 @@ useHead({
   ]
 })
 
-// State
 const searchQuery = ref('')
 const vehicles = ref<any[]>([])
 const loading = ref(false)

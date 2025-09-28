@@ -4,7 +4,7 @@
     <div class="mb-8">
       <h1 class="text-2xl font-bold text-gray-900">Gerenciamento de Usuários</h1>
       <p class="mt-2 text-sm text-gray-600">
-        Visualize e gerencie usuários da plataforma
+        Gerencie usuários e administradores da plataforma
       </p>
     </div>
 
@@ -13,55 +13,58 @@
       <BigNumberCard
         title="Total de Usuários"
         :value="totalUsers"
-        icon="i-heroicons-users"
+        icon="heroicons:users"
         color="blue"
       />
       
       <BigNumberCard
-        title="Usuários Regulares"
+        title="Usuários Regulares" 
         :value="regularUsersCount"
-        icon="i-heroicons-user"
+        icon="heroicons:user"
         color="green"
       />
       
       <BigNumberCard
         title="Administradores"
         :value="adminUsersCount"
-        icon="i-heroicons-shield-check"
+        icon="heroicons:shield-check"
         color="purple"
       />
     </div>
 
     <!-- Loading State -->
-    <div v-if="adminStore.isLoading" class="space-y-4">
-      <USkeleton v-for="i in 5" :key="i" class="h-16" />
+    <div v-if="loading" class="space-y-4">
+      <div v-for="i in 5" :key="i" class="h-16 bg-gray-200 rounded-lg animate-pulse" />
     </div>
 
     <!-- Error State -->
-    <UAlert
-      v-else-if="adminStore.error"
-      icon="i-heroicons-exclamation-triangle"
-      color="red"
-      variant="subtle"
-      :title="adminStore.error"
-      class="mb-6"
-    />
+    <div
+      v-else-if="error"
+      class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded"
+    >
+      <div class="flex">
+        <Icon name="heroicons:exclamation-triangle" class="h-5 w-5 text-red-400 mr-2" />
+        <p class="text-sm">{{ error }}</p>
+      </div>
+    </div>
 
     <!-- Users Table -->
-    <UCard v-else>
-      <template #header>
+    <div v-else class="bg-white rounded-lg shadow">
+      <div class="px-6 py-4 border-b border-gray-200">
         <div class="flex justify-between items-center">
           <h3 class="text-lg font-semibold text-gray-900">Lista de Usuários</h3>
           
           <!-- Filter Dropdown -->
-          <USelectMenu
+          <select
             v-model="selectedFilter"
-            :options="filterOptions"
-            placeholder="Filtrar por tipo"
-            class="w-48"
-          />
+            class="w-48 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="all">Todos os usuários</option>
+            <option value="user">Usuários regulares</option>
+            <option value="admin">Administradores</option>
+          </select>
         </div>
-      </template>
+      </div>
 
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
@@ -114,12 +117,14 @@
 
               <!-- Role -->
               <td class="px-6 py-4 whitespace-nowrap">
-                <UBadge
-                  :label="user.role === 'ADMIN' ? 'Admin' : 'Usuário'"
-                  :color="user.role === 'ADMIN' ? 'purple' : 'gray'"
-                  variant="solid"
-                  size="xs"
-                />
+                <span 
+                  :class="[
+                    'inline-flex px-2 py-1 text-xs font-semibold rounded-full',
+                    user.role === 'ADMIN' ? 'bg-purple-100 text-purple-800' : 'bg-gray-100 text-gray-800'
+                  ]"
+                >
+                  {{ user.role === 'ADMIN' ? 'Admin' : 'Usuário' }}
+                </span>
               </td>
 
               <!-- Ads Count -->
@@ -141,48 +146,46 @@
               <!-- Actions -->
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <div class="flex justify-end space-x-2">
-                  <UButton
-                    variant="ghost"
-                    size="sm"
-                    icon="i-heroicons-eye"
+                  <button
                     @click="viewUserAds(user.id)"
+                    class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-blue-600 hover:text-blue-900 hover:bg-blue-50 transition-colors"
                   >
+                    <Icon name="heroicons:eye" class="mr-1 w-4 h-4" />
                     Ver Anúncios
-                  </UButton>
+                  </button>
                   
-                  <UDropdown>
-                    <UButton
-                      variant="ghost"
-                      size="sm"
-                      icon="i-heroicons-ellipsis-horizontal"
-                    />
+                  <div class="relative">
+                    <button 
+                      @click="toggleDropdown(user.id)"
+                      class="inline-flex items-center px-2 py-1 border border-transparent text-sm font-medium rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+                    >
+                      <Icon name="heroicons:ellipsis-horizontal" class="w-4 h-4" />
+                    </button>
                     
-                    <template #panel>
+                    <div 
+                      v-show="openDropdowns[user.id]" 
+                      class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50"
+                    >
                       <div class="p-2 space-y-1">
-                        <UButton
+                        <button
                           v-if="user.role !== 'ADMIN'"
-                          variant="ghost"
-                          size="sm"
-                          icon="i-heroicons-shield-check"
-                          class="w-full justify-start"
-                          @click="promoteToAdmin(user.id)"
+                          @click="promoteToAdmin(user.id); closeDropdown(user.id)"
+                          class="flex items-center w-full px-3 py-1 text-sm text-gray-700 hover:bg-gray-100 transition-colors rounded"
                         >
+                          <Icon name="heroicons:shield-check" class="mr-2 w-4 h-4" />
                           Promover a Admin
-                        </UButton>
+                        </button>
                         
-                        <UButton
-                          variant="ghost"
-                          size="sm"
-                          icon="i-heroicons-no-symbol"
-                          color="red"
-                          class="w-full justify-start"
+                        <button
                           disabled
+                          class="flex items-center w-full px-3 py-1 text-sm text-gray-400 cursor-not-allowed rounded"
                         >
+                          <Icon name="heroicons:no-symbol" class="mr-2 w-4 h-4" />
                           Suspender (Em Breve)
-                        </UButton>
+                        </button>
                       </div>
-                    </template>
-                  </UDropdown>
+                    </div>
+                  </div>
                 </div>
               </td>
             </tr>
@@ -190,7 +193,7 @@
             <!-- Empty State -->
             <tr v-if="filteredUsers.length === 0">
               <td colspan="6" class="px-6 py-12 text-center">
-                <UIcon name="i-heroicons-users" class="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                <Icon name="heroicons:users" class="mx-auto h-12 w-12 text-gray-400 mb-4" />
                 <h3 class="text-sm font-medium text-gray-900 mb-1">
                   Nenhum usuário encontrado
                 </h3>
@@ -202,7 +205,7 @@
           </tbody>
         </table>
       </div>
-    </UCard>
+    </div>
   </div>
 </template>
 
@@ -215,25 +218,20 @@ definePageMeta({
   middleware: 'admin-auth'
 })
 
-const adminStore = useAdminStore()
+const admin = useAdmin()
+const { users, loading, error, loadUsers } = admin
 
 // Reactive data
 const selectedFilter = ref('all')
-
-// Filter options
-const filterOptions = [
-  { label: 'Todos os usuários', value: 'all' },
-  { label: 'Usuários regulares', value: 'user' },
-  { label: 'Administradores', value: 'admin' }
-]
+const openDropdowns = ref<Record<string, boolean>>({})
 
 // Computed
-const totalUsers = computed(() => adminStore.users.length)
-const regularUsersCount = computed(() => adminStore.regularUsers.length)
-const adminUsersCount = computed(() => adminStore.adminUsers.length)
+const totalUsers = computed(() => users.value.length)
+const regularUsersCount = computed(() => users.value.filter(u => u.role === 'USER').length)
+const adminUsersCount = computed(() => users.value.filter(u => u.role === 'ADMIN').length)
 
 const filteredUsers = computed(() => {
-  const allUsers = adminStore.users
+  const allUsers = users.value
   
   if (selectedFilter.value === 'user') {
     return allUsers.filter(u => u.role === 'USER')
@@ -249,7 +247,7 @@ const filteredUsers = computed(() => {
 const filterText = computed(() => {
   const texts = {
     all: 'cadastrados',
-    user: 'regulares',
+    user: 'regulares', 
     admin: 'administradores'
   }
   return texts[selectedFilter.value as keyof typeof texts] || 'cadastrados'
@@ -280,16 +278,39 @@ const viewUserAds = (userId: string) => {
 
 const promoteToAdmin = async (userId: string) => {
   // TODO: Implement promote to admin functionality
-  toast.add({
-    title: 'Em Breve',
-    description: 'Funcionalidade em desenvolvimento',
-    color: 'yellow'
-  })
+  console.log('Promote to admin:', userId)
+  alert('Funcionalidade em desenvolvimento')
+}
+
+// Dropdown management
+const toggleDropdown = (userId: string) => {
+  openDropdowns.value[userId] = !openDropdowns.value[userId]
+}
+
+const closeDropdown = (userId: string) => {
+  openDropdowns.value[userId] = false
+}
+
+// Close all dropdowns when clicking outside
+const handleClickOutside = (event: Event) => {
+  const target = event.target as Element
+  if (!target.closest('.relative')) {
+    openDropdowns.value = {}
+  }
 }
 
 // Lifecycle
 onMounted(async () => {
-  await adminStore.loadUsers()
+  try {
+    await loadUsers()
+    document.addEventListener('click', handleClickOutside)
+  } catch (err) {
+    console.error('Failed to load users:', err)
+  }
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
 })
 
 // Meta

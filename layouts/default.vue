@@ -1,8 +1,8 @@
 <template>
   <div>
     <Header />
-    <main>
-      <UiContainer size="lg" padding="md">
+    <main class="py-6">
+      <UiContainer>
         <slot />
       </UiContainer>
     </main>

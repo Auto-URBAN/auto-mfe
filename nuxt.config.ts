@@ -8,7 +8,10 @@ export default defineNuxtConfig({
   ],
   
   compatibilityDate: '2024-11-01',
-  devtools: { enabled: true },  
+  devtools: { enabled: true },
+  
+  // CSS Configuration
+  css: ['~/assets/css/main.css'],
   
   runtimeConfig: {
     apiUrl: process.env.NUXT_API_URL || 'http://localhost:3001',
@@ -16,14 +19,7 @@ export default defineNuxtConfig({
       apiBase: process.env.VITE_API_BASE || '/api',
       whatsappPrefix: process.env.VITE_WHATSAPP_PREFIX || '55'
     }
-  },
-
-  // Tailwind CSS Configuration
-  tailwindcss: {
-    configPath: '~/tailwind.config.js'
-  },
-
-  // PWA Configuration via module options
+  },  // PWA Configuration via module options
   pwa: {
     registerType: 'autoUpdate',
     workbox: {
