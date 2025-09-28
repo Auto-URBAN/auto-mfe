@@ -22,16 +22,16 @@ export default defineEventHandler(async (event): Promise<Car> => {
     const premiumCarData = {
         'porsche-911': { brand: 'Porsche', model: '911', basePrice: 1400000, thumb: 'https://s3.sa-east-1.amazonaws.com/revista.mobiauto/Porsche/911+Turbo+S/Porsche-911-Turbo-S-Traseira.jpg' },
         'bmw-m3': { brand: 'BMW', model: 'M3', basePrice: 680000, thumb: 'https://s3.ecompletocarros.dev/images/lojas/108/veiculos/206897/veiculoInfoVeiculoImagesMobile/vehicle_image_1724358685_d41d8cd98f00b204e9800998ecf8427e.jpeg' },
-        'bmw-m2': { brand: 'BMW', model: 'M2', basePrice: 520000, thumb: 'https://image.webmotors.com.br/_fotos/anunciousados/gigante/2025/202507/20250718/bmw-m2-3.0-i6-twinturbo-gasolina-coupe-m-steptronic-wmimagem15234356261.jpg' },
-        'volkswagen-golf-gti': { brand: 'Volkswagen', model: 'Golf GTI', basePrice: 180000, thumb: 'https://cdn.motor1.com/images/mgl/40KWAA/s1/vw-golf-gti-clubsport-2024.jpg' },
-        'volkswagen-polo-gts': { brand: 'Volkswagen', model: 'Polo GTS', basePrice: 95000, thumb: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgjkZwZZnZ0OJZmcTiREAytERFUXlLPMgm1-a6WfWJ-wDvfRRu6pL4-CTYQaoqy-8GyP6yHQF4VcpN3SRNzoGDSnezFBe8HPUqcF9Bdhf7gGMwfp3AT5bS30vFxIQKYFjvO1bjpnbDYCtDXN8YmKka_0aagiJiEzPu2k8t7753taSIZCCynovTtBgEH7BM/s1280/volkswagen-polo-gts-01.jpg' },
-        'nissan-gt-r': { brand: 'Nissan', model: 'GT-R', basePrice: 950000, thumb: 'https://bringatrailer.com/wp-content/uploads/2022/09/2020_nissan_gt-r_f8e4ca0c-0d74-4a1e-b272-74c158057b14-73286.jpeg?fit=940%2C627' },
-        'mercedes-amg-c63': { brand: 'Mercedes-Benz', model: 'AMG C63 S', basePrice: 450000, thumb: 'https://www.cnet.com/a/img/resize/1f48abe6116fb1467ca90b0585de44205b1e4f38/hub/2018/07/23/54caf845-a70d-47d5-bfb9-1a7a6a873dcc/010-2019-mercedes-amg-c63-coupe.jpg?auto=webp&width=1200' },
-        'renault-sandero-rs': { brand: 'Renault', model: 'Sandero RS', basePrice: 85000, thumb: 'https://s3.ecompletocarros.dev/images/lojas/558/veiculos/218494/veiculoInfoVeiculoImagesMobile/vehicle_image_1735271875_d41d8cd98f00b204e9800998ecf8427e.jpeg' },
-        'honda-civic-type-r': { brand: 'Honda', model: 'Civic Type R', basePrice: 295000, thumb: 'https://image.webmotors.com.br/_fotos/anunciousados/gigante/2020/202003/20200315/honda-civic-2.0-vtec-turbo-gasolina-type-r-manual-wmimagem09234567891.jpg' },
-        'ford-mustang-gt': { brand: 'Ford', model: 'Mustang GT', basePrice: 380000, thumb: 'https://image.webmotors.com.br/_fotos/anunciousados/gigante/2020/202005/20200520/ford-mustang-5.0-v8-gasolina-gt-premium-selectshift-wmimagem09876543210.jpg' },
-        'chevrolet-camaro-ss': { brand: 'Chevrolet', model: 'Camaro SS', basePrice: 320000, thumb: 'https://image.webmotors.com.br/_fotos/anunciousados/gigante/2019/201908/20190815/chevrolet-camaro-6.2-v8-gasolina-ss-automatico-wmimagem08765432109.jpg' },
-        'toyota-supra': { brand: 'Toyota', model: 'Supra', basePrice: 420000, thumb: 'https://image.webmotors.com.br/_fotos/anunciousados/gigante/2021/202104/20210410/toyota-supra-3.0-24v-i6-gasolina-automatico-wmimagem10123456789.jpg' }
+        'bmw-m2': { brand: 'BMW', model: 'M2', basePrice: 520000, thumb: 'https://i.ytimg.com/vi/7AqMTC0C_XQ/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDmGdWf9iTnO5E0Vpjpg5pP30hK1w' },
+        'volkswagen-golf-gti': { brand: 'Volkswagen', model: 'Golf GTI', basePrice: 180000, thumb: 'https://revistacarro.com.br/wp-content/uploads/2024/09/Golf4-1173x768.jpg' },
+        'volkswagen-polo-gts': { brand: 'Volkswagen', model: 'Polo GTS', basePrice: 95000, thumb: 'https://cdn.motor1.com/images/mgl/jl9zy6/s3/vw-polo-gts-250tsi-2024.jpg' },
+        'nissan-gt-r': { brand: 'Nissan', model: 'GT-R', basePrice: 950000, thumb: 'https://image.webmotors.com.br/_fotos/anunciousados/gigante/2025/202509/20250921/nissan-gtr-3-8-premium-v6-24v-biturbo-gasolina-2p-automatico-wmimagem23532117213.webp' },
+        'mercedes-amg-c63': { brand: 'Mercedes-Benz', model: 'AMG C63 S', basePrice: 450000, thumb: 'https://editorial.pxcrush.net/carsales/general/editorial/2019-mercedes-c63-sandown-034.jpg?width=1024&height=682' },
+        'renault-sandero-rs': { brand: 'Renault', model: 'Sandero RS', basePrice: 85000, thumb: 'https://s3.ecompletocarros.dev/images/lojas/108/veiculos/85187/veiculoInfoVeiculoImagesMobile/vehicle_image_1639770375_d41d8cd98f00b204e9800998ecf8427e.jpeg' },
+        'honda-civic-type-r': { brand: 'Honda', model: 'Civic Type R', basePrice: 295000, thumb: 'https://hips.hearstapps.com/hmg-prod/images/103-2020-honda-civic-type-r-140-1590038142.jpg?crop=0.637xw:0.538xh;0.0684xw,0.438xh&resize=2048:*' },
+        'ford-mustang-gt': { brand: 'Ford', model: 'Mustang GT', basePrice: 380000, thumb: 'https://cdn.jdpower.com/JDPA_2020%20Ford%20Mustang%20Bullitt%20Green%20Front%20View.jpg' },
+        'chevrolet-camaro-ss': { brand: 'Chevrolet', model: 'Camaro SS', basePrice: 320000, thumb: 'https://www.autocerto.com/fotos/5451/3444492/1.jpg' },
+        'toyota-supra': { brand: 'Toyota', model: 'Supra', basePrice: 420000, thumb: 'https://blog.consumerguide.com/wp-content/uploads/sites/2/2021/05/20200605_182030-1110x577.jpg' }
     }
     
     // Find matching premium car or generate default
@@ -49,7 +49,7 @@ export default defineEventHandler(async (event): Promise<Car> => {
             brand: decodeURIComponent(slugStr).split('-')[0]?.charAt(0).toUpperCase() + decodeURIComponent(slugStr).split('-')[0]?.slice(1) || 'Unknown',
             model: decodeURIComponent(slugStr).split('-')[1]?.charAt(0).toUpperCase() + decodeURIComponent(slugStr).split('-')[1]?.slice(1) || 'Unknown',
             basePrice: Math.floor(Math.random() * 200000) + 80000,
-            thumb: '/imgs/search-example.jpg'
+            thumb: 'https://cdn.motor1.com/images/mgl/VzznE4/s3/generic-car-placeholder.jpg'
         }
     }
     

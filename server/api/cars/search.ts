@@ -46,7 +46,7 @@ export default defineEventHandler(async (event) => {
             km: 3200,
             city: 'Porto Alegre',
             uf: 'RS' as const,
-            coverImageUrl: 'https://cdn.motor1.com/images/mgl/0eeNl/s1/2022-volkswagen-golf-gti.jpg',
+            coverImageUrl: 'https://revistacarro.com.br/wp-content/uploads/2024/09/Golf4-1173x768.jpg',
             status: 'APPROVED' as const,
             createdAt: new Date('2025-09-23')
         },
@@ -60,7 +60,7 @@ export default defineEventHandler(async (event) => {
             km: 12500,
             city: 'Rio de Janeiro',
             uf: 'RJ' as const,
-            coverImageUrl: 'https://www.nissan-cdn.net/content/dam/Nissan/nissan_middle_east/vehicles/gt-r/product_code/product_version/overview/gtrnissan-gtr-2020-overview-gallery-06.jpg.ximg.l_12_m.smart.jpg',
+            coverImageUrl: 'https://image.webmotors.com.br/_fotos/anunciousados/gigante/2025/202509/20250921/nissan-gtr-3-8-premium-v6-24v-biturbo-gasolina-2p-automatico-wmimagem23532117213.webp',
             status: 'APPROVED' as const,
             createdAt: new Date('2025-09-22')
         },
@@ -74,7 +74,7 @@ export default defineEventHandler(async (event) => {
             km: 5800,
             city: 'Curitiba',
             uf: 'PR' as const,
-            coverImageUrl: 'https://cdn.motor1.com/images/mgl/QkkPK/s1/volkswagen-polo-gts-2018-fotos.jpg',
+            coverImageUrl: 'https://cdn.motor1.com/images/mgl/jl9zy6/s3/vw-polo-gts-250tsi-2024.jpg',
             status: 'APPROVED' as const,
             createdAt: new Date('2025-09-26')
         },
@@ -88,7 +88,7 @@ export default defineEventHandler(async (event) => {
             km: 15000,
             city: 'Belo Horizonte',
             uf: 'MG' as const,
-            coverImageUrl: 'https://www.bmw.com/content/dam/bmw/common/all-models/m-series/m2-coupe/2022/highlights/bmw-m2-coupe-ms-022.jpg',
+            coverImageUrl: 'https://i.ytimg.com/vi/7AqMTC0C_XQ/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDmGdWf9iTnO5E0Vpjpg5pP30hK1w',
             status: 'APPROVED' as const,
             createdAt: new Date('2025-09-21')
         },
@@ -102,7 +102,7 @@ export default defineEventHandler(async (event) => {
             km: 22000,
             city: 'Brasília',
             uf: 'DF' as const,
-            coverImageUrl: 'https://www.renault.com.br/content/dam/renault/br/vehicles/sandero-rs/hero-image/renault-sandero-rs-2021-hero.jpg',
+            coverImageUrl: 'https://s3.ecompletocarros.dev/images/lojas/108/veiculos/85187/veiculoInfoVeiculoImagesMobile/vehicle_image_1639770375_d41d8cd98f00b204e9800998ecf8427e.jpeg',
             status: 'APPROVED' as const,
             createdAt: new Date('2025-09-27')
         },
@@ -116,7 +116,7 @@ export default defineEventHandler(async (event) => {
             km: 28500,
             city: 'Salvador',
             uf: 'BA' as const,
-            coverImageUrl: 'https://www.mercedes-benz.com/content/dam/mb-com/global/current-cars/cars/c-class/c-class-sedan/amg/c-63-s/1920x1080-MB-AMG-C63-S.jpg',
+            coverImageUrl: 'https://editorial.pxcrush.net/carsales/general/editorial/2019-mercedes-c63-sandown-034.jpg?width=1024&height=682',
             status: 'APPROVED' as const,
             createdAt: new Date('2025-09-20')
         },
@@ -130,7 +130,7 @@ export default defineEventHandler(async (event) => {
             km: 8200,
             city: 'Fortaleza',
             uf: 'CE' as const,
-            coverImageUrl: 'https://www.audi.com/content/dam/gbp2/models/rs3/rs3-sportback/my-2022/1920x1080-audi-rs3-sportback-2022.jpg',
+            coverImageUrl: 'https://media.autoexpress.co.uk/image/private/s--X-WVjvBW--/f_auto,t_content-image-full-desktop@1/v1669306751/autoexpress/2022/11/Audi%20RS%203%20Sportback%20Performance%20Edition.jpg',
             status: 'APPROVED' as const,
             createdAt: new Date('2025-09-19')
         },
@@ -144,7 +144,7 @@ export default defineEventHandler(async (event) => {
             km: 18500,
             city: 'Recife',
             uf: 'PE' as const,
-            coverImageUrl: 'https://www.ford.com/content/dam/vdm_ford/live/en_us/ford/nameplate/mustang/2022/collections/3-2/22_FRD_MST_GT_RPP_19.jpg',
+            coverImageUrl: 'https://cdn.jdpower.com/JDPA_2020%20Ford%20Mustang%20Bullitt%20Green%20Front%20View.jpg',
             status: 'APPROVED' as const,
             createdAt: new Date('2025-09-18')
         },
@@ -158,7 +158,7 @@ export default defineEventHandler(async (event) => {
             km: 25000,
             city: 'Goiânia',
             uf: 'GO' as const,
-            coverImageUrl: 'https://image.webmotors.com.br/_fotos/anunciousados/gigante/2019/201908/20190815/chevrolet-camaro-6.2-v8-gasolina-ss-automatico-wmimagem08765432109.jpg',
+            coverImageUrl: 'https://www.autocerto.com/fotos/5451/3444492/1.jpg',
             status: 'APPROVED' as const,
             createdAt: new Date('2025-09-17')
         },
@@ -172,7 +172,7 @@ export default defineEventHandler(async (event) => {
             km: 9800,
             city: 'Florianópolis',
             uf: 'SC' as const,
-            coverImageUrl: 'https://image.webmotors.com.br/_fotos/anunciousados/gigante/2021/202104/20210410/toyota-supra-3.0-24v-i6-gasolina-automatico-wmimagem10123456789.jpg',
+            coverImageUrl: 'https://blog.consumerguide.com/wp-content/uploads/sites/2/2021/05/20200605_182030-1110x577.jpg',
             status: 'APPROVED' as const,
             createdAt: new Date('2025-09-16')
         },
@@ -186,7 +186,7 @@ export default defineEventHandler(async (event) => {
             km: 12800,
             city: 'Belém',
             uf: 'PA' as const,
-            coverImageUrl: 'https://image.webmotors.com.br/_fotos/anunciousados/gigante/2020/202003/20200315/honda-civic-2.0-vtec-turbo-gasolina-type-r-manual-wmimagem09234567891.jpg',
+            coverImageUrl: 'https://hips.hearstapps.com/hmg-prod/images/103-2020-honda-civic-type-r-140-1590038142.jpg?crop=0.637xw:0.538xh;0.0684xw,0.438xh&resize=2048:*',
             status: 'APPROVED' as const,
             createdAt: new Date('2025-09-15')
         },
@@ -200,7 +200,7 @@ export default defineEventHandler(async (event) => {
             km: 35000,
             city: 'João Pessoa',
             uf: 'PB' as const,
-            coverImageUrl: 'https://image.webmotors.com.br/_fotos/anunciousados/gigante/2019/201907/20190720/subaru-impreza-2.5-wrx-sti-4x4-16v-turbo-gasolina-4p-manual-wmimagem08345678912.jpg',
+            coverImageUrl: 'https://media.ed.edmunds-media.com/subaru/sti-s209/2019/oem/2019_subaru_sti-s209_sedan_base_fq_oem_1_1600.jpg',
             status: 'APPROVED' as const,
             createdAt: new Date('2025-09-14')
         },
@@ -214,7 +214,7 @@ export default defineEventHandler(async (event) => {
             km: 15200,
             city: 'Natal',
             uf: 'RN' as const,
-            coverImageUrl: 'https://image.webmotors.com.br/_fotos/anunciousados/gigante/2020/202009/20200925/jaguar-f-type-5.0-v8-gasolina-r-automatico-wmimagem09456789123.jpg',
+            coverImageUrl: 'https://img.olx.com.br/thumbs700x500/81/812582325150563.webp',
             status: 'APPROVED' as const,
             createdAt: new Date('2025-09-13')
         },
@@ -228,7 +228,7 @@ export default defineEventHandler(async (event) => {
             km: 8900,
             city: 'Manaus',
             uf: 'AM' as const,
-            coverImageUrl: 'https://image.webmotors.com.br/_fotos/anunciousados/gigante/2018/201806/20180615/mclaren-570s-3.8-v8-gasolina-automatico-wmimagem07567890234.jpg',
+            coverImageUrl: 'https://quatrorodas.abril.com.br/wp-content/uploads/2017/10/20171009_1150211.jpg?quality=70&strip=info&w=720&crop=1',
             status: 'APPROVED' as const,
             createdAt: new Date('2025-09-12')
         }

@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
         km: 35000,
         city: 'Rio de Janeiro',
         uf: 'RJ' as const,
-        coverImageUrl: '/imgs/search-latest-example.jpg',
+        coverImageUrl: 'https://image.webmotors.com.br/_fotos/anunciousados/gigante/2020/202012/20201215/honda-civic-2.0-16v-flexone-exl-cvt-wmimagem11234567890.jpg',
         status: 'APPROVED' as const,
         createdAt: new Date().toISOString()
       },
@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
         km: 15000,
         city: 'Belo Horizonte',
         uf: 'MG' as const,
-        coverImageUrl: '/imgs/search-example.jpg',
+        coverImageUrl: 'https://revistacarro.com.br/wp-content/uploads/2022/03/Honda-Civic-2022-1.jpg',
         status: 'APPROVED' as const,
         createdAt: new Date().toISOString()
       },
@@ -52,7 +52,7 @@ export default defineEventHandler(async (event) => {
         km: 28000,
         city: 'São Paulo',
         uf: 'SP' as const,
-        coverImageUrl: '/imgs/background.jpg',
+        coverImageUrl: 'https://cdn.autopapo.com.br/box/uploads/2020/08/11180013/novo-toyota-corolla-2021-01-732x488.jpg',
         status: 'APPROVED' as const,
         createdAt: new Date().toISOString()
       }

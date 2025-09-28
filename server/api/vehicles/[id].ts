@@ -24,11 +24,11 @@ export default defineEventHandler(async (event) => {
       city: 'São Paulo',
       uf: 'SP' as const,
       status: 'APPROVED' as const,
-      coverImageUrl: 'https://cdn.motor1.com/images/mgl/Oo376A/s3/honda-civic-type-r---brasil.jpg',
+      coverImageUrl: 'https://hips.hearstapps.com/hmg-prod/images/103-2020-honda-civic-type-r-140-1590038142.jpg?crop=0.637xw:0.538xh;0.0684xw,0.438xh&resize=2048:*',
       images: [
-        'https://cdn.motor1.com/images/mgl/Oo376A/s3/honda-civic-type-r---brasil.jpg',
-        'https://garagem360.com.br/wp-content/uploads/2023/06/unnamed-3.jpg',
-        'https://www.honda.com/content/dam/site/honda/vehicles/civic/type-r/2021/overview/exterior/2021-honda-civic-type-r-side-profile.jpg'
+        'https://hips.hearstapps.com/hmg-prod/images/103-2020-honda-civic-type-r-140-1590038142.jpg?crop=0.637xw:0.538xh;0.0684xw,0.438xh&resize=2048:*',
+        'https://cdn.motor1.com/images/mgl/zOOE9A/s3/2017-honda-civic-type-r.jpg',
+        'https://media.ed.edmunds-media.com/honda/civic-type-r/2017/oem/2017_honda_civic-type-r_hatchback_touring_fq_oem_3_1600.jpg'
       ],
       description: `Honda Civic Sport 1.5 Turbo 2021 em excelente estado de conservação.
 
