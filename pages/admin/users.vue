@@ -218,11 +218,31 @@ definePageMeta({
 })
 
 const auth = useAuth()
-const { adminUsers, adminLoading, adminError, loadAdminUsers } = auth
 
 // Reactive data
 const selectedFilter = ref('all')
 const openDropdowns = ref<Record<string, boolean>>({})
+
+// Admin users data
+const adminUsers = ref([])
+const adminLoading = ref(false)
+const adminError = ref<string | null>(null)
+
+// Load admin users function
+const loadAdminUsers = async () => {
+  adminLoading.value = true
+  adminError.value = null
+  
+  try {
+    const users = await $fetch('/api/admin/users')
+    adminUsers.value = users
+  } catch (error: any) {
+    adminError.value = error.message || 'Erro ao carregar usuários'
+    console.error('Error loading admin users:', error)
+  } finally {
+    adminLoading.value = false
+  }
+}
 
 // Computed
 const totalUsers = computed(() => adminUsers.value.length)

@@ -9,6 +9,7 @@ export default defineEventHandler(async (event) => {
         id: 'usr001',
         phone: '11987654321',
         role: 'USER' as const,
+        status: 'ACTIVE' as const,
         createdAt: '2025-09-01T10:30:00Z',
         ads: {
           total: 3,
@@ -23,6 +24,7 @@ export default defineEventHandler(async (event) => {
         id: 'usr002',
         phone: '21987654321',
         role: 'USER' as const,
+        status: 'ACTIVE' as const,
         createdAt: '2025-09-05T14:15:00Z',
         ads: {
           total: 1,
@@ -37,6 +39,7 @@ export default defineEventHandler(async (event) => {
         id: 'usr003',
         phone: '31987654321',
         role: 'USER' as const,
+        status: 'ACTIVE' as const,
         createdAt: '2025-08-20T09:45:00Z',
         ads: {
           total: 5,
@@ -51,6 +54,7 @@ export default defineEventHandler(async (event) => {
         id: 'adm001',
         phone: '11999888777',
         role: 'ADMIN' as const,
+        status: 'ACTIVE' as const,
         createdAt: '2025-08-01T08:00:00Z',
         ads: {
           total: 0,
@@ -65,6 +69,7 @@ export default defineEventHandler(async (event) => {
         id: 'usr004',
         phone: '61987654321',
         role: 'USER' as const,
+        status: 'ACTIVE' as const,
         createdAt: '2025-09-10T16:20:00Z',
         ads: {
           total: 2,
@@ -79,6 +84,7 @@ export default defineEventHandler(async (event) => {
         id: 'usr005',
         phone: '71987654321',
         role: 'USER' as const,
+        status: 'ACTIVE' as const,
         createdAt: '2025-09-15T11:30:00Z',
         ads: {
           total: 1,
@@ -93,6 +99,7 @@ export default defineEventHandler(async (event) => {
         id: 'usr006',
         phone: '85987654321',
         role: 'USER' as const,
+        status: 'SUSPENDED' as const,
         createdAt: '2025-08-25T13:45:00Z',
         ads: {
           total: 0,

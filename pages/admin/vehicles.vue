@@ -23,33 +23,37 @@
           ]"
         >
           {{ tab.label }}
-          <UiBadge
+          <span
             v-if="tab.count > 0"
-            :label="tab.count.toString()"
-            variant="solid"
-            size="xs"
-            :color="tab.key === 'pending' ? 'warning' : 'accent'"
-            class="ml-2"
-          />
+            :class="[
+              'inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ml-2',
+              tab.key === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800'
+            ]"
+          >
+            {{ tab.count }}
+          </span>
         </button>
       </nav>
     </div>
 
     <!-- Loading State -->
-    <div v-if="adminStore.isLoading" class="space-y-4">
+    <div v-if="loading" class="space-y-4">
       <div v-for="i in 5" :key="i" class="h-24 bg-gray-200 animate-pulse rounded-lg" />
     </div>
 
     <!-- Error State -->
-    <UiAlert
-      v-else-if="adminStore.error"
-      variant="danger"
-      :title="adminStore.error"
-      class="mb-6"
-    />
+    <div
+      v-else-if="error"
+      class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded"
+    >
+      <div class="flex">
+        <Icon name="heroicons:exclamation-triangle" class="h-5 w-5 text-red-400 mr-2" />
+        <p class="text-sm">{{ error }}</p>
+      </div>
+    </div>
 
     <!-- Vehicles Table -->
-    <UiCard v-else>
+    <div v-else class="bg-white rounded-lg shadow">
       <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50">
@@ -111,37 +115,32 @@
               <!-- Actions -->
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 <div class="flex justify-end space-x-2">
-                  <UiButton
-                    variant="outline"
-                    size="sm"
-                    icon-left="heroicons:eye-20-solid"
+                  <button
                     @click="viewVehicle(vehicle.id)"
+                    class="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
+                    <Icon name="heroicons:eye" class="mr-1 w-4 h-4" />
                     Ver
-                  </UiButton>
+                  </button>
                   
-                  <UiButton
+                  <button
                     v-if="vehicle.status === 'PENDING'"
-                    variant="solid"
-                    color="success"
-                    size="sm"
-                    icon-left="heroicons:check-20-solid"
-                    :loading="moderatingId === vehicle.id"
                     @click="approveVehicle(vehicle.id)"
+                    :disabled="moderatingId === vehicle.id"
+                    class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50"
                   >
-                    Aprovar
-                  </UiButton>
+                    <Icon name="heroicons:check" class="mr-1 w-4 h-4" />
+                    {{ moderatingId === vehicle.id ? 'Aprovando...' : 'Aprovar' }}
+                  </button>
                   
-                  <UiButton
+                  <button
                     v-if="vehicle.status === 'PENDING'"
-                    variant="solid"
-                    color="danger"
-                    size="sm"
-                    icon-left="heroicons:x-mark-20-solid"
                     @click="openRejectModal(vehicle)"
+                    class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                   >
+                    <Icon name="heroicons:x-mark" class="mr-1 w-4 h-4" />
                     Rejeitar
-                  </UiButton>
+                  </button>
                 </div>
               </td>
             </tr>
@@ -149,7 +148,7 @@
             <!-- Empty State -->
             <tr v-if="filteredVehicles.length === 0">
               <td colspan="5" class="px-6 py-12 text-center">
-                <UIcon name="i-heroicons-truck" class="mx-auto h-12 w-12 text-gray-400 mb-4" />
+                <Icon name="heroicons:truck" class="mx-auto h-12 w-12 text-gray-400 mb-4" />
                 <h3 class="text-sm font-medium text-gray-900 mb-1">
                   Nenhum veículo encontrado
                 </h3>
@@ -161,48 +160,46 @@
           </tbody>
         </table>
       </div>
-    </UiCard>
+    </div>
 
     <!-- Reject Modal -->
-    <UiModal v-model="showRejectModal">
-      <UiCard>
-        <template #header>
+    <div v-if="showRejectModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+        <div class="px-6 py-4 border-b border-gray-200">
           <h3 class="text-lg font-semibold">Rejeitar Anúncio</h3>
-        </template>
+        </div>
 
-        <div class="space-y-4">
+        <div class="p-6 space-y-4">
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">
               Motivo da rejeição
             </label>
-            <UTextarea
+            <textarea
               v-model="rejectionReason"
               placeholder="Descreva o motivo da rejeição..."
-              :rows="4"
+              rows="4"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
         </div>
 
-        <template #footer>
-          <div class="flex justify-end space-x-3">
-            <UiButton
-              variant="outline"
-              @click="closeRejectModal"
-            >
-              Cancelar
-            </UiButton>
-            <UiButton
-              color="danger"
-              :loading="moderatingId !== null"
-              :disabled="!rejectionReason.trim()"
-              @click="confirmReject"
-            >
-              Rejeitar Anúncio
-            </UiButton>
-          </div>
-        </template>
-      </UiCard>
-    </UiModal>
+        <div class="px-6 py-4 bg-gray-50 flex justify-end space-x-3 rounded-b-lg">
+          <button
+            @click="closeRejectModal"
+            class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Cancelar
+          </button>
+          <button
+            :disabled="!rejectionReason.trim() || moderatingId !== null"
+            @click="confirmReject"
+            class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50"
+          >
+            {{ moderatingId !== null ? 'Rejeitando...' : 'Rejeitar Anúncio' }}
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -217,7 +214,27 @@ definePageMeta({
 
 const route = useRoute()
 const router = useRouter()
-const { vehicles, loading, error, loadVehicles, updateVehicleStatus, deleteVehicle } = admin
+
+// Admin vehicles data
+const vehicles = ref([])
+const loading = ref(false)
+const error = ref<string | null>(null)
+
+// Load vehicles function  
+const loadVehicles = async () => {
+  loading.value = true
+  error.value = null
+  
+  try {
+    const vehiclesData = await $fetch('/api/admin/vehicles')
+    vehicles.value = vehiclesData
+  } catch (err: any) {
+    error.value = err.message || 'Erro ao carregar veículos'
+    console.error('Error loading vehicles:', err)
+  } finally {
+    loading.value = false
+  }
+}
 
 // Reactive data
 const selectedTab = ref<VehicleStatus | 'all'>('pending')
@@ -231,30 +248,30 @@ const tabs = computed(() => [
   {
     key: 'pending' as const,
     label: 'Pendentes',
-    count: adminStore.vehiclesByStatus('PENDING').length
+    count: vehicles.value.filter(v => v.status === 'PENDING').length
   },
   {
     key: 'approved' as const,
     label: 'Aprovados',
-    count: adminStore.vehiclesByStatus('APPROVED').length
+    count: vehicles.value.filter(v => v.status === 'APPROVED').length
   },
   {
     key: 'rejected' as const,
     label: 'Rejeitados',
-    count: adminStore.vehiclesByStatus('REJECTED').length
+    count: vehicles.value.filter(v => v.status === 'REJECTED').length
   },
   {
     key: 'all' as const,
     label: 'Todos',
-    count: adminStore.allVehicles.length
+    count: vehicles.value.length
   }
 ])
 
 const filteredVehicles = computed(() => {
   if (selectedTab.value === 'all') {
-    return adminStore.allVehicles
+    return vehicles.value
   }
-  return adminStore.vehiclesByStatus(selectedTab.value)
+  return vehicles.value.filter(v => v.status === selectedTab.value.toUpperCase())
 })
 
 const statusText = computed(() => {
@@ -288,13 +305,20 @@ const approveVehicle = async (vehicleId: string) => {
   moderatingId.value = vehicleId
   
   try {
-    const result = await adminStore.approveVehicle(vehicleId)
+    const result = await $fetch(`/api/admin/vehicles/${vehicleId}/approve`, {
+      method: 'POST'
+    })
     
-    if (result.success) {
-      console.log('Veículo aprovado com sucesso')
-    } else {
-      alert('Erro ao aprovar veículo: ' + (result.error || 'Erro desconhecido'))
+    // Update local state
+    const vehicleIndex = vehicles.value.findIndex(v => v.id === vehicleId)
+    if (vehicleIndex !== -1) {
+      vehicles.value[vehicleIndex].status = 'APPROVED'
     }
+    
+    console.log('Veículo aprovado com sucesso')
+  } catch (error: any) {
+    console.error('Erro ao aprovar veículo:', error)
+    alert('Erro ao aprovar veículo: ' + (error.message || 'Erro desconhecido'))
   } finally {
     moderatingId.value = null
   }
@@ -318,17 +342,25 @@ const confirmReject = async () => {
   moderatingId.value = vehicleToReject.value.id
   
   try {
-    const result = await adminStore.rejectVehicle(
-      vehicleToReject.value.id,
-      rejectionReason.value.trim()
-    )
+    const result = await $fetch(`/api/admin/vehicles/${vehicleToReject.value.id}/reject`, {
+      method: 'POST',
+      body: {
+        reason: rejectionReason.value.trim()
+      }
+    })
     
-    if (result.success) {
-      console.log('Veículo rejeitado com sucesso')
-      closeRejectModal()
-    } else {
-      alert('Erro ao rejeitar veículo: ' + (result.error || 'Erro desconhecido'))
+    // Update local state
+    const vehicleIndex = vehicles.value.findIndex(v => v.id === vehicleToReject.value.id)
+    if (vehicleIndex !== -1) {
+      vehicles.value[vehicleIndex].status = 'REJECTED'
+      vehicles.value[vehicleIndex].rejectionReason = rejectionReason.value.trim()
     }
+    
+    console.log('Veículo rejeitado com sucesso')
+    closeRejectModal()
+  } catch (error: any) {
+    console.error('Erro ao rejeitar veículo:', error)
+    alert('Erro ao rejeitar veículo: ' + (error.message || 'Erro desconhecido'))
   } finally {
     moderatingId.value = null
   }
@@ -348,7 +380,7 @@ watch(selectedTab, (newTab) => {
 
 // Lifecycle
 onMounted(async () => {
-  //await adminStore.loadVehicles()
+  await loadVehicles()
 })
 
 // Meta
