@@ -57,36 +57,237 @@
     <!-- Vehicle Content -->
     <div v-else-if="vehicle" class="space-y-8">
       <!-- Title and Price -->
-      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-        <div>
-          <h1 class="text-2xl lg:text-3xl font-bold text-gray-900">
+      <div class="space-y-3 lg:space-y-0 lg:flex lg:items-center lg:justify-between lg:gap-4">
+        <div class="flex-1">
+          <h1 class="text-xl lg:text-3xl font-bold text-gray-900 leading-tight">
             {{ vehicle.title }}
           </h1>
-          <div class="flex items-center space-x-4 mt-2 text-sm text-gray-600">
-            <span>{{ vehicle.km.toLocaleString('pt-BR') }} km</span>
-            <span>•</span>
-            <span>{{ vehicle.city }}, {{ vehicle.uf }}</span>
-            <span>•</span>
-            <span>ID: {{ vehicle.id.substring(0, 8) }}</span>
+          <div class="flex flex-wrap items-center gap-2 mt-2 text-xs lg:text-sm text-gray-600">
+            <span class="inline-flex items-center">
+              <Icon name="heroicons:clock" class="w-3 h-3 mr-1" />
+              {{ vehicle.km.toLocaleString('pt-BR') }} km
+            </span>
+            <span class="text-gray-400">•</span>
+            <span class="inline-flex items-center">
+              <Icon name="heroicons:map-pin" class="w-3 h-3 mr-1" />
+              {{ vehicle.city }}, {{ vehicle.uf }}
+            </span>
+            <span class="text-gray-400 hidden sm:inline">•</span>
+            <span class="text-gray-500 text-xs">ID: {{ vehicle.id.substring(0, 8) }}</span>
           </div>
-        </div>
-        
-        <div class="text-right">
-          <p class="text-3xl lg:text-4xl font-bold text-green-600">
-            {{ formatCurrency(vehicle.price) }}
-          </p>
-          <p class="text-sm text-gray-600 mt-1">à vista</p>
         </div>
       </div>
 
       <!-- Main Content -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <!-- Left Column: Gallery + Specs + Price Chart -->
+        <!-- Left Column: Gallery + Mobile Sidebar + Specs + Price Chart -->
         <div class="lg:col-span-2 space-y-8">
           <!-- Image Gallery -->
           <VehicleGallery :vehicle="vehicle" />
 
-          <!-- Price History Chart -->
+          <!-- Mobile Sidebar (visible only on mobile/tablet) -->
+          <div class="lg:hidden space-y-4">
+            <!-- Contact Section -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+              <div class="p-4 bg-gradient-to-r from-blue-600 to-blue-700">
+                <div class="flex items-center justify-between text-white">
+                  <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                      <Icon name="heroicons:phone" class="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p class="font-semibold text-sm">{{ formatSellerName(vehicle.seller.id) }}</p>
+                      <p class="text-xs opacity-90">{{ formatPhone(vehicle.seller.phone) }}</p>
+                    </div>
+                  </div>
+                  <button
+                    @click="toggleContactExpanded"
+                    class="p-1 hover:bg-white/20 rounded transition-colors"
+                  >
+                    <Icon 
+                      :name="contactExpanded ? 'heroicons:chevron-up' : 'heroicons:chevron-down'" 
+                      class="w-4 h-4" 
+                    />
+                  </button>
+                </div>
+              </div>
+
+              <div v-show="contactExpanded" class="p-4 space-y-3">
+                <div class="space-y-2">
+                  <div class="flex items-center justify-between text-sm">
+                    <div class="flex items-center space-x-2">
+                      <Icon name="heroicons:identification" class="w-4 h-4 text-gray-500" />
+                      <span class="text-gray-600">Placa:</span>
+                      <span class="font-mono font-semibold text-gray-900">{{ formatPlate(vehicle.id) }}</span>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center justify-between text-sm">
+                    <div class="flex items-center space-x-2">
+                      <Icon name="heroicons:map-pin" class="w-4 h-4 text-gray-500" />
+                      <span class="text-gray-600">Local:</span>
+                      <span class="font-semibold text-gray-900">{{ vehicle.city }}, {{ vehicle.uf }}</span>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center justify-between text-sm">
+                    <div class="flex items-center space-x-2">
+                      <Icon name="heroicons:clock" class="w-4 h-4 text-gray-500" />
+                      <span class="text-gray-600">Anúncio:</span>
+                      <span class="font-semibold text-gray-900">{{ formatDate(vehicle.createdAt) }}</span>
+                    </div>
+                    <div class="flex items-center space-x-1 text-gray-500">
+                      <Icon name="heroicons:eye" class="w-3 h-3" />
+                      <span class="text-xs">{{ getViewCount(vehicle.id) }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Action Buttons for Mobile -->
+                <div class="grid grid-cols-2 gap-2">
+                  <a
+                    :href="`https://wa.me/${vehicle.seller.whatsapp}?text=Olá! Tenho interesse no ${vehicle.title}%0A%0ALocalização: ${vehicle.city}/${vehicle.uf}%0APreço: ${formatCurrency(vehicle.price)}%0A%0APodemos conversar?`"
+                    target="_blank"
+                    class="flex items-center justify-center px-3 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md transition-colors"
+                  >
+                    <Icon name="mdi:whatsapp" class="w-4 h-4 mr-1" />
+                    WhatsApp
+                  </a>
+                  
+                  <a
+                    :href="`tel:${vehicle.seller.phone}`"
+                    class="flex items-center justify-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors"
+                  >
+                    <Icon name="heroicons:phone" class="w-4 h-4 mr-1" />
+                    Ligar
+                  </a>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-2">
+                  <button
+                    @click="shareVehicle"
+                    class="flex items-center justify-center px-3 py-1.5 border border-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50 transition-colors"
+                  >
+                    <Icon name="heroicons:share" class="w-4 h-4 mr-1" />
+                    Compartilhar
+                  </button>
+                  
+                  <button
+                    @click="saveVehicle"
+                    class="flex items-center justify-center px-3 py-1.5 border border-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50 transition-colors"
+                  >
+                    <Icon name="heroicons:heart" class="w-4 h-4 mr-1" />
+                    Salvar
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Financing Simulator for Mobile -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+              <div 
+                class="p-4 cursor-pointer hover:bg-gray-50 transition-colors"
+                @click="toggleFinancingExpanded"
+              >
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center space-x-2">
+                    <Icon name="heroicons:calculator" class="w-5 h-5 text-gray-600" />
+                    <h3 class="font-semibold text-gray-900">Financiamento</h3>
+                  </div>
+                  <Icon 
+                    :name="financingExpanded ? 'heroicons:chevron-up' : 'heroicons:chevron-down'" 
+                    class="w-4 h-4 text-gray-500" 
+                  />
+                </div>
+                
+                <!-- Quick preview when collapsed -->
+                <div v-if="!financingExpanded" class="mt-2">
+                  <div class="text-sm text-gray-600">
+                    Simule parcelas a partir de
+                  </div>
+                  <div class="text-lg font-semibold text-blue-600">
+                    R$ {{ Math.round(vehicle.price * 0.8 / 48).toLocaleString('pt-BR') }}
+                  </div>
+                </div>
+              </div>
+
+              <div v-show="financingExpanded" class="p-4 pt-0">
+                <SimpleFinancingSimulator :price="vehicle.price" />
+              </div>
+            </div>
+
+            <!-- Price Comparison for Mobile -->
+            <div v-if="carData?.partners?.length > 0" class="bg-white rounded-lg shadow-lg overflow-hidden">
+              <div 
+                class="p-4 cursor-pointer hover:bg-gray-50 transition-colors"
+                @click="togglePriceExpanded"
+              >
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center space-x-2">
+                    <Icon name="heroicons:chart-bar" class="w-5 h-5 text-gray-600" />
+                    <h3 class="font-semibold text-gray-900">Comparação de Preços</h3>
+                  </div>
+                  <Icon 
+                    :name="priceExpanded ? 'heroicons:chevron-up' : 'heroicons:chevron-down'" 
+                    class="w-4 h-4 text-gray-500" 
+                  />
+                </div>
+                
+                <div v-if="!priceExpanded" class="mt-2">
+                  <div class="flex justify-between items-center text-sm">
+                    <span class="text-gray-600">Este anúncio</span>
+                    <span 
+                      :class="[
+                        'font-semibold',
+                        priceComparison?.isGoodDeal ? 'text-green-600' : 
+                        priceComparison?.isExpensive ? 'text-red-600' : 'text-gray-900'
+                      ]"
+                    >
+                      {{ formatCurrency(vehicle.price) }}
+                    </span>
+                  </div>
+                  <div class="text-xs text-gray-500 mt-1">
+                    vs. média: {{ formatCurrency(averageMarketPrice) }}
+                  </div>
+                </div>
+              </div>
+
+              <div v-show="priceExpanded" class="px-4 pb-4">
+                <div class="space-y-3">
+                  <div class="flex justify-between items-center text-sm border-b pb-2">
+                    <span class="font-medium text-gray-900">Este anúncio</span>
+                    <span class="text-green-600 font-semibold">{{ formatCurrency(vehicle.price) }}</span>
+                  </div>
+                  
+                  <div class="text-xs text-gray-600 mb-2">Média de mercado:</div>
+                  <div class="space-y-2">
+                    <div 
+                      v-for="partner in carData.partners" 
+                      :key="partner.name"
+                      class="flex justify-between items-center text-sm"
+                    >
+                      <span class="text-gray-600">{{ partner.name }}</span>
+                      <span class="text-gray-900">{{ formatCurrency(partner.value) }}</span>
+                    </div>
+                  </div>
+                  
+                  <div class="flex justify-between items-center text-sm font-medium pt-2 border-t">
+                    <span>Média geral</span>
+                    <span>{{ formatCurrency(averageMarketPrice) }}</span>
+                  </div>
+                  
+                  <div class="text-xs text-gray-500 pt-2 border-t">
+                    {{ priceComparison.dealText }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Specifications -->
+          <VehicleSpecs :vehicle="vehicle" />
+
+          <!-- Price History Chart (moved down for mobile) -->
           <div v-if="carData?.prices?.length > 0" class="bg-white rounded-lg shadow-lg p-6">
             <h2 class="text-xl font-semibold text-gray-900 mb-4">
               Histórico de Preços
@@ -124,13 +325,10 @@
               Dados baseados em pesquisas de mercado e anúncios similares
             </p>
           </div>
-
-          <!-- Specifications -->
-          <VehicleSpecs :vehicle="vehicle" />
         </div>
 
-        <!-- Right Column: Contact + Price Comparison + Financing -->
-        <div class="lg:col-span-1">
+        <!-- Right Column: Contact + Price Comparison + Financing (Desktop Only) -->
+        <div class="hidden lg:block lg:col-span-1">
           <!-- Sticky Container with smart positioning -->
           <div 
             class="sticky transition-all duration-300 z-30"
@@ -167,20 +365,27 @@
                 <div v-show="contactExpanded" class="p-4 space-y-3">
                   <!-- Vehicle & Seller Information Cards -->
                   <div class="space-y-2">
-                    <!-- License Plate -->
+                    
                     <div class="flex items-center justify-between text-sm">
+                      
+                    <div class="flex">
+                      <p class="text-2xl lg:text-2xl font-bold text-green-600">
+                        {{ formatCurrency(vehicle.price) }}
+                      </p>
+                    </div>
+                      
+                      <div class="flex items-center space-x-2">
+                        <Icon name="heroicons:map-pin" class="w-4 h-4 text-gray-500" />
+                      
+                        <span class="font-semibold text-gray-900">{{ vehicle.city }}, {{ vehicle.uf }}</span>
+                      </div>
+                    </div>
+
                       <div class="flex items-center space-x-2">
                         <Icon name="heroicons:identification" class="w-4 h-4 text-gray-500" />
                         <span class="text-gray-600">Placa:</span>
                         <span class="font-mono font-semibold text-gray-900">{{ formatPlate(vehicle.id) }}</span>
                       </div>
-                      
-                      <div class="flex items-center space-x-2">
-                        <Icon name="heroicons:map-pin" class="w-4 h-4 text-gray-500" />
-                        <span class="text-gray-600">Local:</span>
-                        <span class="font-semibold text-gray-900">{{ vehicle.city }}, {{ vehicle.uf }}</span>
-                      </div>
-                    </div>
 
                     <!-- Listing Date -->
                     <div class="flex items-center justify-between text-sm">
@@ -377,8 +582,8 @@
       </div>
     </div>
 
-    <!-- Not Found -->
-    <div v-else class="text-center py-12">
+    <!-- Not Found State -->
+    <div v-else-if="!pending && !vehicle" class="text-center py-12">
       <Icon name="heroicons:exclamation-triangle" class="w-16 h-16 text-gray-400 mx-auto mb-4" />
       <h2 class="text-xl font-semibold text-gray-900 mb-2">Veículo não encontrado</h2>
       <p class="text-gray-600 mb-4">
