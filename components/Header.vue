@@ -42,14 +42,78 @@
           <!-- Authenticated User -->
           <div v-else class="flex items-center space-x-3">
             <!-- Notifications -->
-            <div class="relative">
-              <button class="p-2 text-gray-400 hover:text-gray-600 transition-colors">
+            <div class="relative" ref="notificationsRef">
+              <button 
+                @click.stop="toggleNotifications"
+                class="p-2 text-gray-400 hover:text-gray-600 transition-colors relative"
+              >
                 <Icon name="heroicons:bell" class="w-5 h-5" />
-                <!-- Show pending count for admins -->
-                <span v-if="isAdmin && pendingCount > 0" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  {{ pendingCount }}
+                <!-- Notification Badge -->
+                <span 
+                  v-if="hasNotifications" 
+                  class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center animate-pulse"
+                >
+                  {{ notificationCount }}
                 </span>
               </button>
+
+              <!-- Notifications Dropdown -->
+              <Transition
+                enter-active-class="transition ease-out duration-200"
+                enter-from-class="transform opacity-0 scale-95"
+                enter-to-class="transform opacity-100 scale-100"
+                leave-active-class="transition ease-in duration-150"
+                leave-from-class="transform opacity-100 scale-100"
+                leave-to-class="transform opacity-0 scale-95"
+              >
+                <div 
+                  v-if="notificationsOpen"
+                  class="notifications-dropdown absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 z-50"
+                  @click.stop
+                >
+                  <div class="p-4">
+                    <h3 class="text-sm font-medium text-gray-900 mb-3">Notificações</h3>
+                    
+                    <!-- Notifications List -->
+                    <div v-if="filteredNotifications.length > 0" class="space-y-3 max-h-64 overflow-y-auto">
+                      <div 
+                        v-for="notification in filteredNotifications" 
+                        :key="notification.id"
+                        class="flex items-start space-x-3 p-2 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
+                        @click="handleNotificationClick(notification)"
+                      >
+                        <div class="flex-shrink-0">
+                          <div 
+                            class="w-2 h-2 rounded-full mt-2"
+                            :class="notification.read ? 'bg-gray-300' : 'bg-blue-500'"
+                          ></div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <p class="text-sm text-gray-900 font-medium">{{ notification.title }}</p>
+                          <p class="text-xs text-gray-500 mt-1">{{ notification.message }}</p>
+                          <p class="text-xs text-gray-400 mt-1">{{ notification.time }}</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- Empty State -->
+                    <div v-else class="text-center py-4">
+                      <Icon name="heroicons:bell-slash" class="w-8 h-8 text-gray-300 mx-auto mb-2" />
+                      <p class="text-sm text-gray-500">Nenhuma notificação</p>
+                    </div>
+                    
+                    <!-- Actions -->
+                    <div v-if="filteredNotifications.length > 0" class="border-t pt-3 mt-3">
+                      <button 
+                        @click="markAllAsRead"
+                        class="text-sm text-blue-600 hover:text-blue-500 font-medium transition-colors"
+                      >
+                        Marcar todas como lidas
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </Transition>
             </div>
             
             <!-- Quick Actions (only for non-admin layout) -->
@@ -134,16 +198,6 @@
                       Painel Admin
                     </button>
                     
-                    <!-- Exit Admin (go back to main site) -->
-                    <button
-                      v-if="isAdmin"
-                      class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                      @click="handleMenuClick('/')"
-                    >
-                      <Icon name="heroicons:arrow-left" class="w-4 h-4 mr-3" />
-                      Voltar ao Site
-                    </button>
-                    
                     <hr v-if="isAdmin || !isAdmin" class="my-1 border-gray-200">
                     
                     <!-- Logout -->
@@ -191,26 +245,96 @@ const router = useRouter()
 // Local state
 const dropdownOpen = ref(false)
 const dropdownRef = ref<HTMLElement>()
+const notificationsOpen = ref(false)
+const notificationsRef = ref<HTMLElement>()
+const notifications = ref([
+  {
+    id: 1,
+    title: 'Novo veículo pendente',
+    message: 'Honda Civic 2023 aguardando aprovação',
+    time: 'Há 2 minutos',
+    read: false,
+    type: 'admin'
+  },
+  {
+    id: 2,
+    title: 'Veículo aprovado',
+    message: 'Seu Toyota Corolla foi aprovado!',
+    time: 'Há 1 hora',
+    read: false,
+    type: 'user'
+  },
+  {
+    id: 3,
+    title: 'Nova mensagem',
+    message: 'Você tem uma nova pergunta sobre seu anúncio',
+    time: 'Há 3 horas',
+    read: true,
+    type: 'user'
+  }
+])
 
 // Destructure auth composable para uso no template
 const { isAuthenticated, userName, userInitials, isAdmin, logout, adminStats } = useAuth()
 
 // Computed
 const pendingCount = computed(() => adminStats.value?.totals?.pending || 0)
+const filteredNotifications = computed(() => {
+  if (isAdmin.value) {
+    return notifications.value // Admin vê todas
+  } else {
+    return notifications.value.filter(n => n.type === 'user') // Usuário vê só suas
+  }
+})
+const hasNotifications = computed(() => filteredNotifications.value.some(n => !n.read))
+const notificationCount = computed(() => filteredNotifications.value.filter(n => !n.read).length)
 
 // Methods
 const toggleDropdown = () => {
   dropdownOpen.value = !dropdownOpen.value
+  if (dropdownOpen.value) notificationsOpen.value = false // Fechar notificações se abrir dropdown
+}
+
+const toggleNotifications = () => {
+  notificationsOpen.value = !notificationsOpen.value
+  if (notificationsOpen.value) dropdownOpen.value = false // Fechar dropdown se abrir notificações
+}
+
+const handleNotificationClick = (notification: any) => {
+  // Marcar como lida
+  notification.read = true
+  
+  // Fechar dropdown após um pequeno delay para melhor UX
+  setTimeout(() => {
+    notificationsOpen.value = false
+  }, 150)
+  
+  // Navegar baseado no tipo
+  if (notification.type === 'admin') {
+    router.push('/admin/vehicles')
+  } else {
+    router.push('/my-ads')
+  }
+}
+
+const markAllAsRead = () => {
+  filteredNotifications.value.forEach(n => n.read = true)
+  // Fechar após um delay para mostrar o feedback visual
+  setTimeout(() => {
+    notificationsOpen.value = false
+  }, 300)
 }
 
 const handleMenuClick = async (path: string) => {
   dropdownOpen.value = false
+  notificationsOpen.value = false
   await router.push(path)
 }
 
 async function handleLogout() {
   try {
     dropdownOpen.value = false
+    notificationsOpen.value = false
     await logout()
     await router.push('/')
   } catch (error) {
@@ -220,8 +344,14 @@ async function handleLogout() {
 
 // Click outside handler
 const handleClickOutside = (event: MouseEvent) => {
+  // Fechar dropdown do usuário
   if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
     dropdownOpen.value = false
+  }
+  
+  // Fechar notificações
+  if (notificationsRef.value && !notificationsRef.value.contains(event.target as Node)) {
+    notificationsOpen.value = false
   }
 }
 
