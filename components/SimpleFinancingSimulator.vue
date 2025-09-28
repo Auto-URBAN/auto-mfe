@@ -1,92 +1,101 @@
 <template>
-  <div class="space-y-4">
-    <div class="grid grid-cols-2 gap-4">
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">
-          Valor do veículo
-        </label>
+  <div class="space-y-3">
+    <!-- Input Fields - More compact grid -->
+    <div class="grid grid-cols-6 gap-2 text-xs">
+      <div class="col-span-2">
+        <label class="block text-gray-600 mb-1 text-[10px] font-medium">VALOR</label>
         <input
-          v-model.number="vehicleValue"
-          type="number"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
-          :placeholder="formatCurrency(price)"
+          v-model="vehicleValueFormatted"
+          type="text"
+          class="w-full px-2 py-1.5 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+          placeholder="R$ 50.000"
+        />
+      </div>
+      
+      <div class="col-span-2">
+        <label class="block text-gray-600 mb-1 text-[10px] font-medium">ENTRADA</label>
+        <input
+          v-model="downPaymentFormatted"
+          type="text"
+          class="w-full px-2 py-1.5 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+          placeholder="R$ 10.000"
         />
       </div>
       
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">
-          Entrada
-        </label>
-        <input
-          v-model.number="downPayment"
-          type="number"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
-          placeholder="0"
-        />
-      </div>
-    </div>
-
-    <div class="grid grid-cols-2 gap-4">
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">
-          Prazo
-        </label>
+        <label class="block text-gray-600 mb-1 text-[10px] font-medium">MESES</label>
         <select
           v-model.number="months"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
+          class="w-full px-2 py-1.5 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
         >
-          <option value="12">12 meses</option>
-          <option value="24">24 meses</option>
-          <option value="36">36 meses</option>
-          <option value="48">48 meses</option>
-          <option value="60">60 meses</option>
+          <option value="12">12</option>
+          <option value="24">24</option>
+          <option value="36">36</option>
+          <option value="48">48</option>
+          <option value="60">60</option>
         </select>
       </div>
       
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">
-          Taxa (% a.m.)
-        </label>
+        <label class="block text-gray-600 mb-1 text-[10px] font-medium">% MÊS</label>
         <input
           v-model.number="interestRate"
           type="number"
           step="0.1"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
+          class="w-full px-2 py-1.5 border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
           placeholder="1.5"
         />
       </div>
     </div>
 
-    <!-- Results -->
-    <div class="bg-gray-50 rounded-lg p-4 mt-4">
-      <h4 class="font-medium text-gray-900 mb-3">Simulação:</h4>
-      
-      <div class="space-y-2 text-sm">
-        <div class="flex justify-between">
-          <span class="text-gray-600">Valor financiado:</span>
-          <span class="font-medium">{{ formatCurrency(financedAmount) }}</span>
+    <!-- Results - Compact display -->
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-md p-3 border border-blue-100">
+      <div class="space-y-1.5 text-xs">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center space-x-1.5">
+            <Icon name="heroicons:calculator" class="w-3 h-3 text-gray-500" />
+            <span class="text-gray-500">Financiado:</span>
+          </div>
+          <span class="font-medium text-gray-700 font-mono">{{ formatCurrency(financedAmount) }}</span>
         </div>
         
-        <div class="flex justify-between">
-          <span class="text-gray-600">Parcela mensal:</span>
-          <span class="font-semibold text-blue-600 text-base">{{ formatCurrency(monthlyPayment) }}</span>
+        <div class="flex justify-between items-center bg-blue-100 -mx-1 px-1 py-1 rounded">
+          <div class="flex items-center space-x-1.5">
+            <Icon name="heroicons:banknotes" class="w-3 h-3 text-blue-600" />
+            <span class="text-blue-600 font-medium">Parcela mensal:</span>
+          </div>
+          <span class="font-bold text-blue-700 text-sm font-mono">{{ formatCurrency(monthlyPayment) }}</span>
         </div>
         
-        <div class="flex justify-between">
-          <span class="text-gray-600">Total a pagar:</span>
-          <span class="font-medium">{{ formatCurrency(totalAmount) }}</span>
+        <div class="flex justify-between items-center">
+          <div class="flex items-center space-x-1.5">
+            <Icon name="heroicons:receipt-percent" class="w-3 h-3 text-red-500" />
+            <span class="text-gray-500">Total de juros:</span>
+          </div>
+          <span class="font-medium text-red-600 font-mono">{{ formatCurrency(totalInterest) }}</span>
         </div>
         
-        <div class="flex justify-between">
-          <span class="text-gray-600">Total de juros:</span>
-          <span class="font-medium text-red-600">{{ formatCurrency(totalInterest) }}</span>
+        <div class="flex justify-between items-center">
+          <div class="flex items-center space-x-1.5">
+            <Icon name="heroicons:credit-card" class="w-3 h-3 text-gray-500" />
+            <span class="text-gray-500">Total a pagar:</span>
+          </div>
+          <span class="font-medium text-gray-700 font-mono">{{ formatCurrency(totalAmount) }}</span>
+        </div>
+        
+        <div class="flex justify-between items-center pt-1 border-t border-blue-200">
+          <div class="flex items-center space-x-1.5">
+            <Icon name="heroicons:currency-dollar" class="w-3 h-3 text-green-600" />
+            <span class="text-green-600 font-medium">Valor total:</span>
+          </div>
+          <span class="font-bold text-green-700 font-mono">{{ formatCurrency(grandTotal) }}</span>
         </div>
       </div>
     </div>
 
-    <div class="text-xs text-gray-500 mt-2">
-      * Simulação apenas para fins informativos. Consulte seu banco para condições reais.
-    </div>
+    <p class="text-[10px] text-gray-400 leading-tight">
+      * Simulação informativa. Consulte seu banco para condições reais.
+    </p>
   </div>
 </template>
 
@@ -102,6 +111,23 @@ const vehicleValue = ref(props.price)
 const downPayment = ref(Math.round(props.price * 0.2)) // 20% default
 const months = ref(48)
 const interestRate = ref(1.5) // 1.5% per month default
+
+// Formatted inputs for money
+const vehicleValueFormatted = computed({
+  get: () => formatCurrency(vehicleValue.value),
+  set: (val: string) => {
+    const num = parseFloat(val.replace(/[^\d,.-]/g, '').replace(',', '.'))
+    vehicleValue.value = isNaN(num) ? 0 : num
+  }
+})
+
+const downPaymentFormatted = computed({
+  get: () => formatCurrency(downPayment.value),
+  set: (val: string) => {
+    const num = parseFloat(val.replace(/[^\d,.-]/g, '').replace(',', '.'))
+    downPayment.value = isNaN(num) ? 0 : num
+  }
+})
 
 // Watch price changes
 watch(() => props.price, (newPrice) => {
@@ -134,11 +160,32 @@ const totalInterest = computed(() => {
   return totalAmount.value - vehicleValue.value
 })
 
-// Utility function
+const grandTotal = computed(() => {
+  return downPayment.value + totalAmount.value
+})
+
+// Utility functions
 const formatCurrency = (value: number) => {
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL'
   }).format(value || 0)
+}
+
+const formatCompactCurrency = (value: number) => {
+  const num = value || 0
+  if (num >= 1000000) {
+    return `R$ ${(num / 1000000).toFixed(1)}M`
+  } else if (num >= 1000) {
+    const kValue = (num / 1000).toFixed(1)
+    // Remove .0 desnecessário
+    return `R$ ${kValue.endsWith('.0') ? kValue.slice(0, -2) : kValue}k`
+  }
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(num)
 }
 </script>

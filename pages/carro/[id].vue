@@ -130,75 +130,232 @@
         </div>
 
         <!-- Right Column: Contact + Price Comparison + Financing -->
-        <div class="lg:col-span-1 space-y-6">
-          <!-- Contact -->
-          <VehicleContact 
-            :vehicle="vehicle" 
-            :seller="vehicle.seller" 
-          />
+        <div class="lg:col-span-1">
+          <!-- Sticky Container with smart positioning -->
+          <div 
+            class="sticky transition-all duration-300 z-30"
+            :style="{ top: stickyTop + 'px' }"
+          >
+            <div class="space-y-4">
+              <!-- Compact Contact -->
+              <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <!-- Always visible header -->
+                <div class="p-4 bg-gradient-to-r from-blue-600 to-blue-700">
+                  <div class="flex items-center justify-between text-white">
+                    <div class="flex items-center space-x-3">
+                      <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                        <Icon name="heroicons:phone" class="w-5 h-5" />
+                      </div>
+                      <div>
+                        <p class="font-semibold text-sm">{{ formatSellerName(vehicle.seller.id) }}</p>
+                        <p class="text-xs opacity-90">{{ formatPhone(vehicle.seller.phone) }}</p>
+                      </div>
+                    </div>
+                    <button
+                      @click="toggleContactExpanded"
+                      class="p-1 hover:bg-white/20 rounded transition-colors"
+                    >
+                      <Icon 
+                        :name="contactExpanded ? 'heroicons:chevron-up' : 'heroicons:chevron-down'" 
+                        class="w-4 h-4" 
+                      />
+                    </button>
+                  </div>
+                </div>
 
-          <!-- Price Comparison -->
-          <div v-if="carData?.partners?.length > 0" class="bg-white rounded-lg shadow-lg p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">
-              Comparação de Preços
-            </h3>
-            <div class="space-y-3">
-              <div class="flex justify-between items-center text-sm">
-                <span class="font-medium text-gray-900">Este anúncio</span>
-                <span class="text-green-600 font-semibold">{{ formatCurrency(vehicle.price) }}</span>
+                <!-- Expandable content -->
+                <div v-show="contactExpanded" class="p-4 space-y-3">
+                  <!-- Vehicle & Seller Information Cards -->
+                  <div class="space-y-2">
+                    <!-- License Plate -->
+                    <div class="flex items-center justify-between text-sm">
+                      <div class="flex items-center space-x-2">
+                        <Icon name="heroicons:identification" class="w-4 h-4 text-gray-500" />
+                        <span class="text-gray-600">Placa:</span>
+                        <span class="font-mono font-semibold text-gray-900">{{ formatPlate(vehicle.id) }}</span>
+                      </div>
+                      
+                      <div class="flex items-center space-x-2">
+                        <Icon name="heroicons:map-pin" class="w-4 h-4 text-gray-500" />
+                        <span class="text-gray-600">Local:</span>
+                        <span class="font-semibold text-gray-900">{{ vehicle.city }}, {{ vehicle.uf }}</span>
+                      </div>
+                    </div>
+
+                    <!-- Listing Date -->
+                    <div class="flex items-center justify-between text-sm">
+                      <div class="flex items-center space-x-2">
+                        <Icon name="heroicons:clock" class="w-4 h-4 text-gray-500" />
+                        <span class="text-gray-600">Anúncio:</span>
+                        <span class="font-semibold text-gray-900">{{ formatDate(vehicle.createdAt) }}</span>
+                      </div>
+                      <div class="flex items-center space-x-1 text-gray-500">
+                        <Icon name="heroicons:eye" class="w-3 h-3" />
+                        <span class="text-xs">{{ getViewCount(vehicle.id) }}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Action Buttons -->
+                  <div class="grid grid-cols-6 gap-2">
+                    <a
+                      :href="`https://wa.me/${vehicle.seller.whatsapp}?text=Olá! Tenho interesse no ${vehicle.title}%0A%0ALocalização: ${vehicle.city}/${vehicle.uf}%0APreço: ${formatCurrency(vehicle.price)}%0A%0APodemos conversar?`"
+                      target="_blank"
+                      class="flex col-span-2 items-center justify-center px-3 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-md transition-colors"
+                    >
+                      <Icon name="mdi:whatsapp" class="w-4 h-4 mr-1" />
+                      WhatsApp
+                    </a>
+                    
+                    <a
+                      :href="`tel:${vehicle.seller.phone}`"
+                      class="flex col-span-2 items-center justify-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md transition-colors"
+                    >
+                      <Icon name="heroicons:phone" class="w-4 h-4 mr-1" />
+                      Ligar
+                    </a>
+                    <div class="col-span-1 flex gap-2 justify-between">
+                      <button
+                      @click="shareVehicle"
+                      class="flex items-center justify-center px-3 py-1.5 border border-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50 transition-colors"
+                    >
+                      <Icon name="heroicons:share" class="w-4 h-4 mr-1" />
+                      
+                    </button>
+                    
+                    <button
+                      @click="saveVehicle"
+                      class="flex items-center justify-center px-3 py-1.5 border border-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50 transition-colors"
+                    >
+                      <Icon name="heroicons:heart" class="w-4 h-4 mr-1" />
+                      
+                    </button>
+                    </div>
+                  </div>
+                  
+                </div>
               </div>
-              <hr />
-              <div class="text-xs text-gray-600 mb-2">Média de mercado:</div>
-              <div 
-                v-for="partner in carData.partners" 
-                :key="partner.name"
-                class="flex justify-between items-center text-sm"
-              >
-                <span class="text-gray-600">{{ partner.name }}</span>
-                <span class="text-gray-900">{{ formatCurrency(partner.value) }}</span>
-              </div>
-              <hr />
-              <div class="flex justify-between items-center text-sm font-medium">
-                <span>Média geral</span>
-                <span>{{ formatCurrency(averageMarketPrice) }}</span>
-              </div>
-              <div v-if="priceComparison" class="text-xs mt-2">
-                <span 
-                  :class="[
-                    'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium',
-                    priceComparison.isGoodDeal 
-                      ? 'bg-green-100 text-green-800' 
-                      : priceComparison.isExpensive
-                      ? 'bg-red-100 text-red-800'
-                      : 'bg-yellow-100 text-yellow-800'
-                  ]"
+
+              <!-- Price Comparison -->
+              <div v-if="carData?.partners?.length > 0" class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div 
+                  class="p-4 cursor-pointer hover:bg-gray-50 transition-colors"
+                  @click="togglePriceExpanded"
                 >
-                  {{ priceComparison.message }}
-                </span>
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                      <Icon name="heroicons:chart-bar" class="w-5 h-5 text-gray-600" />
+                      <h3 class="font-semibold text-gray-900">Comparação de Preços</h3>
+                    </div>
+                    <Icon 
+                      :name="priceExpanded ? 'heroicons:chevron-up' : 'heroicons:chevron-down'" 
+                      class="w-4 h-4 text-gray-500" 
+                    />
+                  </div>
+                  
+                  <!-- Quick preview when collapsed -->
+                  <div v-if="!priceExpanded" class="mt-2">
+                    <div class="flex justify-between items-center text-sm">
+                      <span class="text-gray-600">Este anúncio</span>
+                      <span 
+                        :class="[
+                          'font-semibold',
+                          priceComparison?.isGoodDeal ? 'text-green-600' : 
+                          priceComparison?.isExpensive ? 'text-red-600' : 'text-gray-900'
+                        ]"
+                      >
+                        {{ formatCurrency(vehicle.price) }}
+                      </span>
+                    </div>
+                    <div class="text-xs text-gray-500 mt-1">
+                      vs. média: {{ formatCurrency(averageMarketPrice) }}
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Expanded content -->
+                <div v-show="priceExpanded" class="px-4 pb-4">
+                  <div class="space-y-3">
+                    <div class="flex justify-between items-center text-sm border-b pb-2">
+                      <span class="font-medium text-gray-900">Este anúncio</span>
+                      <span class="text-green-600 font-semibold">{{ formatCurrency(vehicle.price) }}</span>
+                    </div>
+                    
+                    <div class="text-xs text-gray-600 mb-2">Média de mercado:</div>
+                    <div class="space-y-2">
+                      <div 
+                        v-for="partner in carData.partners" 
+                        :key="partner.name"
+                        class="flex justify-between items-center text-sm"
+                      >
+                        <span class="text-gray-600">{{ partner.name }}</span>
+                        <span class="text-gray-900">{{ formatCurrency(partner.value) }}</span>
+                      </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center text-sm font-medium pt-2 border-t">
+                      <span>Média geral</span>
+                      <span>{{ formatCurrency(averageMarketPrice) }}</span>
+                    </div>
+                    
+                    <div v-if="priceComparison" class="mt-2">
+                      <span 
+                        :class="[
+                          'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium',
+                          priceComparison.isGoodDeal 
+                            ? 'bg-green-100 text-green-800' 
+                            : priceComparison.isExpensive
+                            ? 'bg-red-100 text-red-800'
+                            : 'bg-yellow-100 text-yellow-800'
+                        ]"
+                      >
+                        {{ priceComparison.message }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Financing Simulator -->
+              <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <div 
+                  class="p-4 cursor-pointer hover:bg-gray-50 transition-colors"
+                  @click="toggleFinancingExpanded"
+                >
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                      <Icon name="heroicons:calculator" class="w-5 h-5 text-gray-600" />
+                      <h3 class="font-semibold text-gray-900">Simulador</h3>
+                    </div>
+                    <Icon 
+                      :name="financingExpanded ? 'heroicons:chevron-up' : 'heroicons:chevron-down'" 
+                      class="w-4 h-4 text-gray-500" 
+                    />
+                  </div>
+                  
+                  <!-- Quick preview when collapsed -->
+                  <div v-if="!financingExpanded" class="mt-2">
+                    <div class="text-sm text-gray-600">
+                      Simule o financiamento
+                    </div>
+                    <div class="text-lg font-semibold text-blue-600">
+                      {{ previewMonthlyPayment }}
+                    </div>
+                    <div class="text-xs text-gray-500">
+                      entrada de {{ formatCurrency(vehicle.price * 0.2) }}
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Expanded content -->
+                <div v-show="financingExpanded" class="px-4 pb-4">
+                  <SimpleFinancingSimulator 
+                    class="w-full" 
+                    :price="vehicle.price"
+                  />
+                </div>
               </div>
             </div>
-          </div>
-
-          <!-- Financing Simulator -->
-          <div class="bg-white rounded-lg shadow-lg p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">
-              Simulador de Financiamento
-            </h3>
-            <p class="text-sm text-gray-600 mb-4">
-              Simule as condições de financiamento para este veículo
-            </p>
-            <button
-              v-if="!showFinancial"
-              @click="showFinancial = true"
-              class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
-            >
-              Simular Financiamento
-            </button>
-            <SimpleFinancingSimulator 
-              v-if="showFinancial"
-              class="w-full" 
-              :price="vehicle.price"
-            />
           </div>
         </div>
       </div>
@@ -266,6 +423,167 @@ const { data: carData } = await useFetch('/api/cars', {
 // Reactive data for financing simulator
 const showFinancial = ref(false)
 
+// Sidebar state management
+const contactExpanded = ref(false)
+const priceExpanded = ref(false) 
+const financingExpanded = ref(false)
+
+// Sticky positioning
+const stickyTop = ref(112) // Default: header height (96px) + margin (16px)
+
+// Toggle functions
+const toggleContactExpanded = () => {
+  contactExpanded.value = !contactExpanded.value
+}
+
+const togglePriceExpanded = () => {
+  priceExpanded.value = !priceExpanded.value
+}
+
+const toggleFinancingExpanded = () => {
+  financingExpanded.value = !financingExpanded.value
+}
+
+// Utility functions
+const formatPhone = (phone: string) => {
+  if (phone.length === 11) {
+    return phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
+  }
+  return phone
+}
+
+const formatPlate = (vehicleId: string) => {
+  // Generate a mock plate based on vehicle ID for privacy
+  const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+  const nums = vehicleId.replace(/\D/g, '') + '000000' // Ensure we have enough digits
+  
+  const letter1 = letters[parseInt(nums[0]) % letters.length]
+  const letter2 = letters[parseInt(nums[1]) % letters.length]
+  const digit1 = nums[2]
+  const digit2 = nums[5] // Last visible digit
+  
+  return `${letter1}${letter2}${digit1}****${digit2}`
+}
+
+const formatSellerName = (sellerId: string) => {
+  // Generate consistent seller names based on ID
+  const firstNames = ['João', 'Maria', 'Carlos', 'Ana', 'Pedro', 'Julia', 'Roberto', 'Fernanda', 'Ricardo', 'Patricia']
+  const lastNames = ['Silva', 'Santos', 'Oliveira', 'Pereira', 'Costa', 'Rodrigues', 'Almeida', 'Nascimento', 'Lima', 'Araújo']
+  
+  const nameHash = sellerId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
+  const firstName = firstNames[nameHash % firstNames.length]
+  const lastName = lastNames[(nameHash * 3) % lastNames.length]
+  
+  return `${firstName} ${lastName}`
+}
+
+const getSellerInitials = (sellerId: string) => {
+  const name = formatSellerName(sellerId)
+  const names = name.split(' ')
+  return `${names[0][0]}${names[1][0]}`
+}
+
+const getStateFullName = (uf: string) => {
+  const states = {
+    'AC': 'Acre', 'AL': 'Alagoas', 'AP': 'Amapá', 'AM': 'Amazonas', 'BA': 'Bahia',
+    'CE': 'Ceará', 'DF': 'Distrito Federal', 'ES': 'Espírito Santo', 'GO': 'Goiás',
+    'MA': 'Maranhão', 'MT': 'Mato Grosso', 'MS': 'Mato Grosso do Sul', 'MG': 'Minas Gerais',
+    'PA': 'Pará', 'PB': 'Paraíba', 'PR': 'Paraná', 'PE': 'Pernambuco', 'PI': 'Piauí',
+    'RJ': 'Rio de Janeiro', 'RN': 'Rio Grande do Norte', 'RS': 'Rio Grande do Sul',
+    'RO': 'Rondônia', 'RR': 'Roraima', 'SC': 'Santa Catarina', 'SP': 'São Paulo',
+    'SE': 'Sergipe', 'TO': 'Tocantins'
+  }
+  return states[uf as keyof typeof states] || uf
+}
+
+const getSellerRating = (sellerId: string) => {
+  // Generate consistent rating based on seller ID
+  const hash = sellerId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
+  const rating = (hash % 21 + 40) / 10 // Rating between 4.0 and 6.0
+  return rating.toFixed(1)
+}
+
+const getSellerSales = (sellerId: string) => {
+  // Generate consistent sales count based on seller ID
+  const hash = sellerId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
+  return (hash % 50) + 5 // Sales between 5 and 54
+}
+
+const getViewCount = (vehicleId: string) => {
+  // Generate consistent view count based on vehicle ID
+  const hash = vehicleId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
+  return (hash % 200) + 50 // Views between 50 and 249
+}
+
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString)
+  const now = new Date()
+  const diffTime = Math.abs(now.getTime() - date.getTime())
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+  
+  if (diffDays === 1) return 'Ontem'
+  if (diffDays < 7) return `${diffDays} dias atrás`
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} semanas atrás`
+  
+  return date.toLocaleDateString('pt-BR')
+}
+
+const saveVehicle = () => {
+  // Mock save functionality
+  alert('Veículo salvo nos seus favoritos!')
+  console.log('Save vehicle:', vehicle.value?.id)
+}
+
+const shareVehicle = async () => {
+  const shareData = {
+    title: vehicle.value?.title,
+    text: `${vehicle.value?.title} por ${formatCurrency(vehicle.value?.price || 0)} em ${vehicle.value?.city}/${vehicle.value?.uf}`,
+    url: window.location.href
+  }
+
+  try {
+    if (navigator.share) {
+      await navigator.share(shareData)
+    } else {
+      await navigator.clipboard.writeText(`${shareData.text}\n${window.location.href}`)
+      alert('Link copiado para a área de transferência!')
+    }
+  } catch (error) {
+    console.log('Erro ao compartilhar:', error)
+    alert(`${shareData.text}\n\nLink: ${window.location.href}`)
+  }
+}
+
+// Handle scroll for smart sticky positioning
+const handleScroll = () => {
+  const scrollY = window.scrollY
+  // Header has: py-4 (32px) + h-16 content (64px) = 96px total height
+  const headerHeight = 96
+  
+  // Adjust sticky top based on scroll position
+  if (scrollY > 50) {
+    stickyTop.value = headerHeight + 8 // Header height + small margin when scrolled
+  } else {
+    stickyTop.value = headerHeight + 16 // Header height + larger margin when at top
+  }
+}
+
+// Lifecycle hooks for scroll handling
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll)
+  
+  // Auto-expand contact on desktop, keep collapsed on mobile
+  if (process.client && window.innerWidth >= 1024) {
+    contactExpanded.value = true
+  }
+})
+
+onUnmounted(() => {
+  if (process.client) {
+    window.removeEventListener('scroll', handleScroll)
+  }
+})
+
 // Computed properties for price chart
 const priceLabels = computed(() => {
   if (!carData.value?.prices?.length) return []
@@ -323,6 +641,22 @@ const priceComparison = computed(() => {
       message: 'Preço próximo à média de mercado',
     }
   }
+})
+
+// Preview calculation for collapsed financing section
+const previewMonthlyPayment = computed(() => {
+  if (!vehicle.value) return formatCurrency(0)
+  
+  const vehiclePrice = vehicle.value.price
+  const downPayment = vehiclePrice * 0.2 // 20%
+  const financedAmount = vehiclePrice - downPayment
+  const months = 48 // Default 48 months
+  const interestRate = 0.015 // 1.5% per month
+  
+  const factor = Math.pow(1 + interestRate, months)
+  const payment = (financedAmount * interestRate * factor) / (factor - 1)
+  
+  return formatCurrency(Math.round(payment))
 })
 
 
