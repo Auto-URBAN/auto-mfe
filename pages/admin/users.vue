@@ -33,18 +33,18 @@
     </div>
 
     <!-- Loading State -->
-    <div v-if="loading" class="space-y-4">
+    <div v-if="adminLoading" class="space-y-4">
       <div v-for="i in 5" :key="i" class="h-16 bg-gray-200 rounded-lg animate-pulse" />
     </div>
 
     <!-- Error State -->
     <div
-      v-else-if="error"
+      v-else-if="adminError"
       class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded"
     >
       <div class="flex">
         <Icon name="heroicons:exclamation-triangle" class="h-5 w-5 text-red-400 mr-2" />
-        <p class="text-sm">{{ error }}</p>
+        <p class="text-sm">{{ adminError }}</p>
       </div>
     </div>
 
@@ -210,7 +210,6 @@
 </template>
 
 <script setup lang="ts">
-import { useAdmin } from '~/composables/useAdmin'
 import BigNumberCard from '~/components/BigNumberCard.vue'
 
 definePageMeta({
@@ -218,20 +217,20 @@ definePageMeta({
   middleware: 'admin-auth'
 })
 
-const admin = useAdmin()
-const { users, loading, error, loadUsers } = admin
+const auth = useAuth()
+const { adminUsers, adminLoading, adminError, loadAdminUsers } = auth
 
 // Reactive data
 const selectedFilter = ref('all')
 const openDropdowns = ref<Record<string, boolean>>({})
 
 // Computed
-const totalUsers = computed(() => users.value.length)
-const regularUsersCount = computed(() => users.value.filter(u => u.role === 'USER').length)
-const adminUsersCount = computed(() => users.value.filter(u => u.role === 'ADMIN').length)
+const totalUsers = computed(() => adminUsers.value.length)
+const regularUsersCount = computed(() => adminUsers.value.filter(u => u.role === 'USER').length)
+const adminUsersCount = computed(() => adminUsers.value.filter(u => u.role === 'ADMIN').length)
 
 const filteredUsers = computed(() => {
-  const allUsers = users.value
+  const allUsers = adminUsers.value
   
   if (selectedFilter.value === 'user') {
     return allUsers.filter(u => u.role === 'USER')
@@ -302,7 +301,7 @@ const handleClickOutside = (event: Event) => {
 // Lifecycle
 onMounted(async () => {
   try {
-    await loadUsers()
+    await loadAdminUsers()
     document.addEventListener('click', handleClickOutside)
   } catch (err) {
     console.error('Failed to load users:', err)

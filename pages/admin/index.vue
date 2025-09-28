@@ -9,7 +9,7 @@
     </div>
 
     <!-- Loading State -->
-    <div v-if="loading" class="space-y-6">
+    <div v-if="adminLoading" class="space-y-6">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div v-for="i in 4" :key="i" class="h-24 bg-gray-200 rounded-lg animate-pulse" />
       </div>
@@ -17,12 +17,12 @@
 
     <!-- Error State -->
     <div
-      v-else-if="error"
+      v-else-if="adminError"
       class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded"
     >
       <div class="flex">
         <Icon name="heroicons:exclamation-triangle" class="h-5 w-5 text-red-400 mr-2" />
-        <p class="text-sm">{{ error }}</p>
+        <p class="text-sm">{{ adminError }}</p>
       </div>
     </div>
 
@@ -32,15 +32,15 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <BigNumberCard
           title="Total de Veículos"
-          :value="metrics?.totalVehicles || 0"
-          icon="i-heroicons-truck"
+          :value="metrics?.totals?.vehicles || 0"
+          icon="heroicons:truck"
           color="blue"
         />
         
         <BigNumberCard
           title="Aguardando Aprovação"
-          :value="metrics?.pendingApprovals || 0"
-          icon="i-heroicons-clock"
+          :value="metrics?.totals?.pending || 0"
+          icon="heroicons:clock"
           color="yellow"
           :clickable="true"
           @click="navigateTo('/admin/vehicles?status=pending')"
@@ -48,15 +48,15 @@
         
         <BigNumberCard
           title="Aprovados"
-          :value="metrics?.totalAds || 0"
-          icon="i-heroicons-check-circle"
+          :value="metrics?.totals?.approved || 0"
+          icon="heroicons:check-circle"
           color="green"
         />
         
         <BigNumberCard
           title="Total de Usuários"
-          :value="metrics?.totalUsers || 0"
-          icon="i-heroicons-users"
+          :value="metrics?.totals?.users || 0"
+          icon="heroicons:users"
           color="purple"
           :clickable="true"
           @click="navigateTo('/admin/users')"
@@ -155,7 +155,6 @@
 </template>
 
 <script setup lang="ts">
-import { useAdmin } from '~/composables/useAdmin'
 import BigNumberCard from '~/components/BigNumberCard.vue'
 
 definePageMeta({
@@ -163,11 +162,11 @@ definePageMeta({
   middleware: 'admin-auth'
 })
 
-const admin = useAdmin()
-const { stats, loading, error, loadStats } = admin
+const auth = useAuth()
+const { adminStats, adminLoading, adminError, loadAdminStats } = auth
 
 // Computed
-const metrics = computed(() => stats.value)
+const metrics = computed(() => adminStats.value)
 
 const topBrands = computed(() => {
   if (!metrics.value?.byBrand) return []
@@ -190,7 +189,7 @@ const maxStateCount = computed(() => {
 // Lifecycle
 onMounted(async () => {
   try {
-    await loadStats()
+    await loadAdminStats()
   } catch (err) {
     console.error('Failed to load admin metrics:', err)
   }

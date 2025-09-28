@@ -9,6 +9,53 @@ import {
 } from '~/schemas'
 import { z } from 'zod'
 
+// Admin Statistics Schema
+const AdminStatsSchema = z.object({
+  totals: z.object({
+    vehicles: z.number(),
+    pending: z.number(),
+    approved: z.number(),
+    rejected: z.number().optional(),
+    users: z.number()
+  }),
+  byBrand: z.array(z.object({
+    brand: z.string(),
+    count: z.number()
+  })).optional(),
+  byUF: z.array(z.object({
+    uf: z.string(),
+    count: z.number()
+  })).optional()
+})
+
+// User Management Schema
+const AdminUserSchema = z.object({
+  id: z.string(),
+  phone: z.string(),
+  role: z.enum(['USER', 'ADMIN']),
+  status: z.enum(['ACTIVE', 'SUSPENDED']),
+  createdAt: z.string().optional(),
+  lastLogin: z.string().optional(),
+  ads: z.object({
+    total: z.number(),
+    byStatus: z.object({
+      approved: z.number(),
+      pending: z.number(),
+      rejected: z.number()
+    })
+  }).optional()
+})
+
+// Vehicle Management Schema  
+const AdminVehicleSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  status: z.enum(['APPROVED', 'PENDING', 'REJECTED']),
+  userId: z.string(),
+  createdAt: z.string().optional(),
+  price: z.number()
+})
+
 // Use Zod schemas instead of TypeScript interfaces
 const AuthStateSchema = z.object({
   user: User.nullable(),
@@ -26,6 +73,15 @@ const authState = reactive<AuthStateType>({
   refreshToken: null,
   isAuthenticated: false,
   loading: false
+})
+
+// Admin state
+const adminState = reactive({
+  stats: null as z.infer<typeof AdminStatsSchema> | null,
+  users: [] as z.infer<typeof AdminUserSchema>[],
+  vehicles: [] as z.infer<typeof AdminVehicleSchema>[],
+  loading: false,
+  error: null as string | null
 })
 
 export const useAuth = () => {
@@ -295,6 +351,80 @@ export const useAuth = () => {
     loadPersistedAuth()
   }
 
+  // Admin functions (only available for admin users)
+  const loadAdminStats = async () => {
+    if (!isAdmin.value) {
+      throw new Error('Access denied: Admin required')
+    }
+
+    adminState.loading = true
+    adminState.error = null
+    
+    try {
+      const response = await $fetch('/api/admin/metrics')
+      const validatedStats = AdminStatsSchema.parse(response)
+      adminState.stats = validatedStats
+      return validatedStats
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load statistics'
+      adminState.error = errorMessage
+      console.error('Admin stats error:', err)
+      throw err
+    } finally {
+      adminState.loading = false
+    }
+  }
+
+  const loadAdminUsers = async () => {
+    if (!isAdmin.value) {
+      throw new Error('Access denied: Admin required')
+    }
+
+    adminState.loading = true
+    adminState.error = null
+    
+    try {
+      const response = await $fetch('/api/admin/users')
+      const UsersArraySchema = z.array(AdminUserSchema)
+      const validatedUsers = UsersArraySchema.parse(response)
+      
+      adminState.users = validatedUsers
+      return validatedUsers
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load users'
+      adminState.error = errorMessage
+      console.error('Admin users error:', err)
+      throw err
+    } finally {
+      adminState.loading = false
+    }
+  }
+
+  const loadAdminVehicles = async () => {
+    if (!isAdmin.value) {
+      throw new Error('Access denied: Admin required')
+    }
+
+    adminState.loading = true
+    adminState.error = null
+    
+    try {
+      const response = await $fetch('/api/admin/vehicles')
+      const VehiclesArraySchema = z.array(AdminVehicleSchema)
+      const validatedVehicles = VehiclesArraySchema.parse(response)
+      
+      adminState.vehicles = validatedVehicles
+      return validatedVehicles
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to load vehicles'
+      adminState.error = errorMessage
+      console.error('Admin vehicles error:', err)
+      throw err
+    } finally {
+      adminState.loading = false
+    }
+  }
+
   return {
     // State
     user,
@@ -317,6 +447,16 @@ export const useAuth = () => {
     refreshTokens,
     persistTokens,
     loadPersistedAuth,
-    clearAuth
+    clearAuth,
+    
+    // Admin state and actions
+    adminStats: toRef(adminState, 'stats'),
+    adminUsers: toRef(adminState, 'users'),
+    adminVehicles: toRef(adminState, 'vehicles'),
+    adminLoading: toRef(adminState, 'loading'),
+    adminError: toRef(adminState, 'error'),
+    loadAdminStats,
+    loadAdminUsers,
+    loadAdminVehicles
   }
 }

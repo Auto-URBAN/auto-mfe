@@ -207,7 +207,6 @@
 </template>
 
 <script setup lang="ts">
-import { useAdmin } from '~/composables/useAdmin'
 import StatusBadge from '~/components/StatusBadge.vue'
 import type { VehicleStatus } from '~/schemas/vehicle'
 
@@ -218,7 +217,6 @@ definePageMeta({
 
 const route = useRoute()
 const router = useRouter()
-const admin = useAdmin()
 const { vehicles, loading, error, loadVehicles, updateVehicleStatus, deleteVehicle } = admin
 
 // Reactive data
@@ -350,7 +348,7 @@ watch(selectedTab, (newTab) => {
 
 // Lifecycle
 onMounted(async () => {
-  await adminStore.loadVehicles()
+  //await adminStore.loadVehicles()
 })
 
 // Meta
