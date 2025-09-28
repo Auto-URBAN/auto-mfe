@@ -54,7 +54,7 @@ stores/
 
 ```
 /                    # Home - catálogo com filtros
-/vehicle/[id]        # Detalhes do veículo
+/carro/[id]        # Detalhes do veículo
 /sell               # Publicar veículo (wizard 3 passos)
 /account            # Meus anúncios (vendedor)
 /auth/login         # Login telefone + OTP

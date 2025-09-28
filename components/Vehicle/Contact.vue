@@ -1,18 +1,19 @@
 <template>
-  <UCard class="sticky top-4">
-    <template #header>
-      <div class="flex items-center justify-between">
-        <h3 class="text-lg font-semibold text-gray-900">
-          Contato
-        </h3>
-        <UBadge v-if="isOnline" label="Online" color="green" variant="solid" size="xs" />
-      </div>
-    </template>
+  <div class="bg-white border border-gray-200 rounded-lg p-6 sticky top-4 shadow-sm">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-lg font-semibold text-gray-900">
+        Contato
+      </h3>
+      <span v-if="isOnline" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+        Online
+      </span>
+    </div>
 
     <!-- Seller Info -->
     <div class="flex items-center space-x-3 mb-4">
       <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
-        <UIcon name="i-heroicons-user" class="w-6 h-6 text-white" />
+        <Icon name="heroicons:user" class="w-6 h-6 text-white" />
       </div>
       <div>
         <p class="font-medium text-gray-900">Vendedor</p>
@@ -31,40 +32,33 @@
     <!-- Contact Actions -->
     <div class="space-y-3">
       <!-- WhatsApp Button -->
-      <UButton
-        color="green"
-        size="lg"
-        block
-        icon="i-simple-icons-whatsapp"
-        :loading="sendingWhatsApp"
+      <button
         @click="contactWhatsApp"
+        :disabled="sendingWhatsApp"
+        class="w-full flex items-center justify-center px-4 py-3 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
-        Conversar no WhatsApp
-      </UButton>
+        <Icon v-if="!sendingWhatsApp" name="heroicons:chat-bubble-left-ellipsis" class="w-5 h-5 mr-2" />
+        <div v-else class="w-5 h-5 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+        {{ sendingWhatsApp ? 'Abrindo...' : 'Conversar no WhatsApp' }}
+      </button>
 
       <!-- Phone Button -->
-      <UButton
-        color="blue"
-        variant="outline"
-        size="lg"
-        block
-        icon="i-heroicons-phone"
+      <button
         @click="callPhone"
+        class="w-full flex items-center justify-center px-4 py-3 bg-white border border-blue-600 text-blue-600 text-sm font-medium rounded-lg hover:bg-blue-50 transition-colors"
       >
+        <Icon name="heroicons:phone" class="w-5 h-5 mr-2" />
         {{ formatPhone(seller.phone) }}
-      </UButton>
+      </button>
 
       <!-- Share Button -->
-      <UButton
-        color="gray"
-        variant="ghost"
-        size="lg"
-        block
-        icon="i-heroicons-share"
+      <button
         @click="shareVehicle"
+        class="w-full flex items-center justify-center px-4 py-3 bg-gray-50 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-100 transition-colors"
       >
+        <Icon name="heroicons:share" class="w-5 h-5 mr-2" />
         Compartilhar Anúncio
-      </UButton>
+      </button>
     </div>
 
     <!-- Interest Counter -->
@@ -78,7 +72,7 @@
     <!-- Contact Tips -->
     <div class="mt-4 p-3 bg-blue-50 rounded-lg">
       <div class="flex items-start space-x-2">
-        <UIcon name="i-heroicons-light-bulb" class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
+        <Icon name="heroicons:light-bulb" class="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
         <div>
           <p class="text-xs font-medium text-blue-800">Dica de segurança</p>
           <p class="text-xs text-blue-700 mt-1">
@@ -87,7 +81,7 @@
         </div>
       </div>
     </div>
-  </UCard>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -117,6 +111,16 @@ const sendingWhatsApp = ref(false)
 const isOnline = ref(Math.random() > 0.3) // Mock online status
 const interestCount = ref(Math.floor(Math.random() * 15) + 1)
 const viewsCount = ref(Math.floor(Math.random() * 200) + 50)
+
+// Toast notification function
+const showNotification = (message: string, type: 'success' | 'error' = 'success') => {
+  // Simple alert for now, can be replaced with a proper toast component
+  if (type === 'success') {
+    alert(`✅ ${message}`)
+  } else {
+    alert(`❌ ${message}`)
+  }
+}
 
 // Methods
 const formatCurrency = (value: number) => {
@@ -166,18 +170,10 @@ const contactWhatsApp = async () => {
     // Update interest counter
     interestCount.value++
     
-    toast.add({
-      title: 'WhatsApp aberto!',
-      description: 'Converse com o vendedor pelo WhatsApp',
-      color: 'green'
-    })
+    showNotification('WhatsApp aberto! Converse com o vendedor pelo WhatsApp')
     
   } catch (error) {
-    toast.add({
-      title: 'Erro',
-      description: 'Não foi possível abrir o WhatsApp',
-      color: 'red'
-    })
+    showNotification('Não foi possível abrir o WhatsApp', 'error')
   } finally {
     sendingWhatsApp.value = false
   }
@@ -208,18 +204,11 @@ const shareVehicle = async () => {
     } else {
       // Fallback to clipboard
       await navigator.clipboard.writeText(window.location.href)
-      toast.add({
-        title: 'Link copiado!',
-        description: 'Link do anúncio copiado para a área de transferência',
-        color: 'blue'
-      })
+      showNotification('Link copiado! Link do anúncio copiado para a área de transferência')
     }
   } catch (error) {
-    toast.add({
-      title: 'Erro ao compartilhar',
-      description: 'Não foi possível compartilhar o anúncio',
-      color: 'red'
-    })
+    console.error('Share error:', error)
+    showNotification('Não foi possível compartilhar o anúncio', 'error')
   }
 }
 

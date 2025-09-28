@@ -122,7 +122,7 @@ async function performSearch() {
 }
 
 function goToVehicle(id: string) {
-  navigateTo(`/vehicle/${id}`)
+  navigateTo(`/carro/${id}`)
 }
 
 // Formatters

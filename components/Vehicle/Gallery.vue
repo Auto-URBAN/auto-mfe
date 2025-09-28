@@ -2,7 +2,7 @@
   <div class="vehicle-gallery">
     <!-- Main Gallery -->
     <div class="relative">
-      <div class="aspect-w-16 aspect-h-9 lg:aspect-w-4 lg:aspect-h-3">
+      <div class="h-64 sm:h-80 lg:h-96 w-full">
         <img
           :src="currentImage"
           :alt="`${vehicle.title} - Imagem ${currentIndex + 1}`"
@@ -15,7 +15,7 @@
           v-if="!imageLoaded" 
           class="absolute inset-0 bg-gray-200 animate-pulse rounded-lg flex items-center justify-center"
         >
-          <UIcon name="i-heroicons-photo" class="w-12 h-12 text-gray-400" />
+          <Icon name="heroicons:photo" class="w-12 h-12 text-gray-400" />
         </div>
       </div>
 
@@ -23,19 +23,19 @@
       <button
         v-if="images.length > 1"
         @click="previousImage"
-        class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors"
+        class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors flex items-center justify-center"
         :disabled="currentIndex === 0"
       >
-        <UIcon name="i-heroicons-chevron-left" class="w-5 h-5" />
+        <Icon name="heroicons:chevron-left" class="w-5 h-5 block" />
       </button>
       
       <button
         v-if="images.length > 1"
         @click="nextImage"
-        class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors"
+        class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors flex items-center justify-center"
         :disabled="currentIndex === images.length - 1"
       >
-        <UIcon name="i-heroicons-chevron-right" class="w-5 h-5" />
+        <Icon name="heroicons:chevron-right" class="w-5 h-5 block" />
       </button>
 
       <!-- Image counter -->
@@ -46,9 +46,9 @@
       <!-- Fullscreen button -->
       <button
         @click="openLightbox"
-        class="absolute top-2 right-2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors"
+        class="absolute top-2 right-2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors flex items-center justify-center"
       >
-        <UIcon name="i-heroicons-magnifying-glass-plus" class="w-5 h-5" />
+        <Icon name="heroicons:magnifying-glass-plus" class="w-5 h-5 block" />
       </button>
     </div>
 
@@ -76,40 +76,45 @@
     </div>
 
     <!-- Lightbox Modal -->
-    <UModal v-model="showLightbox" :ui="{ width: 'max-w-6xl' }">
-      <div class="relative">
+    <div v-if="showLightbox" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+      <div class="relative max-w-6xl w-full">
         <img
           :src="currentImage"
           :alt="`${vehicle.title} - Imagem ${currentIndex + 1}`"
-          class="w-full max-h-[80vh] object-contain"
+          class="w-full max-h-[80vh] object-contain rounded-lg"
         />
         
         <!-- Close button -->
         <button
           @click="closeLightbox"
-          class="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full hover:bg-black/70"
+          class="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 flex items-center justify-center"
         >
-          <UIcon name="i-heroicons-x-mark" class="w-6 h-6" />
+          <Icon name="heroicons:x-mark" class="w-6 h-6 block" />
         </button>
 
         <!-- Lightbox navigation -->
         <button
           v-if="images.length > 1 && currentIndex > 0"
           @click="previousImage"
-          class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-black/70"
+          class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 flex items-center justify-center"
         >
-          <UIcon name="i-heroicons-chevron-left" class="w-6 h-6" />
+          <Icon name="heroicons:chevron-left" class="w-6 h-6 block" />
         </button>
         
         <button
           v-if="images.length > 1 && currentIndex < images.length - 1"
           @click="nextImage"
-          class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-black/70"
+          class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 text-white p-3 rounded-full hover:bg-black/70 flex items-center justify-center"
         >
-          <UIcon name="i-heroicons-chevron-right" class="w-6 h-6" />
+          <Icon name="heroicons:chevron-right" class="w-6 h-6 block" />
         </button>
+
+        <!-- Image counter in lightbox -->
+        <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-3 py-1 rounded-full text-sm">
+          {{ currentIndex + 1 }} / {{ images.length }}
+        </div>
       </div>
-    </UModal>
+    </div>
   </div>
 </template>
 

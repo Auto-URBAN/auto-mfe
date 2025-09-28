@@ -1,6 +1,6 @@
 <template>
   <NuxtLink 
-    :to="`/vehicle/${vehicle.id}`"
+    :to="`/carro/${vehicle.id}`"
     class="block bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all duration-200 cursor-pointer group"
   >
     <!-- Image -->

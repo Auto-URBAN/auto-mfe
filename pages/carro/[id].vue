@@ -47,7 +47,7 @@
       :title="error.message || 'Erro ao carregar veículo'"
       class="mb-6"
     >
-      <template #actions>
+      <template #default>
         <UiButton variant="outline" @click="refresh()">
           Tentar novamente
         </UiButton>
@@ -118,14 +118,14 @@
 
     <!-- Not Found -->
     <div v-else class="text-center py-12">
-      <UIcon name="i-heroicons-exclamation-triangle" class="w-16 h-16 text-gray-400 mx-auto mb-4" />
+      <Icon name="heroicons:exclamation-triangle" class="w-16 h-16 text-gray-400 mx-auto mb-4" />
       <h2 class="text-xl font-semibold text-gray-900 mb-2">Veículo não encontrado</h2>
       <p class="text-gray-600 mb-4">
         Este anúncio pode ter sido removido ou não existe.
       </p>
-      <UButton @click="navigateTo('/')">
+      <UiButton @click="navigateTo('/')">
         Voltar às buscas
-      </UButton>
+      </UiButton>
     </div>
   </div>
 </template>
