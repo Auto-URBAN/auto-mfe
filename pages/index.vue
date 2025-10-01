@@ -50,7 +50,7 @@
     <div class="flex gap-4">
       <!-- Sidebar Filters (Desktop) -->
       <div class="hidden lg:block w-72 flex-shrink-0">
-        <div class="sticky top-24">
+        <div class="sticky top-28">
           <VehicleFilterSidebarV3
             :loading="loading"
             @update:filters="handleFiltersUpdate"

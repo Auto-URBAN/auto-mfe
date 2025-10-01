@@ -61,17 +61,17 @@
     </div>
 
     <!-- Brand Selection State -->
-    <div v-if="currentState === 'brands' && (selectedBrandModels.length === 0 || showBrandsAfterSelection)" class="space-y-3 overflow-y-scroll max-h-80">
+    <div v-if="currentState === 'brands' && (selectedBrandModels.length === 0 || showBrandsAfterSelection)" class="space-y-3 overflow-y-scroll max-h-56">
       <div class="grid grid-cols-2 gap-2">
         <div 
           v-for="brand in brands" 
           :key="brand.id"
           @click="selectBrand(brand)"
-          class="p-3 border rounded-lg cursor-pointer transition-all duration-200 hover:shadow-md hover:border-blue-300 group relative"
+          class="p-1 border rounded-lg cursor-pointer transition-all duration-200 hover:shadow-md hover:border-blue-300 group relative"
         >
           
             <div class="flex flex-col justify-center items-center">
-              <div class="flex items-center justify-center w-12 h-12">
+              <div class="flex items-center justify-center w-9 h-9">
                 <img 
                 :src="brand.logo" 
                 :alt="brand.name"
