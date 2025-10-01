@@ -33,44 +33,44 @@
     </div>
 
     <!-- Content -->
-    <div class="p-4">
+    <div class="p-5">
       <!-- Title -->
-      <h3 class="font-semibold text-gray-900 text-sm line-clamp-2 mb-2 group-hover:text-blue-600 transition-colors">
+      <h3 class="font-semibold text-gray-900 text-base line-clamp-2 mb-3 group-hover:text-blue-600 transition-colors">
         {{ vehicle.title }}
       </h3>
 
       <!-- Price -->
-      <div class="mb-3">
-        <span class="text-xl font-bold text-green-600">
+      <div class="mb-4">
+        <span class="text-2xl font-bold text-green-600">
           {{ formatCurrency(vehicle.price) }}
         </span>
       </div>
 
       <!-- Vehicle info -->
-      <div class="flex flex-wrap gap-2 mb-3">
-        <UiBadge color="gray" variant="soft" size="xs">
+      <div class="flex flex-wrap gap-2 mb-4">
+        <UiBadge color="gray" variant="soft" size="sm">
           {{ vehicle.year }}
         </UiBadge>
-        <UiBadge color="gray" variant="soft" size="xs">
+        <UiBadge color="gray" variant="soft" size="sm">
           {{ formatKm(vehicle.km) }}
         </UiBadge>
-        <UiBadge color="blue" variant="soft" size="xs">
+        <UiBadge color="blue" variant="soft" size="sm">
           {{ vehicle.uf }}
         </UiBadge>
       </div>
 
       <!-- Location -->
-      <p class="text-sm text-gray-600 mb-4">
+      <p class="text-sm text-gray-600 mb-5">
         <Icon name="heroicons:map-pin-20-solid" class="w-4 h-4 inline mr-1" />
         {{ vehicle.city }}, {{ vehicle.uf }}
       </p>
 
       <!-- CTA Button -->
-      <div class="flex items-center justify-between text-sm">
+      <div class="flex items-center justify-between">
         <span class="text-blue-600 font-medium group-hover:text-blue-700">
           Ver Detalhes
         </span>
-        <Icon name="heroicons:arrow-right-20-solid" class="w-4 h-4 text-gray-400 group-hover:text-blue-600 transition-colors" />
+        <Icon name="heroicons:arrow-right-20-solid" class="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
       </div>
     </div>
   </NuxtLink>

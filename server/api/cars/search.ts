@@ -254,6 +254,13 @@ export default defineEventHandler(async (event) => {
         )
     }
     
+    // Model filter
+    if (query.model) {
+        filteredVehicles = filteredVehicles.filter(vehicle => 
+            vehicle.model.toLowerCase().includes((query.model as string).toLowerCase())
+        )
+    }
+    
     // State filter
     if (query.uf) {
         filteredVehicles = filteredVehicles.filter(vehicle => 
@@ -288,6 +295,21 @@ export default defineEventHandler(async (event) => {
         const yearMax = parseInt(query.yearMax as string)
         filteredVehicles = filteredVehicles.filter(vehicle => 
             vehicle.year <= yearMax
+        )
+    }
+
+    // KM range filters
+    if (query.kmMin) {
+        const kmMin = parseInt(query.kmMin as string)
+        filteredVehicles = filteredVehicles.filter(vehicle => 
+            vehicle.km >= kmMin
+        )
+    }
+    
+    if (query.kmMax) {
+        const kmMax = parseInt(query.kmMax as string)
+        filteredVehicles = filteredVehicles.filter(vehicle => 
+            vehicle.km <= kmMax
         )
     }
     

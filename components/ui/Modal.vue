@@ -70,32 +70,28 @@
 interface Props {
   modelValue: boolean
   title?: string
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full'
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'full'
   closable?: boolean
   closeOnBackdrop?: boolean
-  persistent?: boolean
 }
 
 interface Emits {
   'update:modelValue': [value: boolean]
-  close: []
+  'close': []
 }
 
 const props = withDefaults(defineProps<Props>(), {
   size: 'md',
   closable: true,
-  closeOnBackdrop: true,
-  persistent: false
+  closeOnBackdrop: true
 })
 
 const emit = defineEmits<Emits>()
 
 // Methods
 const close = () => {
-  if (!props.persistent) {
-    emit('update:modelValue', false)
-    emit('close')
-  }
+  emit('update:modelValue', false)
+  emit('close')
 }
 
 const handleBackdropClick = () => {
@@ -103,13 +99,6 @@ const handleBackdropClick = () => {
     close()
   }
 }
-
-// Handle escape key
-onKeyStroke('Escape', () => {
-  if (props.modelValue && !props.persistent) {
-    close()
-  }
-})
 
 // Computed classes
 const modalClasses = computed(() => {
@@ -121,6 +110,7 @@ const modalClasses = computed(() => {
 
   // Size variants
   const sizes = {
+    xs: 'max-w-xs',
     sm: 'max-w-sm',
     md: 'max-w-md',
     lg: 'max-w-2xl',

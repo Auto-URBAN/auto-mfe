@@ -66,19 +66,17 @@ const dropdownRef = ref<HTMLElement>()
 const toggle = () => {
   if (props.disabled) return
   isOpen.value = !isOpen.value
-  emit(isOpen.value ? 'open' : 'close')
+  if (isOpen.value) {
+    emit('open')
+  } else {
+    emit('close')
+  }
 }
 
 const close = () => {
   isOpen.value = false
   emit('close')
 }
-
-// Close on outside click
-onClickOutside(dropdownRef, close)
-
-// Close on escape key
-onKeyStroke('Escape', close)
 
 // Computed classes
 const panelClasses = computed(() => {

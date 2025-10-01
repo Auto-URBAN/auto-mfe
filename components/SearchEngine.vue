@@ -4,7 +4,7 @@
             <Icon name="uil:search" size="24px" class="me-4 text-gray-500 dark:text-gray-400" />
             <input 
               type="text" 
-              placeholder="Digite o veículo que você está procurando..." 
+              placeholder="Busca inteligente de carros" 
               class="w-full p-1 outline-none text-gray-900   bg-transparent" 
               v-model="search" 
             />
