@@ -107,18 +107,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Results header -->
-        <div v-if="!loading && vehicles.length > 0" class="flex justify-between items-center mb-6">
-          <div>
-            <h2 class="text-xl font-semibold text-gray-900">
-              {{ searchQuery ? 'Resultados da busca' : 'Todos os veículos' }}
-            </h2>
-            <p class="text-sm text-gray-600">
-              {{ total }} veículos encontrados
-            </p>
-          </div>
-        </div>
         
         <!-- Loading -->
         <div v-if="loading" class="flex justify-center py-12">
