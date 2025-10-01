@@ -6,7 +6,7 @@
       <div class="absolute inset-0 bg-black/0"></div>
       
       <!-- Content -->
-      <div class="relative py-20 px-4 sm:px-6 lg:px-8">
+      <div class="relative py-10 px-4 sm:px-6 lg:px-8">
         <div class="max-w-4xl mx-auto text-center">
           <h1 class="text-4xl sm:text-5xl lg:text-4xl font-black text-white mb-2 leading-tight">
             Busque por 
@@ -33,7 +33,7 @@
       </div>
       
       <!-- Scroll indicator -->
-      <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 animate-bounce">
+      <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 animate-bounce">
         <Icon name="heroicons:chevron-down-20-solid" class="w-6 h-6 text-white/60" />
       </div>
     </div>
@@ -43,8 +43,7 @@
       <!-- Sidebar Filters (Desktop) -->
       <div class="hidden lg:block w-64 flex-shrink-0">
         <div class="sticky top-24">
-          <VehicleFilterSidebar 
-            :filters="filters"
+          <VehicleFilterSidebar
             :loading="loading"
             @update:filters="handleFiltersUpdate"
           />
@@ -173,9 +172,8 @@
     </div>
 
     <!-- Mobile Filter Modal -->
-    <UiModal v-model="showMobileFilters" title="Filtros">
-      <VehicleFilterSidebar 
-        :filters="filters"
+    <UiModal v-model="showMobileFilters" title="Filtros V2">
+      <VehicleFilterSidebar
         :loading="loading"
         @update:filters="handleFiltersUpdate"
         @close="showMobileFilters = false"
@@ -275,14 +273,21 @@ async function loadVehicles() {
       }
     })
     
+    console.log('Loading vehicles with params:', queryParams)
+    
     const response = await $fetch('/api/cars/search', {
       query: queryParams
     })
+    
+    console.log('API Response:', response)
     
     vehicles.value = response.items || []
     total.value = response.total || 0
   } catch (error) {
     console.error('Load vehicles error:', error)
+    // Fallback para dados mock em caso de erro
+    vehicles.value = []
+    total.value = 0
   } finally {
     loading.value = false
   }

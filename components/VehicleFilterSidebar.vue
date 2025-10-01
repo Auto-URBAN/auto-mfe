@@ -25,286 +25,194 @@
       <div v-if="hasActiveFilters" class="mt-2">
         <div class="inline-flex items-center px-2 py-1 bg-white/20 rounded-full">
           <Icon name="heroicons:check-circle-20-solid" class="w-3 h-3 text-white mr-1" />
-          <span class="text-xs text-white font-medium">{{ activeFiltersCount }} filtro{{ activeFiltersCount > 1 ? 's' : '' }} ativo{{ activeFiltersCount > 1 ? 's' : '' }}</span>
+          <span class="text-xs text-white font-medium">
+            {{ activeFiltersCount }} filtro{{ activeFiltersCount > 1 ? 's' : '' }} ativo{{ activeFiltersCount > 1 ? 's' : '' }}
+          </span>
         </div>
       </div>
     </div>
 
+    <!-- Loading State -->
+    <div v-if="loading" class="p-6">
+      <div class="space-y-4">
+        <div v-for="i in 6" :key="i" class="animate-pulse">
+          <div class="h-4 bg-gray-200 rounded w-1/3 mb-2"></div>
+          <div class="h-10 bg-gray-200 rounded"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error State -->
+    <div v-else-if="error" class="p-6">
+      <UiAlert variant="error" :title="error">
+        <UiButton @click="loadFilterOptions" variant="outline" size="sm">
+          Tentar novamente
+        </UiButton>
+      </UiAlert>
+    </div>
+
     <!-- Filters Content -->
-    <div class="p-4 space-y-5 max-h-[calc(100vh-200px)] overflow-y-auto">
+    <div v-else-if="filterOptions" class="p-4 space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto">
+      
       <!-- Sort -->
-      <div class="space-y-2">
-        <div class="flex items-center space-x-2 mb-2">
-          <div class="w-6 h-6 bg-blue-100 rounded-md flex items-center justify-center">
+      <div class="space-y-3">
+        <div class="flex items-center gap-2">
+          <div class="w-6 h-6 bg-blue-100 rounded-lg flex items-center justify-center">
             <Icon name="heroicons:arrows-up-down-20-solid" class="w-3 h-3 text-blue-600" />
           </div>
           <label class="text-sm font-medium text-gray-800">Ordenar por</label>
         </div>
         <UiSelect
-          v-model="localFilters.sort"
+          :model-value="filters.sort"
           :options="filterOptions.sortOptions"
-          placeholder="Selecione"
-          size="sm"
-          @update:model-value="updateFilters"
+          placeholder="Ordenar por"
+          label="value"
+          track-by="key"
+          @update:model-value="updateSort"
         />
       </div>
 
-      <!-- Brand -->
-      <div class="space-y-2">
-        <div class="flex items-center space-x-2 mb-2">
-          <div class="w-6 h-6 bg-green-100 rounded-md flex items-center justify-center">
-            <Icon name="heroicons:building-office-20-solid" class="w-3 h-3 text-green-600" />
+      <!-- Brands -->
+      <div class="space-y-3">
+        <div class="flex items-center gap-2">
+          <div class="w-6 h-6 bg-green-100 rounded-lg flex items-center justify-center">
+            <Icon name="heroicons:building-office-2-20-solid" class="w-3 h-3 text-green-600" />
           </div>
-          <label class="text-sm font-medium text-gray-800">Marca</label>
+          <label class="text-sm font-medium text-gray-800">Marcas</label>
         </div>
-        <UiSelect
-          v-model="localFilters.make"
-          :options="brandOptions"
-          placeholder="Todas as marcas"
-          size="sm"
-          @update:model-value="updateFilters"
-        />
+        
+        <div class="space-y-3">
+          <div class="grid grid-cols-2 gap-2">
+            <div 
+              v-for="brand in filterOptions.brands" 
+              :key="brand.id"
+              @click="toggleBrand(brand.id)"
+              class="p-3 border rounded-lg cursor-pointer transition-all duration-200 hover:shadow-md relative"
+              :class="filters.brands.includes(brand.id) ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'"
+            >
+                <div class="flex flex-col items-center justify-center">
+                  <div class="flex h-10 mb-2">
+                    <img 
+                    :src="brand.logo" 
+                    :alt="brand.name"
+                    class="object-contain"
+                    @error="onImageError"
+                  />
+                  </div>
+                  <span class="text-sm font-medium">{{ brand.name }} </span>
+                </div>
+              <span class="absolute right-2 top-2 text-xs text-white bg-slate-400 rounded-full px-1">{{ brand.count }}</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Model -->
-      <div class="space-y-2">
-        <div class="flex items-center space-x-2 mb-2">
-          <div class="w-6 h-6 bg-purple-100 rounded-md flex items-center justify-center">
+      <!-- Models -->
+      <div v-if="availableModels.length > 0" class="space-y-3">
+        <div class="flex items-center gap-2">
+          <div class="w-6 h-6 bg-purple-100 rounded-lg flex items-center justify-center">
             <Icon name="heroicons:tag-20-solid" class="w-3 h-3 text-purple-600" />
           </div>
-          <label class="text-sm font-medium text-gray-800">Modelo</label>
+          <label class="text-sm font-medium text-gray-800">Modelos</label>
         </div>
-        <UiSelect
-          v-model="localFilters.model"
-          :options="modelOptions"
-          placeholder="Todos os modelos"
-          size="sm"
-          @update:model-value="updateFilters"
-        />
+        
+        <div class="space-y-2 max-h-48 overflow-y-auto">
+          <div 
+            v-for="model in availableModels" 
+            :key="model.id"
+            @click="toggleModel(model.id)"
+            class="flex items-center justify-between p-2 border rounded cursor-pointer transition-all duration-200"
+            :class="filters.models.includes(model.id) ? 'border-purple-500 bg-purple-50' : 'border-gray-200 hover:border-gray-300'"
+          >
+            <span class="text-sm">{{ model.name }}</span>
+            <span class="text-xs text-gray-500">{{ model.count }}</span>
+          </div>
+        </div>
       </div>
 
-      <!-- Year Range -->
-      <div class="space-y-2">
-        <div class="flex items-center space-x-2 mb-2">
-          <div class="w-6 h-6 bg-orange-100 rounded-md flex items-center justify-center">
+      <!-- Years -->
+      <div v-if="availableYears.length > 0" class="space-y-3">
+        <div class="flex items-center gap-2">
+          <div class="w-6 h-6 bg-orange-100 rounded-lg flex items-center justify-center">
             <Icon name="heroicons:calendar-days-20-solid" class="w-3 h-3 text-orange-600" />
           </div>
-          <label class="text-sm font-medium text-gray-800">Ano</label>
+          <label class="text-sm font-medium text-gray-800">Anos</label>
         </div>
-        <div class="grid grid-cols-2 gap-2">
-          <UiSelect
-            v-model="localFilters.yearMin"
-            :options="yearOptions"
-            placeholder="Ano mín."
-            size="sm"
-            @update:model-value="updateFilters"
-          />
-          <UiSelect
-            v-model="localFilters.yearMax"
-            :options="yearOptions"
-            placeholder="Ano máx."
-            size="sm"
-            @update:model-value="updateFilters"
-          />
+        
+        <div class="grid grid-cols-3 gap-2">
+          <div 
+            v-for="year in availableYears" 
+            :key="year"
+            @click="toggleYear(year)"
+            class="p-1 text-center border rounded cursor-pointer transition-all duration-200"
+            :class="filters.years.includes(year) ? 'border-orange-500 bg-orange-50' : 'border-gray-200 hover:border-gray-300'"
+          >
+            <span class="text-sm font-medium">{{ year }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Colors -->
+      <div class="space-y-3">
+        <div class="flex items-center gap-2">
+          <div class="w-6 h-6 bg-pink-100 rounded-lg flex items-center justify-center">
+            <Icon name="heroicons:swatch-20-solid" class="w-3 h-3 text-pink-600" />
+          </div>
+          <label class="text-sm font-medium text-gray-800">Cores</label>
+        </div>
+        
+        <div class="grid grid-cols-3 gap-2">
+          <div 
+            v-for="color in filterOptions.colors" 
+            :key="color.id"
+            @click="toggleColor(color.id)"
+            class="flex flex-col items-center p-2 border rounded cursor-pointer transition-all duration-200"
+            :class="filters.colors.includes(color.id) ? 'border-pink-500 bg-pink-50' : 'border-gray-200 hover:border-gray-300'"
+          >
+            <div 
+              class="w-6 h-6 rounded-full border-2 border-neutral-500 shadow-sm mb-1"
+              :style="{ backgroundColor: color.hex }"
+            ></div>
+            <span class="text-xs">{{ color.name }}</span>
+          </div>
         </div>
       </div>
 
       <!-- Price Range -->
-      <div class="space-y-2">
-        <div class="flex items-center space-x-2 mb-2">
-          <div class="w-6 h-6 bg-emerald-100 rounded-md flex items-center justify-center">
-            <Icon name="heroicons:currency-dollar-20-solid" class="w-3 h-3 text-emerald-600" />
+      <div class="space-y-3">
+        <div class="flex items-center gap-2">
+          <div class="w-6 h-6 bg-red-100 rounded-lg flex items-center justify-center">
+            <Icon name="heroicons:currency-dollar-20-solid" class="w-3 h-3 text-red-600" />
           </div>
           <label class="text-sm font-medium text-gray-800">Faixa de Preço</label>
         </div>
-        <div class="bg-gray-50 rounded-lg p-3 space-y-2">
+        
+        <div class="grid grid-cols-2 gap-2">
           <div 
             v-for="range in filterOptions.priceRanges" 
-            :key="range.value"
-            class="flex items-center"
+            :key="`${range.min}-${range.max}`"
+            @click="selectPriceRange(range)"
+            class="p-2 text-center border rounded cursor-pointer transition-all duration-200 text-sm"
+            :class="isPriceRangeSelected(range) ? 'border-red-500 bg-red-50' : 'border-gray-200 hover:border-gray-300'"
           >
-            <input
-              :id="`price-${range.value}`"
-              v-model="localFilters.priceRange"
-              :value="range.value"
-              type="radio"
-              name="priceRange"
-              class="h-4 w-4 text-emerald-600 focus:ring-emerald-500 border-gray-300"
-              @change="updateFilters"
-            />
-            <label 
-              :for="`price-${range.value}`"
-              class="ml-2 text-sm text-gray-700 cursor-pointer hover:text-gray-900 transition-colors"
-            >
-              {{ range.label }}
-            </label>
+            {{ formatPriceRange(range) }}
           </div>
         </div>
       </div>
 
-      <!-- Custom Price Range -->
-      <div class="space-y-2">
-        <div class="flex items-center space-x-2 mb-2">
-          <div class="w-6 h-6 bg-emerald-100 rounded-md flex items-center justify-center">
-            <Icon name="heroicons:calculator-20-solid" class="w-3 h-3 text-emerald-600" />
-          </div>
-          <label class="text-sm font-medium text-gray-800">Preço Personalizado</label>
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <UiInput
-            v-model="localFilters.priceMin"
-            type="number"
-            placeholder="Preço mín."
-            size="sm"
-            icon-left="heroicons:currency-dollar-20-solid"
-            @input="handleCustomPrice"
-          />
-          <UiInput
-            v-model="localFilters.priceMax"
-            type="number"
-            placeholder="Preço máx."
-            size="sm"
-            icon-left="heroicons:currency-dollar-20-solid"
-            @input="handleCustomPrice"
-          />
-        </div>
-      </div>
-
-            <!-- KM Range -->
-      <div class="space-y-2">
-        <div class="flex items-center space-x-2 mb-2">
-          <div class="w-6 h-6 bg-indigo-100 rounded-md flex items-center justify-center">
-            <Icon name="heroicons:map-20-solid" class="w-3 h-3 text-indigo-600" />
-          </div>
-          <label class="text-sm font-medium text-gray-800">Quilometragem</label>
-        </div>
-        <div class="bg-gray-50 rounded-lg p-3 space-y-2">
-          <div 
-            v-for="range in filterOptions.kmRanges" 
-            :key="range.value"
-            class="flex items-center"
-          >
-            <input
-              :id="`km-${range.value}`"
-              v-model="localFilters.kmRange"
-              :value="range.value"
-              type="radio"
-              name="kmRange"
-              class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
-              @change="updateFilters"
-            />
-            <label 
-              :for="`km-${range.value}`"
-              class="ml-2 text-sm text-gray-700 cursor-pointer hover:text-gray-900 transition-colors"
-            >
-              {{ range.label }}
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <!-- Location -->
-      <div class="space-y-2">
-        <div class="flex items-center space-x-2 mb-2">
-          <div class="w-6 h-6 bg-red-100 rounded-md flex items-center justify-center">
-            <Icon name="heroicons:map-pin-20-solid" class="w-3 h-3 text-red-600" />
-          </div>
-          <label class="text-sm font-medium text-gray-800">Estado</label>
-        </div>
-        <UiSelect
-          v-model="localFilters.uf"
-          :options="locationOptions"
-          placeholder="Todos os estados"
-          size="sm"
-          @update:model-value="updateFilters"
-        />
-      </div>
-
-      <!-- Color -->
-      <div class="space-y-2">
-        <div class="flex items-center space-x-2 mb-2">
-          <div class="w-6 h-6 bg-pink-100 rounded-md flex items-center justify-center">
-            <Icon name="heroicons:swatch-20-solid" class="w-3 h-3 text-pink-600" />
-          </div>
-          <label class="text-sm font-medium text-gray-800">Cor</label>
-        </div>
-        <UiSelect
-          v-model="localFilters.color"
-          :options="colorOptions"
-          placeholder="Todas as cores"
-          size="sm"
-          @update:model-value="updateFilters"
-        />
-      </div>
-
-      <!-- Location -->
-      <div class="space-y-2">
-        <label class="text-sm font-medium text-gray-700">Estado</label>
-        <UiSelect
-          v-model="localFilters.uf"
-          :options="locationOptions"
-          placeholder="Todos os estados"
-          @update:model-value="updateFilters"
-        />
-      </div>
-
-      <!-- Color -->
-      <div class="space-y-2">
-        <label class="text-sm font-medium text-gray-700">Cor</label>
-        <UiSelect
-          v-model="localFilters.color"
-          :options="colorOptions"
-          placeholder="Todas as cores"
-          @update:model-value="updateFilters"
-        />
-      </div>
-    </div>
-
-    <!-- Apply Filters Button (Mobile) -->
-    <div class="p-4 border-t border-gray-200 lg:hidden bg-gradient-to-r from-blue-50 to-purple-50">
-      <UiButton @click="$emit('close')" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium">
-        <Icon name="heroicons:check-20-solid" class="w-4 h-4 mr-2" />
-        Aplicar Filtros
-      </UiButton>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-interface FilterOptions {
-  brands: string[]
-  models: string[]
-  colors: string[]
-  states: { value: string; label: string }[]
-  years: number[]
-  sortOptions: { value: string; label: string }[]
-  priceRanges: { value: string; label: string }[]
-  kmRanges: { value: string; label: string }[]
-}
-
-interface Filters {
-  sort?: string
-  make?: string
-  model?: string
-  yearMin?: string
-  yearMax?: string
-  priceMin?: string
-  priceMax?: string
-  priceRange?: string
-  kmRange?: string
-  kmMin?: string
-  kmMax?: string
-  uf?: string
-  color?: string
-}
+import type { FiltersV2, FiltersOptionsV2 } from '~/schemas/filters'
 
 interface Props {
-  filters: Filters
   loading?: boolean
 }
 
 interface Emits {
-  (e: 'update:filters', filters: Filters): void
+  (e: 'update:filters', filters: any): void
   (e: 'close'): void
 }
 
@@ -314,90 +222,231 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-// Local filters state
-const localFilters = ref<Filters>({ ...props.filters })
+// Estado local
+const filters = ref<FiltersV2>({
+  brands: [],
+  models: [],
+  years: [],
+  colors: [],
+  states: [],
+  priceRange: undefined,
+  kmRange: undefined,
+  sort: 'recent'
+})
 
-// Filter options from API
-const filterOptions = await $fetch<FilterOptions>('/api/cars/filters')
+const filterOptions = ref<FiltersOptionsV2 | null>(null)
+const loading = ref(false)
+const error = ref<string | null>(null)
 
-// Watch for prop changes
-watch(() => props.filters, (newFilters) => {
-  localFilters.value = { ...newFilters }
-}, { deep: true })
-
-// Computed options
-const brandOptions = computed(() => [
-  { value: '', label: 'Todas as marcas' },
-  ...filterOptions.brands.map((brand: string) => ({ value: brand, label: brand }))
-])
-
-const modelOptions = computed(() => [
-  { value: '', label: 'Todos os modelos' },
-  ...filterOptions.models.map((model: string) => ({ value: model, label: model }))
-])
-
-const yearOptions = computed(() => [
-  { value: '', label: 'Qualquer ano' },
-  ...filterOptions.years.map((year: number) => ({ value: year.toString(), label: year.toString() }))
-])
-
-const locationOptions = computed(() => [
-  { value: '', label: 'Todos os estados' },
-  ...filterOptions.states
-])
-
-const colorOptions = computed(() => [
-  { value: '', label: 'Todas as cores' },
-  ...filterOptions.colors.map((color: string) => ({ value: color, label: color }))
-])
-
-// Check if any filters are active
+// Computed properties
 const hasActiveFilters = computed(() => {
-  return Object.keys(localFilters.value).some(key => {
-    const value = localFilters.value[key as keyof Filters]
-    return value && value !== '' && key !== 'sort'
-  })
+  return filters.value.brands.length > 0 ||
+         filters.value.models.length > 0 ||
+         filters.value.years.length > 0 ||
+         filters.value.colors.length > 0 ||
+         filters.value.states.length > 0 ||
+         filters.value.priceRange ||
+         filters.value.kmRange
 })
 
-// Count active filters
 const activeFiltersCount = computed(() => {
-  return Object.keys(localFilters.value).filter(key => {
-    const value = localFilters.value[key as keyof Filters]
-    return value && value !== '' && key !== 'sort'
-  }).length
+  let count = 0
+  if (filters.value.brands.length > 0) count++
+  if (filters.value.models.length > 0) count++
+  if (filters.value.years.length > 0) count++
+  if (filters.value.colors.length > 0) count++
+  if (filters.value.states.length > 0) count++
+  if (filters.value.priceRange) count++
+  if (filters.value.kmRange) count++
+  return count
 })
 
-// Handle custom price input
-const handleCustomPrice = () => {
-  // Clear price range when custom price is entered
-  if (localFilters.value.priceMin || localFilters.value.priceMax) {
-    localFilters.value.priceRange = ''
+const availableModels = computed(() => {
+  if (!filterOptions.value) return []
+  
+  if (filters.value.brands.length === 0) {
+    return filterOptions.value.models
   }
-  updateFilters()
+  
+  return filterOptions.value.models.filter(model => 
+    filters.value.brands.includes(model.brandId)
+  )
+})
+
+const availableYears = computed(() => {
+  if (!filterOptions.value) return []
+  
+  let years = new Set<number>()
+  
+  if (filters.value.brands.length === 0 && filters.value.models.length === 0) {
+    filterOptions.value.years.forEach(year => years.add(year))
+  } else if (filters.value.models.length > 0) {
+    const selectedModels = filterOptions.value.models.filter(model => 
+      filters.value.models.includes(model.id)
+    )
+    selectedModels.forEach(model => {
+      model.years.forEach(year => years.add(year))
+    })
+  } else if (filters.value.brands.length > 0) {
+    const brandsYears = filterOptions.value.brands.filter(brand => 
+      filters.value.brands.includes(brand.id)
+    )
+    brandsYears.forEach(brand => {
+      brand.years.forEach(year => years.add(year))
+    })
+  }
+  
+  return Array.from(years).sort((a, b) => b - a)
+})
+
+// Methods
+const loadFilterOptions = async () => {
+  loading.value = true
+  error.value = null
+  
+  try {
+    const response = await $fetch<FiltersOptionsV2>('/api/cars/filters-v2')
+    filterOptions.value = response
+  } catch (err) {
+    error.value = 'Erro ao carregar opções de filtros'
+    console.error('Error loading filter options:', err)
+  } finally {
+    loading.value = false
+  }
 }
 
-// Update filters
-const updateFilters = () => {
-  // Handle price range selection
-  if (localFilters.value.priceRange) {
-    const [min, max] = localFilters.value.priceRange.split('-')
-    localFilters.value.priceMin = min
-    localFilters.value.priceMax = max === '999999999' ? '' : max
-  }
-
-  // Handle KM range selection
-  if (localFilters.value.kmRange) {
-    const [min, max] = localFilters.value.kmRange.split('-')
-    localFilters.value.kmMin = min
-    localFilters.value.kmMax = max === '999999999' ? '' : max
-  }
-
-  emit('update:filters', { ...localFilters.value })
+const updateSort = (sort: string) => {
+  filters.value.sort = sort
+  emitFilters()
 }
 
-// Clear all filters
+const toggleBrand = (brandId: string) => {
+  const index = filters.value.brands.indexOf(brandId)
+  if (index > -1) {
+    filters.value.brands.splice(index, 1)
+  } else {
+    filters.value.brands.push(brandId)
+  }
+  
+  // Limpar modelos se a marca não estiver mais selecionada
+  if (index > -1) {
+    const availableModelIds = availableModels.value.map(m => m.id)
+    filters.value.models = filters.value.models.filter(modelId => 
+      availableModelIds.includes(modelId)
+    )
+  }
+  
+  emitFilters()
+}
+
+const toggleModel = (modelId: string) => {
+  const index = filters.value.models.indexOf(modelId)
+  if (index > -1) {
+    filters.value.models.splice(index, 1)
+  } else {
+    filters.value.models.push(modelId)
+  }
+  emitFilters()
+}
+
+const toggleYear = (year: number) => {
+  const index = filters.value.years.indexOf(year)
+  if (index > -1) {
+    filters.value.years.splice(index, 1)
+  } else {
+    filters.value.years.push(year)
+  }
+  emitFilters()
+}
+
+const toggleColor = (colorId: string) => {
+  const index = filters.value.colors.indexOf(colorId)
+  if (index > -1) {
+    filters.value.colors.splice(index, 1)
+  } else {
+    filters.value.colors.push(colorId)
+  }
+  emitFilters()
+}
+
+const selectPriceRange = (range: any) => {
+  filters.value.priceRange = {
+    min: range.min,
+    max: range.max === 999999999 ? undefined : range.max
+  }
+  emitFilters()
+}
+
+const isPriceRangeSelected = (range: any): boolean => {
+  const current = filters.value.priceRange
+  return current?.min === range.min && current?.max === (range.max === 999999999 ? undefined : range.max)
+}
+
+const formatPriceRange = (range: any): string => {
+  if (range.max === 999999999) {
+    return `Acima de R$ ${(range.min / 1000).toFixed(0)}k`
+  }
+  return `R$ ${(range.min / 1000).toFixed(0)}k - R$ ${(range.max / 1000).toFixed(0)}k`
+}
+
 const clearAllFilters = () => {
-  localFilters.value = { sort: localFilters.value.sort || 'recent' }
-  updateFilters()
+  filters.value = {
+    brands: [],
+    models: [],
+    years: [],
+    colors: [],
+    states: [],
+    priceRange: undefined,
+    kmRange: undefined,
+    sort: 'recent'
+  }
+  emitFilters()
 }
+
+const emitFilters = () => {
+  // Converter para formato compatível com a API existente
+  const queryParams: any = {
+    sort: filters.value.sort
+  }
+  
+  if (filters.value.brands.length > 0) {
+    queryParams.make = filters.value.brands[0] // Por enquanto, apenas a primeira marca
+  }
+  
+  if (filters.value.models.length > 0) {
+    queryParams.model = filters.value.models[0] // Por enquanto, apenas o primeiro modelo
+  }
+  
+  if (filters.value.years.length > 0) {
+    const sortedYears = [...filters.value.years].sort()
+    queryParams.yearMin = sortedYears[0].toString()
+    queryParams.yearMax = sortedYears[sortedYears.length - 1].toString()
+  }
+  
+  if (filters.value.colors.length > 0) {
+    queryParams.color = filters.value.colors[0] // Por enquanto, apenas a primeira cor
+  }
+  
+  if (filters.value.priceRange) {
+    if (filters.value.priceRange.min) {
+      queryParams.priceMin = filters.value.priceRange.min.toString()
+    }
+    if (filters.value.priceRange.max) {
+      queryParams.priceMax = filters.value.priceRange.max.toString()
+    }
+  }
+  
+  emit('update:filters', queryParams)
+}
+
+const onImageError = (event: Event) => {
+  // Fallback para quando a imagem não carregar
+  const target = event.target as HTMLImageElement
+  target.style.display = 'none'
+}
+
+// Load filter options on mount
+onMounted(() => {
+  loadFilterOptions()
+})
 </script>
