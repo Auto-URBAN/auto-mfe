@@ -20,6 +20,14 @@
             <span class="text-blue-300">Chega de carros sem graça!</span>
           </p>
           
+          <!-- AI Search -->
+          <div class="max-w-2xl mx-auto mb-8">
+            <AISearchSuggestions
+              @search="handleAISearch"
+              @apply-filters="handleAIFilters"
+            />
+          </div>
+          
           <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <NuxtLink to="/sell" class="group">
               <button class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-2 px-4 rounded-xl text-md transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-blue-500/25">
@@ -41,9 +49,9 @@
       <UiContainer class="py-8 vehicles-section">
     <div class="flex gap-4">
       <!-- Sidebar Filters (Desktop) -->
-      <div class="hidden lg:block w-64 flex-shrink-0">
+      <div class="hidden lg:block w-72 flex-shrink-0">
         <div class="sticky top-24">
-          <VehicleFilterSidebar
+          <VehicleFilterSidebarV3
             :loading="loading"
             @update:filters="handleFiltersUpdate"
           />
@@ -300,6 +308,20 @@ async function performSearch() {
 
 const handleFiltersUpdate = async (newFilters: Filters) => {
   filters.value = { ...newFilters }
+  currentPage.value = 1
+  await loadVehicles()
+}
+
+// AI Search Methods
+const handleAISearch = async (query: string) => {
+  searchQuery.value = query
+  currentPage.value = 1
+  await loadVehicles()
+}
+
+const handleAIFilters = async (aiFilters: Record<string, any>) => {
+  // Merge AI filters with existing filters
+  filters.value = { ...filters.value, ...aiFilters }
   currentPage.value = 1
   await loadVehicles()
 }
