@@ -1,20 +1,18 @@
 <template>
   <NuxtLink 
-    :to="`/carro/${vehicle.id}`"
+    :to="href"
     class="block bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all duration-200 cursor-pointer group"
   >
-    <!-- Image -->
     <div class="relative aspect-[4/3] rounded-t-lg overflow-hidden">
       <img 
-        :src="vehicle.coverImageUrl || '/imgs/search-example.jpg'" 
-        :alt="vehicle.title"
+        :src="coverImageUrl || '/imgs/search-example.jpg'" 
+        :alt="title"
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
         loading="lazy"
       >
-      <!-- Status badge -->
-      <div class="absolute top-3 right-3">
+      <div v-if="status" class="absolute top-3 right-3">
         <UiBadge 
-          v-if="vehicle.status === 'PENDING'"
+          v-if="status === 'PENDING'"
           color="yellow" 
           variant="solid"
           size="xs"
@@ -22,7 +20,7 @@
           Aguardando
         </UiBadge>
         <UiBadge 
-          v-else-if="vehicle.status === 'APPROVED'"
+          v-else-if="status === 'APPROVED'"
           color="green" 
           variant="solid"
           size="xs"
@@ -32,59 +30,71 @@
       </div>
     </div>
 
-    <!-- Content -->
-    <div class="flex flex-col p-2 gap-2" id="vehicle-card-content">
+    <div class="flex flex-col p-2 gap-2">
       <div class="flex gap-2 items-center">
-        <div>
+        <div v-if="brand">
           <img 
-              :src="brandsData.find(combo => combo.name === vehicle.brand)?.logo || '/logos/default-car-logo.webp'" 
-              :alt="brandsData.find(combo => combo.name === vehicle.brand)?.name || 'Marca Desconhecida'"
-              class="w-8 h-8 object-contain"
-            />
+            :src="brandsData.find(b => b.name === brand)?.logo || '/logos/default-car-logo.webp'" 
+            :alt="brand"
+            class="w-8 h-8 object-contain"
+          >
         </div>
         <div class="flex-1">
-        <h3 class="font-semibold text-gray-900 text-base line-clamp-2 group-hover:text-blue-600 transition-colors">
-          {{ vehicle.title }}
-        </h3>
+          <h3 class="font-semibold text-gray-900 text-base line-clamp-2 group-hover:text-blue-600 transition-colors">
+            {{ title }}
+          </h3>
 
-        <div>
-          <span class="text-xl font-bold text-green-600">
-            {{ formatCurrency(vehicle.price) }}
-          </span>
-        </div>
-
+          <div v-if="price !== undefined">
+            <span class="text-xl font-bold text-green-600">
+              {{ formatCurrency(price) }}
+            </span>
+          </div>
         </div>
       </div>
-      <hr>
-    <div class="flex flex-wrap gap-2">
-      <UiBadge color="gray" variant="soft" size="sm">
-        {{ vehicle.year }}
-      </UiBadge>
-      <UiBadge color="gray" variant="soft" size="sm">
-        {{ formatKm(vehicle.km) }}
-      </UiBadge>
-      <UiBadge color="blue" variant="soft" size="sm">
-        {{ vehicle.uf }}
-      </UiBadge>
-      <UiBadge color="red" variant="soft" size="sm">
-        {{ vehicle.horsepower }} HP
-      </UiBadge>
+      
+      <hr v-if="hasAnyBadge">
+      
+      <div v-if="hasAnyBadge" class="flex flex-wrap gap-2">
+        <UiBadge v-if="year" color="gray" variant="soft" size="sm">
+          {{ year }}
+        </UiBadge>
+        <UiBadge v-if="km !== undefined" color="gray" variant="soft" size="sm">
+          {{ formatKm(km) }}
+        </UiBadge>
+        <UiBadge v-if="uf" color="blue" variant="soft" size="sm">
+          {{ uf }}
+        </UiBadge>
+        <UiBadge v-if="horsepower" color="red" variant="soft" size="sm">
+          {{ horsepower }} HP
+        </UiBadge>
+      </div>
     </div>
-    </div>
-    
   </NuxtLink>
 </template>
 
 <script setup lang="ts">
-import type { VehicleSummary } from '@/schemas/vehicle'
-
 interface Props {
-  vehicle: VehicleSummary
+  title: string
+  href: string
+  coverImageUrl?: string
+  brand?: string
+  price?: number
+  year?: number
+  km?: number
+  uf?: string
+  horsepower?: number
+  status?: 'PENDING' | 'APPROVED' | 'REJECTED'
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
-// Formatters
+const hasAnyBadge = computed(() => 
+  props.year !== undefined || 
+  props.km !== undefined || 
+  props.uf !== undefined || 
+  props.horsepower !== undefined
+)
+
 function formatCurrency(value: number): string {
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
@@ -100,55 +110,19 @@ function formatKm(km: number): string {
 }
 
 const brandsData = [
-        {
-            name: 'Audi',
-            logo: '/logos/audi.webp',
-        },
-        {
-            name: 'BMW',
-            logo: '/logos/bmw.webp',
-        },
-        {
-            name: 'Chevrolet',
-            logo: '/logos/chevrolet.webp',
-        },
-        {
-            name: 'Ford',
-            logo: '/logos/ford.webp'
-        },
-        {
-            name: 'Honda',
-            logo: '/logos/honda.webp',
-        },
-        {
-            name: 'Hyundai',
-            logo: '/logos/hyundai.webp',
-        },
-        {
-            name: 'Mercedes',
-            logo: '/logos/mercedes-benz.webp',
-        },
-        {
-            name: 'Nissan',
-            logo: '/logos/nissan.webp',
-        },
-        {
-            name: 'Porsche',
-            logo: '/logos/porsche.webp',
-        },
-        {
-            name: 'Renault',
-            logo: '/logos/renault.webp',
-        },
-        {
-            name: 'Toyota',
-            logo: '/logos/toyota.webp',
-        },
-        {
-            name: 'Volkswagen',
-            logo: '/logos/volkswagen.webp',
-        }
-    ]
+  { name: 'Audi', logo: '/logos/audi.webp' },
+  { name: 'BMW', logo: '/logos/bmw.webp' },
+  { name: 'Chevrolet', logo: '/logos/chevrolet.webp' },
+  { name: 'Ford', logo: '/logos/ford.webp' },
+  { name: 'Honda', logo: '/logos/honda.webp' },
+  { name: 'Hyundai', logo: '/logos/hyundai.webp' },
+  { name: 'Mercedes-Benz', logo: '/logos/mercedes-benz.webp' },
+  { name: 'Nissan', logo: '/logos/nissan.webp' },
+  { name: 'Porsche', logo: '/logos/porsche.webp' },
+  { name: 'Renault', logo: '/logos/renault.webp' },
+  { name: 'Toyota', logo: '/logos/toyota.webp' },
+  { name: 'Volkswagen', logo: '/logos/volkswagen.webp' }
+]
 </script>
 
 <style scoped>
