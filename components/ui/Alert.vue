@@ -1,11 +1,9 @@
 <template>
 	<div :class="alertClasses">
-		<!-- Icon -->
 		<div v-if="showIcon" class="flex-shrink-0">
 			<Icon :name="iconName" :class="iconClasses" />
 		</div>
 
-		<!-- Content -->
 		<div class="flex-1">
 			<h3 v-if="title" :class="titleClasses">
 				{{ title }}
@@ -17,7 +15,6 @@
 			</div>
 		</div>
 
-		<!-- Close Button -->
 		<div v-if="closable" class="flex-shrink-0 ml-4">
 			<button type="button" :class="closeButtonClasses" @click="$emit('close')">
 				<Icon name="heroicons:x-mark-20-solid" class="h-4 w-4" />
@@ -48,7 +45,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 defineEmits<Emits>()
 
-// Computed properties
 const alertClasses = computed(() => {
 	const base = 'flex p-4 rounded-lg'
 

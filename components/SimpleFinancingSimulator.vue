@@ -1,6 +1,5 @@
 <template>
 	<div class="space-y-3">
-		<!-- Input Fields - More compact grid -->
 		<div class="grid grid-cols-4 gap-2 text-xs">
 			<div>
 				<label class="block text-gray-600 mb-1 text-[10px] font-medium">VALOR</label>
@@ -54,7 +53,6 @@
 			</div>
 		</div>
 
-		<!-- Results - Compact display -->
 		<div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-md p-3 border border-blue-100">
 			<div class="space-y-1.5 text-xs">
 				<div class="flex justify-between items-center">
@@ -118,27 +116,23 @@ interface Props {
 
 const props = defineProps<Props>()
 
-// Reactive data
 const vehicleValue = ref(props.price)
-const downPayment = ref(Math.round(props.price * 0.2)) // 20% default
+const downPayment = ref(Math.round(props.price * 0.2))
 const months = ref(48)
-const interestRate = ref(1.5) // 1.5% per month default
+const interestRate = ref(1.5)
 
-// Display values for inputs (more fluid UX)
 const vehicleValueDisplay = ref('')
 const downPaymentDisplay = ref('')
 const focusState = ref({ vehicle: false, down: false })
 
-// Initialize display values
 const initializeDisplayValues = () => {
 	vehicleValueDisplay.value = formatDisplayValueWithCurrency(vehicleValue.value)
 	downPaymentDisplay.value = formatDisplayValueWithCurrency(downPayment.value)
 }
 
-// Handle focus events
 const handleFocus = (field: 'vehicle' | 'down') => {
 	focusState.value[field] = true
-	// Show raw number when focused
+
 	if (field === 'vehicle') {
 		vehicleValueDisplay.value = vehicleValue.value.toString()
 	} else {
@@ -146,10 +140,9 @@ const handleFocus = (field: 'vehicle' | 'down') => {
 	}
 }
 
-// Handle blur events
 const handleBlur = (field: 'vehicle' | 'down') => {
 	focusState.value[field] = false
-	// Format display when not focused
+
 	if (field === 'vehicle') {
 		vehicleValueDisplay.value = formatDisplayValueWithCurrency(vehicleValue.value)
 	} else {
@@ -157,7 +150,6 @@ const handleBlur = (field: 'vehicle' | 'down') => {
 	}
 }
 
-// Update vehicle value
 const updateVehicleValue = (event: Event) => {
 	const input = event.target as HTMLInputElement
 	const cleanValue = input.value.replace(/[^\d]/g, '')
@@ -168,7 +160,6 @@ const updateVehicleValue = (event: Event) => {
 		: formatDisplayValueWithCurrency(numValue)
 }
 
-// Update down payment
 const updateDownPayment = (event: Event) => {
 	const input = event.target as HTMLInputElement
 	const cleanValue = input.value.replace(/[^\d]/g, '')
@@ -179,7 +170,6 @@ const updateDownPayment = (event: Event) => {
 		: formatDisplayValueWithCurrency(numValue)
 }
 
-// Format display value (compact, user-friendly)
 const formatDisplayValue = (value: number) => {
 	if (value === 0) return ''
 	if (value >= 1000) {
@@ -188,7 +178,6 @@ const formatDisplayValue = (value: number) => {
 	return value.toString()
 }
 
-// Format display value with currency
 const formatDisplayValueWithCurrency = (value: number) => {
 	if (value === 0) return ''
 	if (value >= 1000000) {
@@ -201,7 +190,6 @@ const formatDisplayValueWithCurrency = (value: number) => {
 	return `R$ ${value.toString()}`
 }
 
-// Watch price changes
 watch(
 	() => props.price,
 	newPrice => {
@@ -211,12 +199,10 @@ watch(
 	}
 )
 
-// Initialize on mount
 onMounted(() => {
 	initializeDisplayValues()
 })
 
-// Computed values
 const financedAmount = computed(() => {
 	return Math.max(0, vehicleValue.value - downPayment.value)
 })
@@ -245,7 +231,6 @@ const grandTotal = computed(() => {
 	return downPayment.value + totalAmount.value
 })
 
-// Utility functions
 const formatCurrency = (value: number) => {
 	return new Intl.NumberFormat('pt-BR', {
 		style: 'currency',
@@ -259,7 +244,7 @@ const formatCompactCurrency = (value: number) => {
 		return `R$ ${(num / 1000000).toFixed(1)}M`
 	} else if (num >= 1000) {
 		const kValue = (num / 1000).toFixed(1)
-		// Remove .0 desnecessário
+
 		return `R$ ${kValue.endsWith('.0') ? kValue.slice(0, -2) : kValue}k`
 	}
 	return new Intl.NumberFormat('pt-BR', {

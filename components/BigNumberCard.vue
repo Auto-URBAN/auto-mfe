@@ -55,7 +55,6 @@ const emit = defineEmits<{
 	click: []
 }>()
 
-// Computed
 const formattedValue = computed(() => {
 	if (!props.formatAsNumber) return props.value.toString()
 
@@ -79,7 +78,6 @@ const colorClasses = computed(() => {
 	return colors[props.color] || colors.blue
 })
 
-// Methods
 const handleClick = () => {
 	if (props.clickable) {
 		emit('click')

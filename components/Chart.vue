@@ -73,17 +73,14 @@ const getOrCreateTooltip = (chart: any) => {
 }
 
 const externalTooltipHandler = (context: any) => {
-	// Tooltip Element
 	const { chart, tooltip } = context
 	const tooltipEl = getOrCreateTooltip(chart)
 
-	// Hide if no tooltip
 	if (tooltip.opacity === 0) {
 		tooltipEl.style.opacity = 0
 		return
 	}
 
-	// Set Text
 	if (tooltip.body) {
 		const titleLines = tooltip.title || []
 		const bodyLines = tooltip.body.map(b => b.lines)
@@ -133,19 +130,16 @@ const externalTooltipHandler = (context: any) => {
 
 		const tableRoot = tooltipEl.querySelector('table')
 
-		// Remove old children
 		while (tableRoot.firstChild) {
 			tableRoot.firstChild.remove()
 		}
 
-		// Add new children
 		tableRoot.appendChild(tableHead)
 		tableRoot.appendChild(tableBody)
 	}
 
 	const { offsetLeft: positionX, offsetTop: positionY } = chart.canvas
 
-	// Display, position, and set styles for font
 	tooltipEl.style.opacity = 1
 	tooltipEl.style.left = positionX + tooltip.caretX + 'px'
 	tooltipEl.style.top = positionY + tooltip.caretY + 'px'

@@ -1,6 +1,5 @@
 <template>
 	<div class="relative">
-		<!-- Search Input -->
 		<div class="relative">
 			<input
 				v-model="searchQuery"
@@ -12,7 +11,6 @@
 				:class="isProcessing ? 'bg-blue-50' : 'bg-white'"
 			/>
 
-			<!-- Search Icon -->
 			<div class="absolute left-4 top-1/2 transform -translate-y-1/2">
 				<Icon
 					:name="
@@ -23,7 +21,6 @@
 				/>
 			</div>
 
-			<!-- AI Processing Indicator -->
 			<div v-if="isProcessing" class="absolute right-4 top-1/2 transform -translate-y-1/2">
 				<div class="flex items-center gap-2">
 					<div
@@ -41,7 +38,6 @@
 				</div>
 			</div>
 
-			<!-- Clear Button -->
 			<button
 				v-if="searchQuery && !isProcessing"
 				@click="clearSearch"
@@ -51,12 +47,10 @@
 			</button>
 		</div>
 
-		<!-- AI Suggestions Dropdown -->
 		<div
 			v-if="showSuggestions && (suggestions.length > 0 || categories.length > 0)"
 			class="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto"
 		>
-			<!-- AI Interpretation -->
 			<div v-if="aiInterpretation" class="p-4 bg-gradient-to-r from-blue-50 to-purple-50 border-b">
 				<div class="flex items-start gap-3">
 					<Icon name="heroicons:sparkles-20-solid" class="w-5 h-5 text-blue-500 mt-0.5" />
@@ -76,7 +70,6 @@
 				</div>
 			</div>
 
-			<!-- Quick Categories -->
 			<div v-if="categories.length > 0 && !searchQuery" class="p-3">
 				<p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
 					Categorias Populares
@@ -97,7 +90,6 @@
 				</div>
 			</div>
 
-			<!-- Smart Suggestions -->
 			<div v-if="suggestions.length > 0" class="p-3">
 				<p class="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
 					Sugestões Inteligentes
@@ -126,7 +118,6 @@
 				</div>
 			</div>
 
-			<!-- Apply AI Filters Button -->
 			<div v-if="suggestedFilters.length > 0" class="p-3 border-t">
 				<UiButton @click="applyAIFilters" class="w-full" size="sm">
 					<Icon name="heroicons:sparkles-20-solid" class="w-4 h-4 mr-2" />
@@ -168,14 +159,12 @@ interface Emits {
 
 const emit = defineEmits<Emits>()
 
-// State
 const searchQuery = ref('')
 const showSuggestions = ref(false)
 const isProcessing = ref(false)
 const aiInterpretation = ref('')
 const suggestedFilters = ref<AIFilter[]>([])
 
-// Mock AI Categories
 const categories = ref<Category[]>([
 	{
 		id: 'esportivos',
@@ -211,14 +200,12 @@ const categories = ref<Category[]>([
 	}
 ])
 
-// Dynamic suggestions based on input
 const suggestions = computed(() => {
 	if (!searchQuery.value || searchQuery.value.length < 3) return []
 
 	const query = searchQuery.value.toLowerCase()
 	const mockSuggestions: Suggestion[] = []
 
-	// Brand suggestions
 	if (query.includes('bmw') || query.includes('audi') || query.includes('mercedes')) {
 		mockSuggestions.push({
 			id: 'premium-brands',
@@ -231,7 +218,6 @@ const suggestions = computed(() => {
 		})
 	}
 
-	// Price suggestions
 	if (query.includes('barato') || query.includes('econômico') || query.includes('até')) {
 		mockSuggestions.push({
 			id: 'budget-cars',
@@ -242,7 +228,6 @@ const suggestions = computed(() => {
 		})
 	}
 
-	// Year suggestions
 	if (query.includes('novo') || query.includes('2023') || query.includes('2024')) {
 		mockSuggestions.push({
 			id: 'new-cars',
@@ -253,7 +238,6 @@ const suggestions = computed(() => {
 		})
 	}
 
-	// Fuel type suggestions
 	if (query.includes('flex') || query.includes('álcool') || query.includes('etanol')) {
 		mockSuggestions.push({
 			id: 'flex-fuel',
@@ -264,7 +248,6 @@ const suggestions = computed(() => {
 		})
 	}
 
-	// Performance suggestions
 	if (query.includes('esportivo') || query.includes('rápido') || query.includes('potente')) {
 		mockSuggestions.push({
 			id: 'sports-cars',
@@ -278,7 +261,6 @@ const suggestions = computed(() => {
 	return mockSuggestions.slice(0, 5)
 })
 
-// Methods
 const handleInput = () => {
 	if (searchQuery.value.length >= 3) {
 		processAIQuery()
@@ -290,14 +272,12 @@ const handleInput = () => {
 const processAIQuery = async () => {
 	isProcessing.value = true
 
-	// Simulate AI processing delay
 	await new Promise(resolve => setTimeout(resolve, 800))
 
 	const query = searchQuery.value.toLowerCase()
 	const filters: AIFilter[] = []
 	let interpretation = ''
 
-	// Mock AI interpretation logic
 	if (query.includes('esportivo') || query.includes('rápido') || query.includes('performance')) {
 		interpretation = 'Um carro esportivo com boa performance'
 		filters.push(
@@ -334,7 +314,6 @@ const clearAIInterpretation = () => {
 }
 
 const handleBlur = () => {
-	// Delay hiding to allow click events on suggestions
 	setTimeout(() => {
 		showSuggestions.value = false
 	}, 200)
@@ -371,7 +350,6 @@ const applyAIFilters = () => {
 	emit('search', searchQuery.value)
 }
 
-// Expose search functionality
 defineExpose({
 	focus: () => {
 		const input = document.querySelector('input')
@@ -382,7 +360,6 @@ defineExpose({
 </script>
 
 <style scoped>
-/* Custom scrollbar for suggestions */
 .overflow-y-auto::-webkit-scrollbar {
 	width: 6px;
 }

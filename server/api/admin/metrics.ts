@@ -2,10 +2,8 @@ import { AdminMetrics } from '~/schemas/admin'
 
 export default defineEventHandler(async event => {
 	try {
-		// Simulate API delay
 		await new Promise(resolve => setTimeout(resolve, 500))
 
-		// Mock metrics data
 		const mockMetrics = {
 			totals: {
 				vehicles: 45,
@@ -33,7 +31,6 @@ export default defineEventHandler(async event => {
 			]
 		}
 
-		// Validate response
 		const validatedMetrics = AdminMetrics.parse(mockMetrics)
 
 		return validatedMetrics

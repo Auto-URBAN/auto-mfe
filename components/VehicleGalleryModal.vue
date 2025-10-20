@@ -7,9 +7,7 @@
 		@update:model-value="$emit('update:modelValue', $event)"
 	>
 		<div v-if="vehicle" class="h-full flex flex-col lg:flex-row">
-			<!-- Image Gallery Section -->
 			<div class="flex-1 lg:w-2/3 bg-black relative">
-				<!-- Main Image -->
 				<div class="relative h-64 lg:h-full">
 					<img
 						:src="currentImage"
@@ -19,7 +17,6 @@
 						@error="onImageError"
 					/>
 
-					<!-- Loading overlay -->
 					<div
 						v-if="imageLoading"
 						class="absolute inset-0 bg-black/50 flex items-center justify-center"
@@ -27,7 +24,6 @@
 						<Icon name="heroicons:arrow-path-20-solid" class="w-8 h-8 animate-spin text-white" />
 					</div>
 
-					<!-- Navigation arrows -->
 					<button
 						v-if="images.length > 1"
 						class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-all"
@@ -44,7 +40,6 @@
 						<Icon name="heroicons:chevron-right-20-solid" class="w-6 h-6" />
 					</button>
 
-					<!-- Image counter -->
 					<div
 						v-if="images.length > 1"
 						class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/70 text-white px-3 py-1 rounded-full text-sm"
@@ -52,7 +47,6 @@
 						{{ currentImageIndex + 1 }} de {{ images.length }}
 					</div>
 
-					<!-- Zoom button -->
 					<button
 						class="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all"
 						@click="toggleZoom"
@@ -68,7 +62,6 @@
 					</button>
 				</div>
 
-				<!-- Thumbnail strip -->
 				<div v-if="images.length > 1" class="absolute bottom-0 left-0 right-0 bg-black/70 p-4">
 					<div class="flex gap-2 justify-center overflow-x-auto max-w-full">
 						<button
@@ -92,9 +85,7 @@
 				</div>
 			</div>
 
-			<!-- Vehicle Info Section -->
 			<div class="lg:w-1/3 bg-white p-6 flex flex-col">
-				<!-- Header -->
 				<div class="mb-6">
 					<h2 class="text-2xl font-bold text-gray-900 mb-2">{{ vehicle.title }}</h2>
 					<div class="flex items-center gap-4 text-sm text-gray-600">
@@ -109,7 +100,6 @@
 					</div>
 				</div>
 
-				<!-- Price -->
 				<div class="mb-6">
 					<div class="text-3xl font-bold text-green-600 mb-1">
 						{{ formatCurrency(vehicle.price) }}
@@ -117,7 +107,6 @@
 					<p class="text-sm text-gray-500">Preço à vista</p>
 				</div>
 
-				<!-- Quick specs -->
 				<div class="grid grid-cols-2 gap-4 mb-6">
 					<div class="bg-gray-50 p-3 rounded-lg">
 						<div class="text-sm text-gray-600">Marca</div>
@@ -137,7 +126,6 @@
 					</div>
 				</div>
 
-				<!-- Action buttons -->
 				<div class="mt-auto space-y-3">
 					<UiButton class="w-full" size="lg" @click="goToDetails">
 						<Icon name="heroicons:eye-20-solid" class="w-5 h-5 mr-2" />
@@ -170,7 +158,6 @@
 					</div>
 				</div>
 
-				<!-- Contact info -->
 				<div class="mt-6 p-4 bg-blue-50 rounded-lg">
 					<h3 class="font-semibold text-blue-900 mb-2">Interessado?</h3>
 					<p class="text-sm text-blue-700 mb-3">Entre em contato para mais informações</p>
@@ -204,24 +191,21 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-// State
 const currentImageIndex = ref(0)
 const imageLoading = ref(false)
 const isZoomed = ref(false)
 const isFavorite = ref(false)
 
-// Mock images for demonstration
 const images = computed(() => {
 	if (!props.vehicle) return []
 
-	// Generate mock images based on the vehicle
 	const baseImage = props.vehicle.coverImageUrl || '/imgs/search-example.jpg'
 	return [
 		baseImage,
-		'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800',
-		'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800',
-		'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800',
-		'https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?w=800'
+		'https:
+		'https:
+		'https:
+		'https:
 	]
 })
 
@@ -229,7 +213,6 @@ const currentImage = computed(() => {
 	return images.value[currentImageIndex.value] || '/imgs/search-example.jpg'
 })
 
-// Methods
 const nextImage = () => {
 	if (currentImageIndex.value < images.value.length - 1) {
 		currentImageIndex.value++
@@ -303,10 +286,10 @@ const shareVehicle = async () => {
 			console.log('Share cancelled')
 		}
 	} else {
-		// Fallback: copy to clipboard
+
 		try {
 			await navigator.clipboard.writeText(shareData.url)
-			// You could show a toast notification here
+
 			console.log('Link copied to clipboard')
 		} catch (err) {
 			console.error('Failed to copy link')
@@ -316,10 +299,9 @@ const shareVehicle = async () => {
 
 const toggleFavorite = () => {
 	isFavorite.value = !isFavorite.value
-	// Here you would typically save to localStorage or API
+
 }
 
-// Formatters
 const formatCurrency = (value: number): string => {
 	return new Intl.NumberFormat('pt-BR', {
 		style: 'currency',
@@ -334,7 +316,6 @@ const formatKm = (km: number): string => {
 	return `${(km / 1000).toFixed(0)}k km`
 }
 
-// Keyboard navigation
 const handleKeydown = (event: KeyboardEvent) => {
 	if (!props.modelValue) return
 
@@ -354,7 +335,6 @@ const handleKeydown = (event: KeyboardEvent) => {
 	}
 }
 
-// Watch for changes
 watch(
 	() => props.modelValue,
 	newValue => {
@@ -374,7 +354,6 @@ watch(
 	}
 )
 
-// Lifecycle
 onMounted(() => {
 	document.addEventListener('keydown', handleKeydown)
 })
@@ -385,7 +364,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* Custom scrollbar for thumbnail strip */
 ::-webkit-scrollbar {
 	height: 6px;
 }

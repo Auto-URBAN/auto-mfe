@@ -1,22 +1,14 @@
 import { z } from 'zod'
 
-/**
- * Vehicle schemas for Auto URBAN marketplace
- */
-
-// Vehicle status enum
 export const VehicleStatus = z.enum(['PENDING', 'APPROVED', 'REJECTED'])
 export type VehicleStatus = z.infer<typeof VehicleStatus>
 
-// Gearbox enum
 export const Gearbox = z.enum(['MANUAL', 'AUTO'])
 export type Gearbox = z.infer<typeof Gearbox>
 
-// Fuel type enum
 export const FuelType = z.enum(['GASOLINA', 'ALCOOL', 'DIESEL', 'HIBRIDO', 'ELETRICO'])
 export type FuelType = z.infer<typeof FuelType>
 
-// Brazilian states (UF) enum
 export const BrazilianState = z.enum([
 	'AC',
 	'AL',
@@ -67,10 +59,9 @@ export const Seller = z.object({
 })
 export type Seller = z.infer<typeof Seller>
 
-// Base Vehicle Summary schema (for listings)
 export const VehicleSummary = z.object({
 	id: z.string().min(1),
-	title: z.string().min(1), // "Marca Modelo Ano"
+	title: z.string().min(1),
 	brand: z.string().min(1),
 	model: z.string().min(1),
 	year: z
@@ -157,7 +148,6 @@ export const SearchFilters = z
 	)
 export type SearchFilters = z.infer<typeof SearchFilters>
 
-// Pagination schema
 export const Pagination = z.object({
 	page: z.number().int().min(1).default(1),
 	pageSize: z.number().int().min(1).max(100).default(20),
@@ -166,7 +156,6 @@ export const Pagination = z.object({
 })
 export type Pagination = z.infer<typeof Pagination>
 
-// Search result schema
 export const SearchResult = z.object({
 	items: z.array(VehicleSummary),
 	page: z.number().int().min(1),
@@ -175,7 +164,6 @@ export const SearchResult = z.object({
 })
 export type SearchResult = z.infer<typeof SearchResult>
 
-// Vehicle creation/update schema (for forms)
 export const VehicleForm = z.object({
 	title: z.string().min(5, 'Title must be at least 5 characters').max(100),
 	brand: z.string().min(1, 'Brand is required'),
@@ -201,7 +189,6 @@ export const VehicleForm = z.object({
 })
 export type VehicleForm = z.infer<typeof VehicleForm>
 
-// Vehicle store state schema
 export const VehiclesState = z.object({
 	vehicles: z.array(VehicleSummary),
 	currentVehicle: VehicleDetail.nullable(),

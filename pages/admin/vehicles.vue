@@ -1,12 +1,10 @@
 <template>
 	<div>
-		<!-- Page Header -->
 		<div class="mb-8">
 			<h1 class="text-2xl font-bold text-gray-900">Moderação de Veículos</h1>
 			<p class="mt-2 text-sm text-gray-600">Gerencie anúncios de veículos da plataforma</p>
 		</div>
 
-		<!-- Status Tabs -->
 		<div class="mb-6">
 			<nav class="flex space-x-8 border-b border-gray-200">
 				<button
@@ -34,12 +32,10 @@
 			</nav>
 		</div>
 
-		<!-- Loading State -->
 		<div v-if="loading" class="space-y-4">
 			<div v-for="i in 5" :key="i" class="h-24 bg-gray-200 animate-pulse rounded-lg" />
 		</div>
 
-		<!-- Error State -->
 		<div
 			v-else-if="error"
 			class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded"
@@ -50,7 +46,6 @@
 			</div>
 		</div>
 
-		<!-- Vehicles Table -->
 		<div v-else class="bg-white rounded-lg shadow">
 			<div class="overflow-x-auto">
 				<table class="min-w-full divide-y divide-gray-200">
@@ -85,7 +80,6 @@
 					</thead>
 					<tbody class="bg-white divide-y divide-gray-200">
 						<tr v-for="vehicle in filteredVehicles" :key="vehicle.id" class="hover:bg-gray-50">
-							<!-- Vehicle Info -->
 							<td class="px-6 py-4 whitespace-nowrap">
 								<div class="flex items-center">
 									<img
@@ -104,23 +98,19 @@
 								</div>
 							</td>
 
-							<!-- Seller Info -->
 							<td class="px-6 py-4 whitespace-nowrap">
 								<div class="text-sm text-gray-900">{{ vehicle.seller.phone }}</div>
 								<div class="text-sm text-gray-500">{{ vehicle.city }}, {{ vehicle.uf }}</div>
 							</td>
 
-							<!-- Status -->
 							<td class="px-6 py-4 whitespace-nowrap">
 								<StatusBadge :status="vehicle.status" />
 							</td>
 
-							<!-- Date -->
 							<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
 								{{ formatDate(vehicle.createdAt) }}
 							</td>
 
-							<!-- Actions -->
 							<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 								<div class="flex justify-end space-x-2">
 									<button
@@ -153,7 +143,6 @@
 							</td>
 						</tr>
 
-						<!-- Empty State -->
 						<tr v-if="filteredVehicles.length === 0">
 							<td colspan="5" class="px-6 py-12 text-center">
 								<Icon name="heroicons:truck" class="mx-auto h-12 w-12 text-gray-400 mb-4" />
@@ -166,7 +155,6 @@
 			</div>
 		</div>
 
-		<!-- Reject Modal -->
 		<div
 			v-if="showRejectModal"
 			class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
@@ -220,12 +208,10 @@ definePageMeta({
 const route = useRoute()
 const router = useRouter()
 
-// Admin vehicles data
 const vehicles = ref([])
 const loading = ref(false)
 const error = ref<string | null>(null)
 
-// Load vehicles function
 const loadVehicles = async () => {
 	loading.value = true
 	error.value = null
@@ -241,14 +227,12 @@ const loadVehicles = async () => {
 	}
 }
 
-// Reactive data
 const selectedTab = ref<VehicleStatus | 'all'>('pending')
 const showRejectModal = ref(false)
 const rejectionReason = ref('')
 const vehicleToReject = ref(null)
 const moderatingId = ref<string | null>(null)
 
-// Computed
 const tabs = computed(() => [
 	{
 		key: 'pending' as const,
@@ -289,7 +273,6 @@ const statusText = computed(() => {
 	return texts[selectedTab.value]
 })
 
-// Methods
 const formatCurrency = (value: number) => {
 	return new Intl.NumberFormat('pt-BR', {
 		style: 'currency',
@@ -302,7 +285,6 @@ const formatDate = (date: string) => {
 }
 
 const viewVehicle = (vehicleId: string) => {
-	// Navigate to vehicle details (will be implemented in Sprint 2)
 	navigateTo(`/carros/${vehicleId}`)
 }
 
@@ -314,7 +296,6 @@ const approveVehicle = async (vehicleId: string) => {
 			method: 'POST'
 		})
 
-		// Update local state
 		const vehicleIndex = vehicles.value.findIndex(v => v.id === vehicleId)
 		if (vehicleIndex !== -1) {
 			vehicles.value[vehicleIndex].status = 'APPROVED'
@@ -354,7 +335,6 @@ const confirmReject = async () => {
 			}
 		})
 
-		// Update local state
 		const vehicleIndex = vehicles.value.findIndex(v => v.id === vehicleToReject.value.id)
 		if (vehicleIndex !== -1) {
 			vehicles.value[vehicleIndex].status = 'REJECTED'
@@ -371,7 +351,6 @@ const confirmReject = async () => {
 	}
 }
 
-// Watch route params
 watch(
 	() => route.query.status,
 	status => {
@@ -382,17 +361,14 @@ watch(
 	{ immediate: true }
 )
 
-// Watch selected tab to update URL
 watch(selectedTab, newTab => {
 	router.replace({ query: { ...route.query, status: newTab } })
 })
 
-// Lifecycle
 onMounted(async () => {
 	await loadVehicles()
 })
 
-// Meta
 useHead({
 	title: 'Moderação de Veículos - Admin Auto URBAN'
 })

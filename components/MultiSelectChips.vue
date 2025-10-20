@@ -10,7 +10,6 @@
 			</span>
 		</div>
 
-		<!-- Search Input -->
 		<div v-if="searchable" class="relative">
 			<UiInput
 				v-model="searchQuery"
@@ -21,7 +20,6 @@
 			/>
 		</div>
 
-		<!-- Selected Items (Chips) -->
 		<div v-if="selectedItems.length > 0" class="flex flex-wrap gap-2">
 			<div
 				v-for="item in selectedItems"
@@ -44,7 +42,6 @@
 			</div>
 		</div>
 
-		<!-- Dropdown for selection -->
 		<div class="relative">
 			<button
 				@click="toggleDropdown"
@@ -63,7 +60,6 @@
 				/>
 			</button>
 
-			<!-- Dropdown Menu -->
 			<Transition
 				enter-active-class="transition ease-out duration-100"
 				enter-from-class="transform opacity-0 scale-95"
@@ -127,7 +123,7 @@ interface Props {
 	showCount?: boolean
 	maxSelection?: number
 	variant?: 'purple' | 'orange' | 'red' | 'indigo'
-	// Functions to extract data from generic items
+
 	getItemId: (item: GenericItem) => string | number
 	getItemLabel: (item: GenericItem) => string
 	getItemCount?: (item: GenericItem) => number
@@ -148,11 +144,9 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-// Component state
 const isOpen = ref(false)
 const searchQuery = ref('')
 
-// Computed properties for theming
 const variantClasses = computed(() => {
 	const variants = {
 		purple: {
@@ -208,7 +202,6 @@ const dropdownButtonClass = computed(() => variantClasses.value.dropdownButton)
 const selectedItemClass = computed(() => variantClasses.value.selectedItem)
 const selectedIndicatorClass = computed(() => variantClasses.value.selectedIndicator)
 
-// Data computed properties
 const selectedItems = computed(() =>
 	props.options.filter(item => props.modelValue.includes(props.getItemId(item)))
 )
@@ -224,25 +217,21 @@ const filteredOptions = computed(() => {
 	}
 
 	return options.sort((a, b) => {
-		// Selected items first
 		const aSelected = isItemSelected(props.getItemId(a))
 		const bSelected = isItemSelected(props.getItemId(b))
 		if (aSelected && !bSelected) return -1
 		if (!aSelected && bSelected) return 1
 
-		// Then by count (desc) if available
 		if (props.getItemCount) {
 			const aCount = props.getItemCount(a) || 0
 			const bCount = props.getItemCount(b) || 0
 			if (aCount !== bCount) return bCount - aCount
 		}
 
-		// Then alphabetically
 		return props.getItemLabel(a).localeCompare(props.getItemLabel(b))
 	})
 })
 
-// Methods
 const isItemSelected = (itemId: string | number): boolean => {
 	return props.modelValue.includes(itemId)
 }
@@ -261,10 +250,8 @@ const toggleItem = (itemId: string | number) => {
 	let newSelection = [...props.modelValue]
 
 	if (isItemSelected(itemId)) {
-		// Remove item
 		newSelection = newSelection.filter(id => id !== itemId)
 	} else {
-		// Add item (check max selection)
 		if (props.maxSelection && newSelection.length >= props.maxSelection) {
 			return
 		}
@@ -276,8 +263,6 @@ const toggleItem = (itemId: string | number) => {
 		'change',
 		props.options.filter(opt => newSelection.includes(props.getItemId(opt)))
 	)
-
-	// Keep dropdown open for multiple selection
 }
 
 const removeItem = (itemId: string | number) => {
@@ -289,7 +274,6 @@ const removeItem = (itemId: string | number) => {
 	)
 }
 
-// Close dropdown when clicking outside
 onClickOutside(templateRef, () => {
 	isOpen.value = false
 })

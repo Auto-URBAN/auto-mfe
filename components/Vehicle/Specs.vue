@@ -5,7 +5,6 @@
 		</template>
 
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-			<!-- Basic Info -->
 			<div class="space-y-3">
 				<div class="flex justify-between py-2 border-b border-gray-100">
 					<span class="text-sm text-gray-600">Marca</span>
@@ -35,7 +34,6 @@
 				</div>
 			</div>
 
-			<!-- Additional Specs -->
 			<div class="space-y-3">
 				<div v-if="vehicle.gearbox" class="flex justify-between py-2 border-b border-gray-100">
 					<span class="text-sm text-gray-600">Câmbio</span>
@@ -68,7 +66,6 @@
 			</div>
 		</div>
 
-		<!-- Description -->
 		<div v-if="vehicle.description" class="mt-6 pt-6 border-t border-gray-100">
 			<h4 class="text-md font-semibold text-gray-900 mb-3">Descrição</h4>
 			<p class="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
@@ -104,7 +101,6 @@ interface Props {
 
 defineProps<Props>()
 
-// Formatting methods
 const formatCurrency = (value: number) => {
 	return new Intl.NumberFormat('pt-BR', {
 		style: 'currency',

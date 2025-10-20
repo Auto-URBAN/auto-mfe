@@ -29,7 +29,6 @@ const props = withDefaults(defineProps<Props>(), {
 	type: 'flex'
 })
 
-// Map old API to new UiFlex API
 const flexDirection = computed(() => {
 	const directionMap = {
 		row: 'row',

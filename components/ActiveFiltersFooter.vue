@@ -12,7 +12,6 @@
 					</div>
 
 					<div class="flex flex-wrap gap-2">
-						<!-- Brand filters -->
 						<div
 							v-for="brand in activeBrands"
 							:key="`brand-${brand}`"
@@ -24,7 +23,6 @@
 							</button>
 						</div>
 
-						<!-- Model filters -->
 						<div
 							v-for="model in activeModels"
 							:key="`model-${model}`"
@@ -36,7 +34,6 @@
 							</button>
 						</div>
 
-						<!-- Year filters -->
 						<div
 							v-for="year in activeYears"
 							:key="`year-${year}`"
@@ -48,7 +45,6 @@
 							</button>
 						</div>
 
-						<!-- Color filters -->
 						<div
 							v-for="color in activeColors"
 							:key="`color-${color}`"
@@ -60,7 +56,6 @@
 							</button>
 						</div>
 
-						<!-- Price range -->
 						<div
 							v-if="activePriceRange"
 							class="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm"
@@ -71,7 +66,6 @@
 							</button>
 						</div>
 
-						<!-- Legacy filters for backward compatibility -->
 						<div
 							v-if="filters.make"
 							class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"

@@ -1,6 +1,5 @@
 <template>
 	<div class="min-h-screen bg-gray-50">
-		<!-- Loading State -->
 		<div v-if="loading" class="py-20">
 			<UiContainer>
 				<div class="animate-pulse space-y-8">
@@ -13,9 +12,7 @@
 			</UiContainer>
 		</div>
 
-		<!-- Content -->
 		<div v-else-if="vehicle">
-			<!-- 1️⃣ Header do Modelo -->
 			<section
 				class="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white overflow-hidden"
 			>
@@ -25,7 +22,6 @@
 
 				<UiContainer size="xl" padding="md" class="relative py-12">
 					<div class="grid lg:grid-cols-2 gap-8 items-center max-w-7xl mx-auto">
-						<!-- Left: Image -->
 						<div class="relative">
 							<div class="aspect-video rounded-xl overflow-hidden shadow-xl">
 								<img
@@ -35,7 +31,6 @@
 								/>
 							</div>
 
-							<!-- Image Gallery Thumbnails -->
 							<div
 								v-if="vehicle.images && vehicle.images.length > 1"
 								class="grid grid-cols-4 gap-2 mt-3"
@@ -50,9 +45,7 @@
 							</div>
 						</div>
 
-						<!-- Right: Info -->
 						<div>
-							<!-- Brand Logo -->
 							<div class="flex items-center gap-2 mb-3">
 								<img
 									:src="getBrandLogo(vehicle.brand)"
@@ -64,12 +57,10 @@
 								</span>
 							</div>
 
-							<!-- Model Name -->
 							<h1 class="text-4xl font-black mb-3">
 								{{ vehicle.model }}
 							</h1>
 
-							<!-- Year Selector -->
 							<div v-if="availableYears.length > 0" class="mb-4">
 								<label class="text-xs text-gray-400 mb-2 block">Selecione o ano do modelo</label>
 								<div class="flex flex-wrap gap-2">
@@ -89,7 +80,6 @@
 								</div>
 							</div>
 
-							<!-- Price for selected year -->
 							<div v-if="currentYearData" class="mb-4 p-4 bg-white/10 rounded-lg backdrop-blur-sm">
 								<p class="text-xs text-gray-400 mb-1">Valor FIPE {{ selectedYear }}</p>
 								<p class="text-3xl font-black text-white">
@@ -97,7 +87,6 @@
 								</p>
 							</div>
 
-							<!-- Badges -->
 							<div class="flex flex-wrap gap-2 mb-4">
 								<UiBadge color="blue" variant="solid" size="md">
 									{{ selectedYear }}
@@ -110,7 +99,6 @@
 								</UiBadge>
 							</div>
 
-							<!-- Description -->
 							<p class="text-base text-gray-300 mb-6 leading-relaxed">
 								{{
 									vehicle.description ||
@@ -118,7 +106,6 @@
 								}}
 							</p>
 
-							<!-- CTA -->
 							<div class="flex gap-3">
 								<UiButton size="md" class="bg-gradient-to-r from-blue-600 to-purple-600">
 									<Icon name="heroicons:heart-20-solid" class="w-4 h-4" />
@@ -138,7 +125,6 @@
 				</UiContainer>
 			</section>
 
-			<!-- 2️⃣ Ficha Técnica -->
 			<section class="py-12 bg-white">
 				<UiContainer size="xl" padding="md">
 					<div class="max-w-7xl mx-auto">
@@ -148,7 +134,6 @@
 						</div>
 
 						<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-							<!-- Main Specs -->
 							<div
 								class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-4 border border-orange-200"
 							>
@@ -249,7 +234,6 @@
 				</UiContainer>
 			</section>
 
-			<!-- 3️⃣ Histórico de Preço FIPE -->
 			<section class="py-12 bg-gray-50">
 				<UiContainer size="xl" padding="md">
 					<div class="max-w-7xl mx-auto bg-white rounded-xl p-6 shadow-lg border border-gray-100">
@@ -275,7 +259,6 @@
 							</div>
 						</div>
 
-						<!-- Last 6 Months -->
 						<div class="mb-6">
 							<h3 class="text-xs font-semibold text-gray-700 mb-3">Últimos 6 meses</h3>
 							<div class="grid grid-cols-3 md:grid-cols-6 gap-3">
@@ -299,7 +282,6 @@
 							</div>
 						</div>
 
-						<!-- Full History Chart -->
 						<div>
 							<h3 class="text-xs font-semibold text-gray-700 mb-3">
 								Histórico Completo (12 meses)
@@ -312,7 +294,6 @@
 				</UiContainer>
 			</section>
 
-			<!-- 4️⃣ Anúncios Ativos -->
 			<section class="py-12 bg-white">
 				<UiContainer size="xl" padding="md">
 					<div class="max-w-7xl mx-auto">
@@ -340,7 +321,6 @@
 				</UiContainer>
 			</section>
 
-			<!-- 5️⃣ Modelos Similares -->
 			<section class="py-12 bg-gray-50">
 				<UiContainer size="xl" padding="md">
 					<div class="max-w-7xl mx-auto">
@@ -386,7 +366,6 @@
 			</section>
 		</div>
 
-		<!-- Error State -->
 		<div v-else class="py-20">
 			<UiContainer class="text-center">
 				<Icon
@@ -441,13 +420,11 @@ const relatedAds = ref<VehicleSummary[]>([])
 const similarModels = ref<VehicleSummary[]>([])
 const allModels = ref<VehicleSummary[]>([])
 
-// Available years for this model
 const availableYears = computed(() => {
 	if (!vehicle.value?.years) return []
 	return [...vehicle.value.years].sort((a, b) => b.year - a.year)
 })
 
-// Current year data based on selection
 const currentYearData = computed(() => {
 	if (!vehicle.value?.years) {
 		return {
@@ -482,7 +459,6 @@ useHead({
 	]
 })
 
-// Generate price history data
 const priceHistory = computed(() => {
 	if (!currentYearData.value) {
 		return {
@@ -492,7 +468,7 @@ const priceHistory = computed(() => {
 	}
 
 	const currentPrice = currentYearData.value.price
-	const basePrice = currentPrice * 0.92 // 8% depreciation over 12 months
+	const basePrice = currentPrice * 0.92
 
 	const months = [
 		'Jan',
@@ -515,7 +491,7 @@ const priceHistory = computed(() => {
 	for (let i = 5; i >= 0; i--) {
 		const monthIndex = (currentMonth - i + 12) % 12
 		const year = currentMonth - i < 0 ? currentYear - 1 : currentYear
-		const progress = (6 - i) / 6 // 0 to 1
+		const progress = (6 - i) / 6
 		const value = basePrice + (currentPrice - basePrice) * progress
 		const prevValue = i < 5 ? basePrice + (currentPrice - basePrice) * ((5 - i) / 6) : null
 
@@ -532,7 +508,6 @@ const priceHistory = computed(() => {
 	}
 })
 
-// Chart data for full history
 const priceChartData = computed(() => {
 	if (!currentYearData.value) return { labels: [], datasets: [] }
 
@@ -562,10 +537,9 @@ const priceChartData = computed(() => {
 		const year = currentMonth - i < 0 ? currentYear - 1 : currentYear
 		labels.push(`${months[monthIndex]}/${year.toString().slice(2)}`)
 
-		// Simulate gradual appreciation with some volatility
 		const baseValue = currentPrice * 0.88
 		const progress = (12 - i) / 12
-		const volatility = Math.sin(i * 0.5) * 0.02 // ±2% random variation
+		const volatility = Math.sin(i * 0.5) * 0.02
 		values.push(Math.round(baseValue + (currentPrice - baseValue) * progress * (1 + volatility)))
 	}
 
@@ -633,7 +607,6 @@ const priceChartOptions = {
 	}
 }
 
-// Mock ads data
 const mockAds = computed(() => {
 	if (!vehicle.value || !currentYearData.value) return []
 
@@ -663,17 +636,14 @@ const mockAds = computed(() => {
 	}))
 })
 
-// Random similar models
 const randomSimilarModels = computed(() => {
 	if (allModels.value.length === 0) return []
 
-	// Get random models, excluding current one
 	const filtered = allModels.value.filter(m => m.id !== vehicle.value?.id)
 	const shuffled = [...filtered].sort(() => Math.random() - 0.5)
 	return shuffled.slice(0, 3)
 })
 
-// Load vehicle details
 async function loadVehicle() {
 	loading.value = true
 	try {
@@ -684,7 +654,6 @@ async function loadVehicle() {
 		if (response?.items) {
 			allModels.value = response.items
 
-			// Find vehicle by slug and group by model
 			const matchingVehicles = response.items.filter((v: VehicleSummary) => v.slug === slug)
 
 			if (matchingVehicles.length > 0) {
@@ -692,7 +661,6 @@ async function loadVehicle() {
 
 				if (!baseVehicle) return
 
-				// Group all years of this model
 				const years: YearVariant[] = matchingVehicles.map((v: VehicleSummary) => ({
 					year: v.year,
 					price: v.price,
@@ -703,10 +671,8 @@ async function loadVehicle() {
 					fipeCode: (v as VehicleDetail).fipeCode
 				}))
 
-				// Use actual years from API (now includes multi-year data)
 				const allYears = years
 
-				// Create model data with all years
 				vehicle.value = {
 					id: baseVehicle.id,
 					title: `${baseVehicle.brand} ${baseVehicle.model}`,
@@ -724,10 +690,8 @@ async function loadVehicle() {
 					years: allYears
 				}
 
-				// Set initial selected year to the most recent
 				selectedYear.value = Math.max(...allYears.map(y => y.year))
 
-				// Load related ads (same brand and model)
 				relatedAds.value = response.items
 					.filter(
 						(v: VehicleSummary) =>
@@ -737,7 +701,6 @@ async function loadVehicle() {
 					)
 					.slice(0, 6)
 
-				// Load similar models (same brand, different model)
 				similarModels.value = response.items
 					.filter(
 						(v: VehicleSummary) =>

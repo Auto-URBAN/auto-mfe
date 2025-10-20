@@ -1,12 +1,10 @@
 <template>
 	<div>
-		<!-- Page Header -->
 		<div class="mb-8">
 			<h1 class="text-2xl font-bold text-gray-900">Gerenciamento de Usuários</h1>
 			<p class="mt-2 text-sm text-gray-600">Gerencie usuários e administradores da plataforma</p>
 		</div>
 
-		<!-- Stats Cards -->
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
 			<BigNumberCard
 				title="Total de Usuários"
@@ -30,12 +28,10 @@
 			/>
 		</div>
 
-		<!-- Loading State -->
 		<div v-if="adminLoading" class="space-y-4">
 			<div v-for="i in 5" :key="i" class="h-16 bg-gray-200 rounded-lg animate-pulse" />
 		</div>
 
-		<!-- Error State -->
 		<div
 			v-else-if="adminError"
 			class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded"
@@ -46,13 +42,11 @@
 			</div>
 		</div>
 
-		<!-- Users Table -->
 		<div v-else class="bg-white rounded-lg shadow">
 			<div class="px-6 py-4 border-b border-gray-200">
 				<div class="flex justify-between items-center">
 					<h3 class="text-lg font-semibold text-gray-900">Lista de Usuários</h3>
 
-					<!-- Filter Dropdown -->
 					<select
 						v-model="selectedFilter"
 						class="w-48 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
@@ -102,7 +96,6 @@
 					</thead>
 					<tbody class="bg-white divide-y divide-gray-200">
 						<tr v-for="user in filteredUsers" :key="user.id" class="hover:bg-gray-50">
-							<!-- User Info -->
 							<td class="px-6 py-4 whitespace-nowrap">
 								<div class="flex items-center">
 									<div class="flex-shrink-0 h-10 w-10">
@@ -120,12 +113,10 @@
 								</div>
 							</td>
 
-							<!-- Phone -->
 							<td class="px-6 py-4 whitespace-nowrap">
 								<div class="text-sm text-gray-900">{{ formatPhone(user.phone) }}</div>
 							</td>
 
-							<!-- Role -->
 							<td class="px-6 py-4 whitespace-nowrap">
 								<span
 									:class="[
@@ -139,7 +130,6 @@
 								</span>
 							</td>
 
-							<!-- Ads Count -->
 							<td class="px-6 py-4 whitespace-nowrap">
 								<div class="text-sm text-gray-900">{{ user.ads?.total || 0 }} anúncios</div>
 								<div v-if="user.ads?.byStatus" class="text-xs text-gray-500">
@@ -148,12 +138,10 @@
 								</div>
 							</td>
 
-							<!-- Created Date -->
 							<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
 								{{ formatDate(user.createdAt) }}
 							</td>
 
-							<!-- Actions -->
 							<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 								<div class="flex justify-end space-x-2">
 									<button
@@ -200,7 +188,6 @@
 							</td>
 						</tr>
 
-						<!-- Empty State -->
 						<tr v-if="filteredUsers.length === 0">
 							<td colspan="6" class="px-6 py-12 text-center">
 								<Icon name="heroicons:users" class="mx-auto h-12 w-12 text-gray-400 mb-4" />
@@ -225,16 +212,13 @@ definePageMeta({
 
 const auth = useAuth()
 
-// Reactive data
 const selectedFilter = ref('all')
 const openDropdowns = ref<Record<string, boolean>>({})
 
-// Admin users data
 const adminUsers = ref([])
 const adminLoading = ref(false)
 const adminError = ref<string | null>(null)
 
-// Load admin users function
 const loadAdminUsers = async () => {
 	adminLoading.value = true
 	adminError.value = null
@@ -250,7 +234,6 @@ const loadAdminUsers = async () => {
 	}
 }
 
-// Computed
 const totalUsers = computed(() => adminUsers.value.length)
 const regularUsersCount = computed(() => adminUsers.value.filter(u => u.role === 'USER').length)
 const adminUsersCount = computed(() => adminUsers.value.filter(u => u.role === 'ADMIN').length)
@@ -278,9 +261,7 @@ const filterText = computed(() => {
 	return texts[selectedFilter.value as keyof typeof texts] || 'cadastrados'
 })
 
-// Methods
 const formatPhone = (phone: string) => {
-	// Format Brazilian phone number
 	if (phone.length === 11) {
 		return phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
 	}
@@ -292,22 +273,18 @@ const formatDate = (date: string) => {
 }
 
 const getUserInitials = (user: any) => {
-	// Generate initials from user ID (since we don't have names)
 	return user.id.substring(0, 2).toUpperCase()
 }
 
 const viewUserAds = (userId: string) => {
-	// Navigate to vehicles page filtered by user
 	navigateTo(`/admin/vehicles?user=${userId}`)
 }
 
 const promoteToAdmin = async (userId: string) => {
-	// TODO: Implement promote to admin functionality
 	console.log('Promote to admin:', userId)
 	alert('Funcionalidade em desenvolvimento')
 }
 
-// Dropdown management
 const toggleDropdown = (userId: string) => {
 	openDropdowns.value[userId] = !openDropdowns.value[userId]
 }
@@ -316,7 +293,6 @@ const closeDropdown = (userId: string) => {
 	openDropdowns.value[userId] = false
 }
 
-// Close all dropdowns when clicking outside
 const handleClickOutside = (event: Event) => {
 	const target = event.target as Element
 	if (!target.closest('.relative')) {
@@ -324,7 +300,6 @@ const handleClickOutside = (event: Event) => {
 	}
 }
 
-// Lifecycle
 onMounted(async () => {
 	try {
 		await loadAdminUsers()
@@ -338,7 +313,6 @@ onUnmounted(() => {
 	document.removeEventListener('click', handleClickOutside)
 })
 
-// Meta
 useHead({
 	title: 'Gerenciamento de Usuários - Admin Auto URBAN'
 })

@@ -2,10 +2,8 @@ import vehiclesData from '~/server/data/vehicles.json'
 import brandsData from '~/server/data/brands.json'
 
 export default defineEventHandler(() => {
-	// Extract unique years from vehicles
 	const years = [...new Set(vehiclesData.map(v => v.year))].sort((a, b) => b - a)
 
-	// Extract unique colors from vehicles (usando cores fixas)
 	const commonColors = [
 		{ id: 'preto', name: 'Preto', hex: '#000000' },
 		{ id: 'branco', name: 'Branco', hex: '#FFFFFF' },
@@ -17,10 +15,8 @@ export default defineEventHandler(() => {
 		{ id: 'amarelo', name: 'Amarelo', hex: '#EAB308' }
 	]
 
-	// Extract unique UFs from vehicles
 	const ufs = [...new Set(vehiclesData.map(v => v.uf))].sort()
 
-	// Enhance brands with years and models from vehicles
 	const brands = brandsData.map(brand => {
 		const brandVehicles = vehiclesData.filter(v => v.brand === brand.name)
 		const brandYears = [...new Set(brandVehicles.map(v => v.year))].sort((a, b) => b - a)
@@ -34,7 +30,6 @@ export default defineEventHandler(() => {
 		}
 	})
 
-	// Extract models with their available years
 	const modelsMap = new Map()
 	vehiclesData.forEach(v => {
 		const key = `${v.brand}-${v.model}`

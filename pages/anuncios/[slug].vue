@@ -1,6 +1,5 @@
 <template>
 	<UiContainer class="py-6">
-		<!-- Breadcrumb -->
 		<nav class="mb-6">
 			<ol class="flex items-center space-x-2 text-sm">
 				<li>
@@ -21,7 +20,6 @@
 			</ol>
 		</nav>
 
-		<!-- Loading State -->
 		<div v-if="pending" class="space-y-6">
 			<div class="h-64 lg:h-96 bg-gray-200 animate-pulse rounded-lg" />
 			<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -33,7 +31,6 @@
 			</div>
 		</div>
 
-		<!-- Error State -->
 		<UiAlert
 			v-else-if="error"
 			variant="error"
@@ -45,9 +42,7 @@
 			</template>
 		</UiAlert>
 
-		<!-- Vehicle Content -->
 		<div v-else-if="vehicle" class="space-y-8">
-			<!-- Title and Price -->
 			<div class="space-y-3 lg:space-y-0 lg:flex lg:items-center lg:justify-between lg:gap-4">
 				<div class="flex-1">
 					<h1 class="text-xl lg:text-3xl font-bold text-gray-900 leading-tight">
@@ -69,16 +64,11 @@
 				</div>
 			</div>
 
-			<!-- Main Content -->
 			<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-				<!-- Left Column: Gallery + Mobile Sidebar + Specs + Price Chart -->
 				<div class="lg:col-span-2 space-y-8">
-					<!-- Image Gallery -->
 					<VehicleGallery :vehicle="vehicle" />
 
-					<!-- Mobile Sidebar (visible only on mobile/tablet) -->
 					<div class="lg:hidden space-y-4">
-						<!-- Contact Section -->
 						<div class="bg-white rounded-lg shadow-lg overflow-hidden">
 							<div class="p-4 bg-gradient-to-r from-blue-600 to-blue-700">
 								<div class="flex items-center justify-between text-white">
@@ -142,7 +132,6 @@
 									</div>
 								</div>
 
-								<!-- Action Buttons for Mobile -->
 								<div class="grid grid-cols-2 gap-2">
 									<a
 										:href="`https://wa.me/${vehicle.seller.whatsapp}?text=Olá! Tenho interesse no ${vehicle.title}%0A%0ALocalização: ${vehicle.city}/${vehicle.uf}%0APreço: ${formatCurrency(vehicle.price)}%0A%0APodemos conversar?`"
@@ -182,7 +171,6 @@
 							</div>
 						</div>
 
-						<!-- Financing Simulator for Mobile -->
 						<div class="bg-white rounded-lg shadow-lg overflow-hidden">
 							<div
 								class="p-4 cursor-pointer hover:bg-gray-50 transition-colors"
@@ -199,7 +187,6 @@
 									/>
 								</div>
 
-								<!-- Quick preview when collapsed -->
 								<div v-if="!financingExpanded" class="mt-2">
 									<div class="text-sm text-gray-600">Simule parcelas a partir de</div>
 									<div class="text-lg font-semibold text-blue-600">
@@ -213,7 +200,6 @@
 							</div>
 						</div>
 
-						<!-- Price Comparison for Mobile -->
 						<div
 							v-if="carData?.partners?.length > 0"
 							class="bg-white rounded-lg shadow-lg overflow-hidden"
@@ -289,10 +275,8 @@
 						</div>
 					</div>
 
-					<!-- Specifications -->
 					<VehicleSpecs :vehicle="vehicle" />
 
-					<!-- Price History Chart (moved down for mobile) -->
 					<div v-if="carData?.prices?.length > 0" class="bg-white rounded-lg shadow-lg p-6">
 						<h2 class="text-xl font-semibold text-gray-900 mb-4">Histórico de Preços</h2>
 						<div class="h-80">
@@ -330,14 +314,10 @@
 					</div>
 				</div>
 
-				<!-- Right Column: Contact + Price Comparison + Financing (Desktop Only) -->
 				<div class="hidden lg:block lg:col-span-1">
-					<!-- Sticky Container with smart positioning -->
 					<div class="sticky transition-all duration-300 z-30" :style="{ top: stickyTop + 'px' }">
 						<div class="space-y-4">
-							<!-- Compact Contact -->
 							<div class="bg-white rounded-lg shadow-lg overflow-hidden">
-								<!-- Always visible header -->
 								<div class="p-4 bg-gradient-to-r from-blue-600 to-blue-700">
 									<div class="flex items-center justify-between text-white">
 										<div class="flex items-center space-x-3">
@@ -365,9 +345,7 @@
 									</div>
 								</div>
 
-								<!-- Expandable content -->
 								<div v-show="contactExpanded" class="p-4 space-y-3">
-									<!-- Vehicle & Seller Information Cards -->
 									<div class="space-y-2">
 										<div class="flex items-center justify-between text-sm">
 											<div class="flex">
@@ -393,7 +371,6 @@
 											}}</span>
 										</div>
 
-										<!-- Listing Date -->
 										<div class="flex items-center justify-between text-sm">
 											<div class="flex items-center space-x-2">
 												<Icon name="heroicons:clock" class="w-4 h-4 text-gray-500" />
@@ -409,7 +386,6 @@
 										</div>
 									</div>
 
-									<!-- Action Buttons -->
 									<div class="grid grid-cols-6 gap-2">
 										<a
 											:href="`https://wa.me/${vehicle.seller.whatsapp}?text=Olá! Tenho interesse no ${vehicle.title}%0A%0ALocalização: ${vehicle.city}/${vehicle.uf}%0APreço: ${formatCurrency(vehicle.price)}%0A%0APodemos conversar?`"
@@ -446,7 +422,6 @@
 								</div>
 							</div>
 
-							<!-- Price Comparison -->
 							<div
 								v-if="carData?.partners?.length > 0"
 								class="bg-white rounded-lg shadow-lg overflow-hidden"
@@ -466,7 +441,6 @@
 										/>
 									</div>
 
-									<!-- Quick preview when collapsed -->
 									<div v-if="!priceExpanded" class="mt-2">
 										<div class="flex justify-between items-center text-sm">
 											<span class="text-gray-600">Este anúncio</span>
@@ -489,7 +463,6 @@
 									</div>
 								</div>
 
-								<!-- Expanded content -->
 								<div v-show="priceExpanded" class="px-4 pb-4">
 									<div class="space-y-3">
 										<div class="flex justify-between items-center text-sm border-b pb-2">
@@ -536,7 +509,6 @@
 								</div>
 							</div>
 
-							<!-- Financing Simulator -->
 							<div class="bg-white rounded-lg shadow-lg overflow-hidden">
 								<div
 									class="p-4 cursor-pointer hover:bg-gray-50 transition-colors"
@@ -553,7 +525,6 @@
 										/>
 									</div>
 
-									<!-- Quick preview when collapsed -->
 									<div v-if="!financingExpanded" class="mt-2">
 										<div class="text-sm text-gray-600">Simule o financiamento</div>
 										<div class="text-lg font-semibold text-blue-600">
@@ -565,7 +536,6 @@
 									</div>
 								</div>
 
-								<!-- Expanded content -->
 								<div v-show="financingExpanded" class="px-4 pb-4">
 									<SimpleFinancingSimulator class="w-full" :price="vehicle.price" />
 								</div>
@@ -575,7 +545,6 @@
 				</div>
 			</div>
 
-			<!-- Related Vehicles -->
 			<div v-if="relatedVehicles.length > 0" class="mt-12">
 				<h2 class="text-xl font-semibold text-gray-900 mb-6">Anúncios Similares</h2>
 
@@ -583,6 +552,7 @@
 					<VehicleCard
 						v-for="related in relatedVehicles"
 						:key="related.id"
+						:href="`/anuncios/${related.slug}`"
 						:title="related.title"
 						:brand="related.brand"
 						:model="related.model"
@@ -599,7 +569,6 @@
 			</div>
 		</div>
 
-		<!-- Not Found State -->
 		<div v-else-if="!pending && !vehicle" class="text-center py-12">
 			<Icon name="heroicons:exclamation-triangle" class="w-16 h-16 text-gray-400 mx-auto mb-4" />
 			<h2 class="text-xl font-semibold text-gray-900 mb-2">Veículo não encontrado</h2>
@@ -672,7 +641,7 @@ const formatPlate = (vehicleId: string) => {
 	const letter1 = letters[parseInt(nums[0]) % letters.length]
 	const letter2 = letters[parseInt(nums[1]) % letters.length]
 	const digit1 = nums[2]
-	const digit2 = nums[5] // Last visible digit
+	const digit2 = nums[5]
 
 	return `${letter1}${letter2}${digit1}****${digit2}`
 }
@@ -712,7 +681,7 @@ const formatSellerName = (sellerId: string) => {
 
 const getViewCount = (vehicleId: string) => {
 	const hash = vehicleId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
-	return (hash % 200) + 50 // Views between 50 and 249
+	return (hash % 200) + 50
 }
 
 const formatDate = (dateString: string) => {
@@ -758,9 +727,9 @@ const handleScroll = () => {
 	const headerHeight = 96
 
 	if (scrollY > 50) {
-		stickyTop.value = headerHeight + 8 // Header height + small margin when scrolled
+		stickyTop.value = headerHeight + 8
 	} else {
-		stickyTop.value = headerHeight + 16 // Header height + larger margin when at top
+		stickyTop.value = headerHeight + 16
 	}
 }
 
@@ -804,7 +773,6 @@ const priceDatasets = computed(() => {
 	]
 })
 
-// Price comparison logic
 const averageMarketPrice = computed(() => {
 	if (!carData.value?.partners?.length) return 0
 	const total = carData.value.partners.reduce((sum: number, partner: any) => sum + partner.value, 0)
@@ -819,14 +787,12 @@ const priceComparison = computed(() => {
 	const difference = vehiclePrice - marketAverage
 
 	if (difference < -2000) {
-		// R$ 2.000 below average
 		return {
 			isGoodDeal: true,
 			isExpensive: false,
 			message: `R$ ${Math.abs(difference).toLocaleString('pt-BR')} abaixo da média`
 		}
 	} else if (difference > 3000) {
-		// R$ 3.000 above average
 		return {
 			isGoodDeal: false,
 			isExpensive: true,
@@ -841,15 +807,14 @@ const priceComparison = computed(() => {
 	}
 })
 
-// Preview calculation for collapsed financing section
 const previewMonthlyPayment = computed(() => {
 	if (!vehicle.value) return formatCurrency(0)
 
 	const vehiclePrice = vehicle.value.price
-	const downPayment = vehiclePrice * 0.2 // 20%
+	const downPayment = vehiclePrice * 0.2
 	const financedAmount = vehiclePrice - downPayment
-	const months = 48 // Default 48 months
-	const interestRate = 0.015 // 1.5% per month
+	const months = 48
+	const interestRate = 0.015
 
 	const factor = Math.pow(1 + interestRate, months)
 	const payment = (financedAmount * interestRate * factor) / (factor - 1)
@@ -857,7 +822,6 @@ const previewMonthlyPayment = computed(() => {
 	return formatCurrency(Math.round(payment))
 })
 
-// Formatting methods
 const formatCurrency = (value: number) => {
 	return new Intl.NumberFormat('pt-BR', {
 		style: 'currency',
@@ -865,7 +829,6 @@ const formatCurrency = (value: number) => {
 	}).format(value)
 }
 
-// Meta tags
 useHead({
 	title: computed(() => (vehicle.value ? `${vehicle.value.title} - Auto URBAN` : 'Carregando...')),
 	meta: [

@@ -13,7 +13,6 @@ interface Props {
 
 const props = defineProps<Props>()
 
-// Computed
 const badgeConfig = computed(() => {
 	const configs = {
 		PENDING: {

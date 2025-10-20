@@ -1,6 +1,5 @@
 <template>
 	<div class="space-y-4">
-		<!-- Header with back button -->
 		<div class="flex items-center justify-between">
 			<div class="flex items-center gap-2">
 				<div class="w-6 h-6 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -23,7 +22,6 @@
 			</div>
 		</div>
 
-		<!-- Selected Brand-Model combinations -->
 		<div v-if="selectedBrandModels.length > 0" class="space-y-2">
 			<p class="text-xs text-gray-500 uppercase tracking-wide font-medium">Selecionados:</p>
 			<div class="flex flex-wrap gap-2">
@@ -47,7 +45,6 @@
 				</div>
 			</div>
 
-			<!-- Add Another Brand Button -->
 			<div class="mt-3">
 				<button
 					@click="addAnotherBrand"
@@ -59,7 +56,6 @@
 			</div>
 		</div>
 
-		<!-- Brand Selection State -->
 		<div
 			v-if="
 				currentState === 'brands' && (selectedBrandModels.length === 0 || showBrandsAfterSelection)
@@ -89,7 +85,6 @@
 			</div>
 		</div>
 
-		<!-- Model Selection State -->
 		<div v-else-if="currentState === 'models' && selectedBrand" class="space-y-3">
 			<div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
 				<div class="flex items-center gap-2">
@@ -127,7 +122,6 @@
 					"
 				>
 					<div class="flex items-center gap-3">
-						<!-- Checkbox -->
 						<div class="relative">
 							<input
 								type="checkbox"
@@ -154,7 +148,6 @@
 				</div>
 			</div>
 
-			<!-- Action Buttons -->
 			<div class="flex gap-2 pt-3 border-t">
 				<UiButton @click="backToBrands" variant="outline" size="sm" class="flex-1">
 					<Icon name="heroicons:arrow-left-20-solid" class="w-4 h-4 mr-1" />
@@ -213,14 +206,12 @@ interface Emits {
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
-// State
 const currentState = ref<'brands' | 'models' | 'hidden'>('brands')
 const selectedBrand = ref<Brand | null>(null)
 const selectedBrandModels = ref<BrandModelCombo[]>([])
 const showBrandsAfterSelection = ref(false)
 const selectedModelsForCurrentBrand = ref<string[]>([])
 
-// Computed
 const selectedBrandName = computed(() => selectedBrand.value?.name || '')
 
 const availableModels = computed(() => {
@@ -228,7 +219,6 @@ const availableModels = computed(() => {
 	return props.models.filter(model => model.brandId === selectedBrand.value!.id)
 })
 
-// Methods
 const selectBrand = (brand: Brand) => {
 	selectedBrand.value = brand
 	selectedModelsForCurrentBrand.value = []
@@ -251,7 +241,6 @@ const isModelSelected = (modelId: string): boolean => {
 const finishModelSelection = () => {
 	if (!selectedBrand.value || selectedModelsForCurrentBrand.value.length === 0) return
 
-	// Create combos for all selected models
 	const selectedModels = availableModels.value.filter(model =>
 		selectedModelsForCurrentBrand.value.includes(model.id)
 	)
@@ -269,7 +258,6 @@ const finishModelSelection = () => {
 
 	emit('update:selection', selectedBrandModels.value)
 
-	// Hide brands after selection
 	selectedBrand.value = null
 	selectedModelsForCurrentBrand.value = []
 	currentState.value = 'hidden'
@@ -277,7 +265,6 @@ const finishModelSelection = () => {
 }
 
 const selectModel = (model: Model) => {
-	// This method is kept for backward compatibility but now just toggles
 	toggleModel(model)
 }
 
@@ -304,7 +291,6 @@ const onImageError = (event: Event) => {
 	target.style.display = 'none'
 }
 
-// Watch for external clear
 defineExpose({
 	clearSelection: () => {
 		selectedBrandModels.value = []

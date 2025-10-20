@@ -1,9 +1,7 @@
 export default defineEventHandler(async event => {
 	try {
-		// Simulate API delay
 		await new Promise(resolve => setTimeout(resolve, 400))
 
-		// Mock users data
 		const mockUsers = [
 			{
 				id: 'usr001',

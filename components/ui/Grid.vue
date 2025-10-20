@@ -10,12 +10,12 @@ interface Props {
 	gap?: number | 'none'
 	rows?: number | 'none' | 'subgrid'
 	flow?: 'row' | 'col' | 'row-dense' | 'col-dense'
-	// Responsive columns
+
 	sm?: number
 	md?: number
 	lg?: number
 	xl?: number
-	// Responsive gaps
+
 	gapSm?: number
 	gapMd?: number
 	gapLg?: number
@@ -27,11 +27,9 @@ const props = withDefaults(defineProps<Props>(), {
 	gap: 4
 })
 
-// Computed classes
 const gridClasses = computed(() => {
 	const base = ['grid']
 
-	// Grid columns
 	if (props.cols === 'none') {
 		base.push('grid-cols-none')
 	} else if (props.cols === 'subgrid') {
@@ -40,13 +38,11 @@ const gridClasses = computed(() => {
 		base.push(`grid-cols-${props.cols}`)
 	}
 
-	// Responsive columns
 	if (props.sm) base.push(`sm:grid-cols-${props.sm}`)
 	if (props.md) base.push(`md:grid-cols-${props.md}`)
 	if (props.lg) base.push(`lg:grid-cols-${props.lg}`)
 	if (props.xl) base.push(`xl:grid-cols-${props.xl}`)
 
-	// Grid rows
 	if (props.rows === 'none') {
 		base.push('grid-rows-none')
 	} else if (props.rows === 'subgrid') {
@@ -55,7 +51,6 @@ const gridClasses = computed(() => {
 		base.push(`grid-rows-${props.rows}`)
 	}
 
-	// Grid flow
 	if (props.flow) {
 		const flows = {
 			row: 'grid-flow-row',
@@ -66,14 +61,12 @@ const gridClasses = computed(() => {
 		base.push(flows[props.flow])
 	}
 
-	// Gap
 	if (props.gap === 'none') {
 		base.push('gap-0')
 	} else if (typeof props.gap === 'number') {
 		base.push(`gap-${props.gap}`)
 	}
 
-	// Responsive gaps
 	if (props.gapSm) base.push(`sm:gap-${props.gapSm}`)
 	if (props.gapMd) base.push(`md:gap-${props.gapMd}`)
 	if (props.gapLg) base.push(`lg:gap-${props.gapLg}`)

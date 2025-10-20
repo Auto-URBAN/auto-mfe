@@ -1,6 +1,5 @@
 <template>
 	<div class="relative inline-block text-left" ref="dropdownRef">
-		<!-- Trigger -->
 		<div @click="toggle">
 			<slot name="trigger">
 				<Button
@@ -13,7 +12,6 @@
 			</slot>
 		</div>
 
-		<!-- Dropdown Panel -->
 		<Transition
 			enter-active-class="transition ease-out duration-100"
 			enter-from-class="transform opacity-0 scale-95"
@@ -55,11 +53,9 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-// State
 const isOpen = ref(false)
 const dropdownRef = ref<HTMLElement>()
 
-// Methods
 const toggle = () => {
 	if (props.disabled) return
 	isOpen.value = !isOpen.value
@@ -75,7 +71,6 @@ const close = () => {
 	emit('close')
 }
 
-// Computed classes
 const panelClasses = computed(() => {
 	const base = [
 		'absolute z-50 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'

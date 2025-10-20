@@ -10,7 +10,6 @@
 			</span>
 		</div>
 
-		<!-- Search Input -->
 		<div v-if="searchable" class="relative">
 			<UiInput
 				v-model="searchQuery"
@@ -21,7 +20,6 @@
 			/>
 		</div>
 
-		<!-- Selected Brands (Chips) -->
 		<div v-if="selectedBrands.length > 0" class="flex flex-wrap gap-2">
 			<div
 				v-for="brand in selectedBrands"
@@ -40,7 +38,6 @@
 			</div>
 		</div>
 
-		<!-- Brands Grid -->
 		<div class="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-64 overflow-y-auto">
 			<button
 				v-for="brand in filteredBrands"
@@ -57,7 +54,6 @@
 				]"
 				:disabled="brand.count === 0"
 			>
-				<!-- Selected Indicator -->
 				<div
 					v-if="isSelected(brand.id)"
 					class="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center shadow-md"
@@ -65,7 +61,6 @@
 					<Icon name="heroicons:check-20-solid" class="w-4 h-4 text-white" />
 				</div>
 
-				<!-- Brand Logo -->
 				<div class="flex flex-col items-center space-y-2">
 					<div
 						class="w-12 h-12 flex items-center justify-center bg-gray-50 rounded-lg group-hover:bg-white transition-colors"
@@ -90,14 +85,12 @@
 					</div>
 				</div>
 
-				<!-- Hover Effect -->
 				<div
 					class="absolute inset-0 rounded-lg bg-gradient-to-br from-green-400/10 to-blue-400/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
 				/>
 			</button>
 		</div>
 
-		<!-- No Results -->
 		<div v-if="searchQuery && filteredBrands.length === 0" class="text-center py-6">
 			<Icon name="heroicons:magnifying-glass-20-solid" class="w-8 h-8 text-gray-400 mx-auto mb-2" />
 			<p class="text-sm text-gray-500">Nenhuma marca encontrada</p>
@@ -127,10 +120,8 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-// Search functionality
 const searchQuery = ref('')
 
-// Computed properties
 const selectedBrands = computed(() =>
 	props.brands.filter(brand => props.modelValue.includes(brand.id))
 )
@@ -146,21 +137,17 @@ const filteredBrands = computed(() => {
 	}
 
 	return brands.sort((a, b) => {
-		// Selected brands first
 		const aSelected = props.modelValue.includes(a.id)
 		const bSelected = props.modelValue.includes(b.id)
 		if (aSelected && !bSelected) return -1
 		if (!aSelected && bSelected) return 1
 
-		// Then by count (desc)
 		if (a.count !== b.count) return b.count - a.count
 
-		// Then alphabetically
 		return a.name.localeCompare(b.name)
 	})
 })
 
-// Methods
 const isSelected = (brandId: string): boolean => {
 	return props.modelValue.includes(brandId)
 }
@@ -172,10 +159,8 @@ const toggleBrand = (brandId: string) => {
 	let newSelection = [...props.modelValue]
 
 	if (isSelected(brandId)) {
-		// Remove brand
 		newSelection = newSelection.filter(id => id !== brandId)
 	} else {
-		// Add brand (check max selection)
 		if (props.maxSelection && newSelection.length >= props.maxSelection) {
 			return
 		}
@@ -199,8 +184,7 @@ const removeBrand = (brandId: string) => {
 }
 
 const handleImageError = (event: Event) => {
-	// Fallback for missing images
 	const img = event.target as HTMLImageElement
-	img.src = '/imgs/Logo.svg' // Fallback to app logo
+	img.src = '/imgs/Logo.svg'
 }
 </script>

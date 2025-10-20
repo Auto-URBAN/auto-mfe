@@ -38,6 +38,16 @@
     "source.organizeImports": "never"
   },
 
+  // Run tasks on save
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": "\\.(vue|ts|js|mjs)$",
+        "cmd": "node scripts/strip-comments.js ${file}"
+      }
+    ]
+  },
+
   // Específico para Vue
   "[vue]": {
     "editor.formatOnSave": true,

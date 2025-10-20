@@ -2,7 +2,6 @@
 	<section
 		class="py-16 bg-gradient-to-br from-gray-900 via-gray-800 to-black relative overflow-hidden animate-fade-in-up"
 	>
-		<!-- Metallic Texture Background -->
 		<div
 			class="absolute inset-0 opacity-5"
 			style="
@@ -30,12 +29,10 @@
 			"
 		/>
 
-		<!-- Gradient Orbs -->
 		<div class="absolute top-0 left-1/4 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl" />
 		<div class="absolute bottom-0 right-1/4 w-64 h-64 bg-red-600/10 rounded-full blur-3xl" />
 
 		<UiContainer size="lg">
-			<!-- Divisor Superior -->
 			<div class="flex items-center justify-center mb-12">
 				<div
 					class="h-px flex-1 bg-gradient-to-r from-transparent via-gray-600 to-transparent max-w-xs"
@@ -46,7 +43,6 @@
 				/>
 			</div>
 
-			<!-- Header -->
 			<div class="text-center mb-12 relative z-10 px-4">
 				<div
 					class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-sm border border-blue-500/30 rounded-full text-sm font-bold text-blue-400 mb-4 shadow-lg"
@@ -69,9 +65,7 @@
 				</p>
 			</div>
 
-			<!-- Stats Grid com Animação de Gauge -->
 			<div class="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10 px-4">
-				<!-- Stat Card 1 - Valorização -->
 				<div
 					class="group bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-2xl border-2 border-gray-700 hover:border-green-500/50 transition-all duration-500 hover:shadow-xl hover:shadow-green-500/20 hover:scale-105"
 				>
@@ -80,7 +74,7 @@
 							class="relative p-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl shadow-lg group-hover:shadow-green-500/50 transition-shadow"
 						>
 							<Icon name="mdi:trending-up" class="w-6 h-6 text-white" />
-							<!-- Pulse Effect -->
+
 							<div class="absolute inset-0 bg-green-400 rounded-xl animate-ping opacity-20" />
 						</div>
 						<div>
@@ -98,7 +92,6 @@
 						<span class="text-white font-medium">O mercado sabe o que quer.</span>
 					</p>
 
-					<!-- Progress Bar -->
 					<div class="mt-4 h-2 bg-gray-700 rounded-full overflow-hidden">
 						<div
 							class="h-full bg-gradient-to-r from-green-500 to-green-400 rounded-full animate-progress-bar"
@@ -107,7 +100,6 @@
 					</div>
 				</div>
 
-				<!-- Stat Card 2 - Potência -->
 				<div
 					class="group bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-2xl border-2 border-gray-700 hover:border-blue-500/50 transition-all duration-500 hover:shadow-xl hover:shadow-blue-500/20 hover:scale-105"
 				>
@@ -132,7 +124,6 @@
 						<span class="text-white font-medium">Porque performance importa.</span>
 					</p>
 
-					<!-- Speedometer Effect -->
 					<div class="mt-4 flex items-center gap-2">
 						<div class="flex-1 h-2 bg-gray-700 rounded-full overflow-hidden">
 							<div
@@ -144,7 +135,6 @@
 					</div>
 				</div>
 
-				<!-- Stat Card 3 - Velocidade de Venda -->
 				<div
 					class="group bg-gradient-to-br from-gray-800 to-gray-900 p-6 rounded-2xl border-2 border-gray-700 hover:border-purple-500/50 transition-all duration-500 hover:shadow-xl hover:shadow-purple-500/20 hover:scale-105"
 				>
@@ -169,7 +159,6 @@
 						<span class="text-white font-medium">A qualidade vende sozinha.</span>
 					</p>
 
-					<!-- Timer Effect -->
 					<div class="mt-4 flex items-center gap-2">
 						<Icon name="mdi:timer-sand" class="w-4 h-4 text-purple-400 animate-spin-slow" />
 						<div class="flex-1 h-2 bg-gray-700 rounded-full overflow-hidden">
@@ -182,13 +171,11 @@
 				</div>
 			</div>
 
-			<!-- CTA com Brilho -->
 			<div class="mt-12 text-center relative z-10 px-4">
 				<NuxtLink
 					to="/carros"
 					class="group relative inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-500 hover:to-blue-600 transition-all duration-300 font-bold text-base shadow-xl hover:shadow-blue-500/50 hover:scale-105 overflow-hidden"
 				>
-					<!-- Animated Shine -->
 					<div
 						class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"
 					/>
@@ -201,7 +188,6 @@
 				</NuxtLink>
 			</div>
 
-			<!-- Divisor Inferior -->
 			<div class="flex items-center justify-center mt-12">
 				<div
 					class="h-px flex-1 bg-gradient-to-r from-transparent via-gray-600 to-transparent max-w-xs"

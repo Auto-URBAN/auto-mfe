@@ -1,9 +1,5 @@
 import { z } from 'zod'
 
-/**
- * Ranking schemas for vehicle valuation tracking
- */
-
 export const RankingItemSchema = z.object({
 	id: z.string().min(1),
 	modelo: z.string().min(1),

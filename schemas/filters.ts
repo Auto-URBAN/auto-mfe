@@ -1,16 +1,14 @@
 import { z } from 'zod'
 
-// Schema para marca com dados relacionais
 export const BrandSchema = z.object({
 	id: z.string(),
 	name: z.string(),
-	logo: z.string(), // webp files
+	logo: z.string(),
 	models: z.array(z.string()),
 	years: z.array(z.number()),
 	count: z.number()
 })
 
-// Schema para cor com hex e contador
 export const ColorSchema = z.object({
 	id: z.string(),
 	name: z.string(),
@@ -18,7 +16,6 @@ export const ColorSchema = z.object({
 	count: z.number()
 })
 
-// Schema para modelo com anos disponíveis
 export const ModelSchema = z.object({
 	id: z.string(),
 	name: z.string(),
@@ -27,7 +24,6 @@ export const ModelSchema = z.object({
 	count: z.number()
 })
 
-// Schema para estado
 export const StateSchema = z.object({
 	id: z.string(),
 	name: z.string(),
@@ -35,13 +31,11 @@ export const StateSchema = z.object({
 	count: z.number()
 })
 
-// Schema para faixa de preço/km
 export const RangeSchema = z.object({
 	min: z.number().optional(),
 	max: z.number().optional()
 })
 
-// Schema principal dos filtros V2
 export const FiltersV2Schema = z.object({
 	brands: z.array(z.string()).default([]),
 	models: z.array(z.string()).default([]),
@@ -53,7 +47,6 @@ export const FiltersV2Schema = z.object({
 	sort: z.string().default('recent')
 })
 
-// Schema da resposta da API de filtros
 export const FiltersOptionsV2Schema = z.object({
 	brands: z.array(BrandSchema),
 	models: z.array(ModelSchema),
@@ -84,7 +77,6 @@ export const FiltersOptionsV2Schema = z.object({
 	)
 })
 
-// Tipos TypeScript inferidos
 export type Brand = z.infer<typeof BrandSchema>
 export type Color = z.infer<typeof ColorSchema>
 export type Model = z.infer<typeof ModelSchema>

@@ -1,6 +1,5 @@
 <template>
 	<div class="bg-white border-b sticky top-0 z-20">
-		<!-- Mobile filter button -->
 		<div class="md:hidden p-4">
 			<UiButton
 				@click="showMobileFilters = true"
@@ -16,10 +15,8 @@
 			</UiButton>
 		</div>
 
-		<!-- Desktop filters -->
 		<div class="hidden md:block p-4">
 			<div class="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4">
-				<!-- Brand filter -->
 				<USelectMenu
 					v-model="filters.make"
 					:options="brandOptions"
@@ -28,7 +25,6 @@
 					@change="handleFilterChange"
 				/>
 
-				<!-- State filter -->
 				<USelectMenu
 					v-model="filters.uf"
 					:options="stateOptions"
@@ -37,7 +33,6 @@
 					@change="handleFilterChange"
 				/>
 
-				<!-- Price range -->
 				<UiInput
 					v-model="filters.priceMin"
 					placeholder="Preço mín"
@@ -54,7 +49,6 @@
 					@input="handleFilterChange"
 				/>
 
-				<!-- Year range -->
 				<UiInput
 					v-model="filters.yearMin"
 					placeholder="Ano mín"
@@ -73,7 +67,6 @@
 			</div>
 		</div>
 
-		<!-- Active filters chips -->
 		<div v-if="activeFiltersCount > 0" class="px-4 pb-4">
 			<div class="flex flex-wrap gap-2">
 				<UBadge
@@ -100,7 +93,6 @@
 			</div>
 		</div>
 
-		<!-- Mobile filter drawer -->
 		<USlideover v-model="showMobileFilters" side="bottom">
 			<div class="p-4">
 				<div class="flex justify-between items-center mb-4">
@@ -111,7 +103,6 @@
 				</div>
 
 				<div class="space-y-4">
-					<!-- Mobile filter controls (same as desktop but vertical) -->
 					<div>
 						<label class="block text-sm font-medium mb-2">Marca</label>
 						<USelectMenu
@@ -180,7 +171,6 @@ const emit = defineEmits<Emits>()
 
 const showMobileFilters = ref(false)
 
-// Filter state
 const filters = ref<SearchFilters>({
 	q: '',
 	make: undefined,
@@ -192,7 +182,6 @@ const filters = ref<SearchFilters>({
 	kmMax: undefined
 })
 
-// Filter options
 const brandOptions = [
 	'Toyota',
 	'Honda',
@@ -236,7 +225,6 @@ const stateOptions = [
 	'TO'
 ]
 
-// Computed
 const activeFiltersCount = computed(() => {
 	return Object.values(filters.value).filter(
 		value => value !== '' && value !== undefined && value !== null
@@ -279,7 +267,6 @@ const activeFilterChips = computed(() => {
 	return chips
 })
 
-// Methods
 function handleFilterChange() {
 	emit('filterChange', { ...filters.value })
 }
@@ -312,7 +299,6 @@ function applyFilters() {
 	handleFilterChange()
 }
 
-// Helper
 function formatCurrency(value: number): string {
 	return new Intl.NumberFormat('pt-BR', {
 		style: 'currency',

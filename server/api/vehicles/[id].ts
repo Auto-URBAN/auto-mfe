@@ -9,10 +9,8 @@ export default defineEventHandler(async event => {
 			})
 		}
 
-		// Simulate API delay
 		await new Promise(resolve => setTimeout(resolve, 600))
 
-		// Mock vehicle details - in a real app this would come from database
 		const mockVehicle = {
 			id: vehicleId,
 			title: 'Honda Civic Type R 2021',
@@ -68,7 +66,6 @@ Carro impecável, sem sinistro, pronto para rodar. Aceito financiamento e consó
 			}
 		}
 
-		// Validate vehicle exists (in a real app)
 		if (vehicleId === 'invalid') {
 			throw createError({
 				statusCode: 404,

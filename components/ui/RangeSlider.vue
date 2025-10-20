@@ -7,15 +7,12 @@
 			<label class="text-sm font-medium text-gray-800">{{ label }}</label>
 		</div>
 
-		<!-- Range Slider -->
 		<div class="px-2">
 			<div class="relative py-4">
-				<!-- Range Track -->
 				<div class="h-2 bg-gray-200 rounded-full relative">
 					<div class="h-2 rounded-full absolute" :class="gradientClass" :style="rangeStyle"></div>
 				</div>
 
-				<!-- Hidden Range Inputs -->
 				<input
 					v-model.number="currentMin"
 					@input="updateRange"
@@ -36,7 +33,6 @@
 					class="absolute top-0 w-full h-10 opacity-0 cursor-pointer z-20"
 				/>
 
-				<!-- Custom Thumbs -->
 				<div
 					class="absolute w-4 h-4 border-2 border-white rounded-full shadow-lg cursor-pointer z-30 transform -translate-x-1/2 -translate-y-1"
 					:class="thumbMinClass"
@@ -51,7 +47,6 @@
 				></div>
 			</div>
 
-			<!-- Range Labels -->
 			<div class="flex justify-between mt-1 text-xs text-gray-500">
 				<input
 					type="text"
@@ -92,15 +87,12 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-// Local state
 const currentMin = ref(props.modelValue?.min || props.config.min)
 const currentMax = ref(props.modelValue?.max || props.config.max)
 
-// Drag state
 const isDragging = ref(false)
 const dragType = ref<'min' | 'max' | null>(null)
 
-// Computed properties for styling based on variant
 const iconBgClass = computed(() => {
 	return props.variant === 'price' ? 'bg-red-100' : 'bg-indigo-100'
 })
@@ -127,7 +119,6 @@ const thumbMaxClass = computed(() => {
 	return props.variant === 'price' ? 'bg-red-600' : 'bg-indigo-600'
 })
 
-// Computed properties for slider functionality
 const rangeStyle = computed(() => {
 	const min = Math.max(currentMin.value || props.config.min, props.config.min)
 	const max = Math.min(currentMax.value || props.config.max, props.config.max)
@@ -153,7 +144,6 @@ const maxThumbPosition = computed(() => {
 	return `${percent}%`
 })
 
-// Methods
 const formatDisplayValue = (value: number): string => {
 	if (!value && value !== 0) return '0'
 
@@ -173,7 +163,6 @@ const formatDisplayValue = (value: number): string => {
 }
 
 const updateRange = () => {
-	// Ensure min is not greater than max
 	if (currentMin.value && currentMax.value && currentMin.value > currentMax.value) {
 		if (dragType.value === 'min') {
 			currentMax.value = currentMin.value
@@ -230,7 +219,6 @@ const reset = () => {
 	updateRange()
 }
 
-// Watch for external changes
 watch(
 	() => props.modelValue,
 	newValue => {
@@ -242,7 +230,6 @@ watch(
 	{ deep: true, immediate: true }
 )
 
-// Expose reset method
 defineExpose({
 	reset
 })

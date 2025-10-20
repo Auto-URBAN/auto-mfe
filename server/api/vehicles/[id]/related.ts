@@ -9,10 +9,8 @@ export default defineEventHandler(async event => {
 			})
 		}
 
-		// Simulate API delay
 		await new Promise(resolve => setTimeout(resolve, 400))
 
-		// Mock related vehicles - in a real app this would be based on brand, model, price range, location, etc.
 		const mockRelatedVehicles = [
 			{
 				id: 'rel_001',
@@ -61,7 +59,6 @@ export default defineEventHandler(async event => {
 			}
 		]
 
-		// Filter out the current vehicle if it appears in related
 		const relatedVehicles = mockRelatedVehicles.filter(vehicle => vehicle.id !== vehicleId)
 
 		return relatedVehicles

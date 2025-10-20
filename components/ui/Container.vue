@@ -17,16 +17,13 @@ const props = withDefaults(defineProps<Props>(), {
 	center: true
 })
 
-// Computed classes
 const containerClasses = computed(() => {
 	const base = ['w-full']
 
-	// Center content
 	if (props.center) {
 		base.push('mx-auto')
 	}
 
-	// Size variants
 	const sizes = {
 		sm: 'max-w-3xl',
 		md: 'max-w-5xl',
@@ -35,7 +32,6 @@ const containerClasses = computed(() => {
 		full: 'max-w-none'
 	}
 
-	// Padding variants
 	const paddings = {
 		none: '',
 		sm: 'px-4',

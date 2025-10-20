@@ -10,7 +10,6 @@
 				@keyup.enter="handleSearch"
 			/>
 
-			<!-- Clear button -->
 			<button
 				v-if="searchQuery"
 				@click="clearSearch"
@@ -20,7 +19,6 @@
 			</button>
 		</div>
 
-		<!-- Search suggestions (optional future feature) -->
 		<div
 			v-if="showSuggestions && suggestions.length > 0"
 			class="absolute top-full left-0 right-0 bg-white border rounded-lg shadow-lg mt-1 z-10"
@@ -73,7 +71,6 @@ function selectSuggestion(suggestion: string) {
 	handleSearch()
 }
 
-// Watch for external search query changes
 watch(searchQuery, newQuery => {
 	if (!newQuery.trim()) {
 		emit('clear')

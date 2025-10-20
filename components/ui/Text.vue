@@ -24,11 +24,9 @@ const props = withDefaults(defineProps<Props>(), {
 	align: 'left'
 })
 
-// Computed classes
 const textClasses = computed(() => {
 	const base = ['font-sans']
 
-	// Size variants
 	const sizes = {
 		xs: 'text-xs',
 		sm: 'text-sm',
@@ -40,7 +38,6 @@ const textClasses = computed(() => {
 		'4xl': 'text-4xl'
 	}
 
-	// Weight variants
 	const weights = {
 		light: 'font-light',
 		normal: 'font-normal',
@@ -49,7 +46,6 @@ const textClasses = computed(() => {
 		bold: 'font-bold'
 	}
 
-	// Color variants
 	const variants = {
 		default: 'text-gray-900',
 		primary: 'text-primary-600',
@@ -60,7 +56,6 @@ const textClasses = computed(() => {
 		danger: 'text-danger-600'
 	}
 
-	// Text alignment
 	const alignments = {
 		left: 'text-left',
 		center: 'text-center',
@@ -68,7 +63,6 @@ const textClasses = computed(() => {
 		justify: 'text-justify'
 	}
 
-	// Additional modifiers
 	const modifiers = []
 	if (props.truncate) modifiers.push('truncate')
 	if (props.uppercase) modifiers.push('uppercase')

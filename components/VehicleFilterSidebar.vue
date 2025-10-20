@@ -1,6 +1,5 @@
 <template>
 	<div class="bg-white rounded-lg border border-gray-200 shadow-lg overflow-hidden">
-		<!-- Header -->
 		<div class="p-2 bg-gradient-to-r from-blue-600 to-purple-600">
 			<div class="flex items-center justify-between">
 				<div class="flex items-center space-x-2">
@@ -22,7 +21,6 @@
 			</div>
 		</div>
 
-		<!-- Loading State -->
 		<div v-if="loading" class="p-6">
 			<div class="space-y-4">
 				<div v-for="i in 6" :key="i" class="animate-pulse">
@@ -32,7 +30,6 @@
 			</div>
 		</div>
 
-		<!-- Error State -->
 		<div v-else-if="error" class="p-6">
 			<UiAlert variant="error" :title="error">
 				<UiButton variant="outline" size="sm" @click="loadFilterOptions">
@@ -41,9 +38,7 @@
 			</UiAlert>
 		</div>
 
-		<!-- Filters Content -->
 		<div v-else-if="filterOptions" class="p-4 space-y-6">
-			<!-- Category Filter (only for models mode) -->
 			<div v-if="props.mode === 'models'" class="space-y-3">
 				<div class="flex items-center gap-2">
 					<div class="w-6 h-6 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -69,7 +64,6 @@
 				</div>
 			</div>
 
-			<!-- Brand/Model Flow -->
 			<BrandModelFlow
 				ref="brandModelFlow"
 				:brands="filterOptions.brands"
@@ -77,7 +71,6 @@
 				@update:selection="updateBrandModelSelection"
 			/>
 
-			<!-- Years -->
 			<div v-if="availableYears.length > 0" class="space-y-3">
 				<div class="flex items-center gap-2">
 					<div class="w-6 h-6 bg-orange-100 rounded-lg flex items-center justify-center">
@@ -103,7 +96,6 @@
 				</div>
 			</div>
 
-			<!-- Colors -->
 			<div v-if="props.mode === 'ads'" class="space-y-3">
 				<div class="flex items-center gap-2">
 					<div class="w-6 h-6 bg-pink-100 rounded-lg flex items-center justify-center">
@@ -133,7 +125,6 @@
 				</div>
 			</div>
 
-			<!-- Price Range -->
 			<UiRangeSlider
 				ref="priceSlider"
 				v-model="filters.priceRange"
@@ -145,7 +136,6 @@
 				@update:model-value="updatePriceRange"
 			/>
 
-			<!-- KM Range -->
 			<UiRangeSlider
 				v-if="props.mode === 'ads'"
 				ref="kmSlider"
@@ -166,7 +156,7 @@ import type { FiltersOptionsV2 } from '~/schemas/filters'
 
 interface Props {
 	loading?: boolean
-	mode?: 'models' | 'ads' // models = página de modelos, ads = página de anúncios
+	mode?: 'models' | 'ads'
 }
 
 interface Emits {
@@ -181,7 +171,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-// Estado local
 const filters = ref({
 	category: 'todos',
 	brandModelCombos: [] as any[],
@@ -192,7 +181,6 @@ const filters = ref({
 	sort: 'recent'
 })
 
-// Categories for models mode
 const categories = [
 	{ id: 'todos', label: 'Todos' },
 	{ id: 'esportivos', label: 'Esportivos' },
@@ -202,7 +190,6 @@ const categories = [
 	{ id: 'eletricos', label: 'Elétricos' }
 ]
 
-// Slider configurations
 const priceSliderConfig = {
 	min: 0,
 	max: 500000,
@@ -222,7 +209,6 @@ const brandModelFlow = ref()
 const priceSlider = ref()
 const kmSlider = ref()
 
-// Computed properties
 const hasActiveFilters = computed(() => {
 	return (
 		filters.value.category !== 'todos' ||
@@ -242,7 +228,6 @@ const availableYears = computed(() => {
 	if (filters.value.brandModelCombos.length === 0) {
 		filterOptions.value.years.forEach(year => years.add(year))
 	} else {
-		// Filter years based on selected brand/model combos
 		const selectedBrandIds = filters.value.brandModelCombos.map(combo => combo.brandId)
 		const selectedModelIds = filters.value.brandModelCombos.map(combo => combo.modelId)
 
@@ -264,7 +249,6 @@ const availableYears = computed(() => {
 	return Array.from(years).sort((a, b) => b - a)
 })
 
-// Methods
 const loadFilterOptions = async () => {
 	loading.value = true
 	error.value = null
@@ -331,7 +315,6 @@ const clearAllFilters = () => {
 		sort: 'recent'
 	}
 
-	// Reset sliders
 	priceSlider.value?.reset()
 	kmSlider.value?.reset()
 
@@ -340,14 +323,12 @@ const clearAllFilters = () => {
 }
 
 const emitFilters = () => {
-	// Converter para formato compatível com a API existente
 	const queryParams: any = {
 		sort: filters.value.sort,
 		category: filters.value.category
 	}
 
 	if (filters.value.brandModelCombos.length > 0) {
-		// Por enquanto, usar apenas o primeiro combo
 		const firstCombo = filters.value.brandModelCombos[0]
 		queryParams.make = firstCombo.brandId
 		queryParams.model = firstCombo.modelId
@@ -384,7 +365,6 @@ const emitFilters = () => {
 	emit('update:filters', queryParams)
 }
 
-// Load filter options on mount
 onMounted(() => {
 	loadFilterOptions()
 })

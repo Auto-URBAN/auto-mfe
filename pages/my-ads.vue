@@ -4,7 +4,6 @@
 			<div class="bg-white rounded-lg shadow-sm p-8">
 				<h1 class="text-2xl font-bold text-gray-900 mb-6">Meus Anúncios</h1>
 
-				<!-- Empty State -->
 				<div class="text-center py-12">
 					<Icon name="heroicons:document-text" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
 					<h3 class="text-lg font-medium text-gray-900 mb-2">Nenhum anúncio encontrado</h3>
@@ -20,12 +19,10 @@
 </template>
 
 <script setup lang="ts">
-// Middleware de autenticação
 definePageMeta({
 	middleware: 'auth'
 })
 
-// Meta
 useHead({
 	title: 'Meus Anúncios - Auto URBAN'
 })

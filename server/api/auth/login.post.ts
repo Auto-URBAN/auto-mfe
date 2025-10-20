@@ -10,13 +10,7 @@ export default defineEventHandler(async event => {
 			})
 		}
 
-		// Simulate API delay
 		await new Promise(resolve => setTimeout(resolve, 1000))
-
-		// In a real app, this would:
-		// 1. Check if user exists
-		// 2. Send OTP via SMS/WhatsApp
-		// 3. Store OTP in database with expiration
 
 		console.log(`Mock OTP sent to ${phone}: 123456`)
 

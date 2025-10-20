@@ -28,14 +28,12 @@ const props = withDefaults(defineProps<Props>(), {
 	rounded: false
 })
 
-// Computed classes
 const badgeClasses = computed(() => {
 	const base = [
 		'inline-flex items-center font-medium transition-colors',
 		props.rounded ? 'rounded-full' : 'rounded-md'
 	]
 
-	// Size variants
 	const sizes = {
 		xs: 'px-2 py-0.5 text-xs',
 		sm: 'px-2.5 py-0.5 text-xs',
@@ -43,7 +41,6 @@ const badgeClasses = computed(() => {
 		lg: 'px-3.5 py-1.5 text-sm'
 	}
 
-	// Color and variant combinations
 	const colorVariants = {
 		gray: {
 			solid: 'bg-gray-600 text-white',
@@ -94,7 +91,6 @@ const badgeClasses = computed(() => {
 </script>
 
 <style scoped>
-/* Dot variant pseudo-element */
 .relative.pl-4::before {
 	content: '';
 	position: absolute;

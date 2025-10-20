@@ -19,7 +19,7 @@ export default function calculateInstallments({
 		}
 	}
 
-	const i = taxMonth / 100 // <-- Corrigido aqui
+	const i = taxMonth / 100
 	const n = qtdMonths
 	const PV = financedValue
 

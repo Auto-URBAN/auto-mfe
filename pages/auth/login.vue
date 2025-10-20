@@ -1,17 +1,14 @@
 <template>
 	<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
 		<div class="max-w-md w-full space-y-8">
-			<!-- Header -->
 			<div class="text-center">
 				<NuxtImg src="/imgs/Logo.svg" alt="Auto URBAN" class="mx-auto h-12 w-auto" />
 				<h2 class="mt-6 text-3xl font-bold text-gray-900">Entre na sua conta</h2>
 				<p class="mt-2 text-sm text-gray-600">Digite seu telefone para continuar</p>
 			</div>
 
-			<!-- Login Form -->
 			<UiCard>
 				<form @submit.prevent="handleLogin" class="space-y-6">
-					<!-- Phone Input -->
 					<div class="space-y-2">
 						<label class="block text-sm font-medium text-gray-700">Telefone</label>
 						<UiInput
@@ -25,7 +22,6 @@
 						/>
 					</div>
 
-					<!-- Terms -->
 					<div class="flex items-start">
 						<div class="flex items-center h-5">
 							<input
@@ -49,7 +45,6 @@
 						</div>
 					</div>
 
-					<!-- Submit Button -->
 					<UiButton
 						type="submit"
 						size="lg"
@@ -60,7 +55,6 @@
 						{{ loading ? 'Enviando código...' : 'Continuar' }}
 					</UiButton>
 
-					<!-- Or Divider -->
 					<div class="relative">
 						<div class="absolute inset-0 flex items-center">
 							<div class="w-full border-t border-gray-300" />
@@ -70,7 +64,6 @@
 						</div>
 					</div>
 
-					<!-- Register Link -->
 					<div class="text-center">
 						<NuxtLink to="/auth/register" class="text-sm text-blue-600 hover:text-blue-500">
 							Primeira vez aqui? Criar conta
@@ -79,7 +72,6 @@
 				</form>
 			</UiCard>
 
-			<!-- Back to Home -->
 			<div class="text-center">
 				<NuxtLink to="/" class="text-sm text-gray-500 hover:text-gray-700">
 					← Voltar para o início
@@ -97,18 +89,15 @@ definePageMeta({
 const router = useRouter()
 const route = useRoute()
 
-// Reactive data
 const phone = ref('')
 const acceptTerms = ref(false)
 const loading = ref(false)
 
-// Computed
 const isFormValid = computed(() => {
 	const cleanPhone = phone.value.replace(/\D/g, '')
 	return cleanPhone.length >= 10 && acceptTerms.value
 })
 
-// Methods
 const formatPhone = (event: Event) => {
 	const input = event.target as HTMLInputElement
 	let value = input.value.replace(/\D/g, '')
@@ -139,7 +128,6 @@ const handleLogin = async () => {
 		if (response.otpSent) {
 			console.log('Código enviado com sucesso!')
 
-			// Navigate to OTP verification with phone in query
 			await router.push({
 				path: '/auth/verify',
 				query: {
@@ -156,7 +144,6 @@ const handleLogin = async () => {
 	}
 }
 
-// Meta
 useHead({
 	title: 'Login - Auto URBAN'
 })

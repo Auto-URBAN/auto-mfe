@@ -13,10 +13,8 @@
 				class="fixed inset-0 z-50 overflow-y-auto"
 				@click="handleBackdropClick"
 			>
-				<!-- Backdrop -->
 				<div class="fixed inset-0 bg-black bg-opacity-50" />
 
-				<!-- Modal Container -->
 				<div class="flex min-h-screen items-center justify-center p-4">
 					<Transition
 						enter-active-class="transition ease-out duration-300"
@@ -27,7 +25,6 @@
 						leave-to-class="opacity-0 scale-95"
 					>
 						<div v-if="modelValue" :class="modalClasses" @click.stop>
-							<!-- Header -->
 							<div
 								v-if="$slots.header || title"
 								class="flex items-center justify-between p-6 border-b border-gray-200"
@@ -48,12 +45,10 @@
 								</button>
 							</div>
 
-							<!-- Content -->
 							<div :class="contentClasses">
 								<slot />
 							</div>
 
-							<!-- Footer -->
 							<div
 								v-if="$slots.footer"
 								class="flex items-center justify-end space-x-3 px-6 py-4 border-t border-gray-200 bg-gray-50"
@@ -90,7 +85,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-// Methods
 const close = () => {
 	emit('update:modelValue', false)
 	emit('close')
@@ -102,7 +96,6 @@ const handleBackdropClick = () => {
 	}
 }
 
-// Computed classes
 const modalClasses = computed(() => {
 	const base = [
 		'relative bg-white rounded-lg shadow-xl transition-all',
@@ -110,7 +103,6 @@ const modalClasses = computed(() => {
 		'flex flex-col'
 	]
 
-	// Size variants
 	const sizes = {
 		xs: 'max-w-xs',
 		sm: 'max-w-sm',
@@ -127,7 +119,6 @@ const contentClasses = computed(() => {
 	return 'flex-1 overflow-y-auto p-6'
 })
 
-// Body scroll lock
 watch(
 	() => props.modelValue,
 	isOpen => {
@@ -141,7 +132,6 @@ watch(
 	}
 )
 
-// Cleanup on unmount
 onUnmounted(() => {
 	if (process.client) {
 		document.body.style.overflow = ''

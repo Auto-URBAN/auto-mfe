@@ -1,7 +1,3 @@
-/**
- * Composable for vehicle search with SWR cache using IndexedDB
- */
-
 import { openDB, type IDBPDatabase } from 'idb'
 import type { SearchFilters, VehicleSummary } from '~/stores/vehicles'
 
@@ -24,7 +20,7 @@ interface SearchResult {
 const DB_NAME = 'auto-urban-cache'
 const DB_VERSION = 1
 const SEARCH_STORE = 'searches'
-const CACHE_DURATION = 3600000 // 1 hour in milliseconds
+const CACHE_DURATION = 3600000
 
 let db: IDBPDatabase | null = null
 
@@ -64,7 +60,7 @@ async function getCachedSearch(key: string): Promise<SearchResult | null> {
 		if (cached && Date.now() - cached.data.timestamp < CACHE_DURATION) {
 			return {
 				items: cached.data.items,
-				page: 1, // Will be overridden by actual request
+				page: 1,
 				pageSize: 20,
 				total: cached.data.total
 			}
@@ -128,11 +124,9 @@ export const useSearch = () => {
 		const page = loadMore ? vehiclesStore.pagination.page + 1 : 1
 		const cacheKey = getCacheKey(filters, page)
 
-		// Try cache first (only for fresh searches, not load more)
 		if (!loadMore) {
 			const cached = await getCachedSearch(cacheKey)
 			if (cached) {
-				// Use cached data but still make background request to update
 				vehiclesStore.vehicles = cached.items
 				vehiclesStore.searchFilters = filters
 				vehiclesStore.pagination = {
@@ -142,14 +136,12 @@ export const useSearch = () => {
 					hasMore: cached.items.length === 20
 				}
 
-				// Background update
 				searchFromAPI(filters, page, cacheKey).catch(console.error)
 
 				return cached
 			}
 		}
 
-		// No cache or load more - fetch from API
 		return searchFromAPI(filters, page, cacheKey)
 	}
 
@@ -167,7 +159,6 @@ export const useSearch = () => {
 				}
 			})
 
-			// Cache the result (only for page 1)
 			if (page === 1) {
 				await setCachedSearch(cacheKey, response)
 			}
@@ -192,7 +183,6 @@ export const useSearch = () => {
 		}
 	}
 
-	// Initialize and setup cleanup
 	onMounted(() => {
 		clearExpiredCache()
 	})

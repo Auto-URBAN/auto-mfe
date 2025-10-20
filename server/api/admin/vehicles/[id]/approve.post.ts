@@ -9,10 +9,8 @@ export default defineEventHandler(async event => {
 			})
 		}
 
-		// Simulate API delay
 		await new Promise(resolve => setTimeout(resolve, 500))
 
-		// In a real app, this would update the database
 		console.log(`Approving vehicle ${vehicleId}`)
 
 		return {

@@ -15,18 +15,15 @@ const props = withDefaults(defineProps<Props>(), {
 	animation: 'pulse'
 })
 
-// Computed classes
 const skeletonClasses = computed(() => {
 	const base = ['bg-gray-200']
 
-	// Animation variants
 	const animations = {
 		pulse: 'animate-pulse',
-		wave: 'animate-pulse', // Could implement wave animation later
+		wave: 'animate-pulse',
 		none: ''
 	}
 
-	// Shape variants
 	const variants = {
 		rectangular: 'rounded-md',
 		circular: 'rounded-full',
@@ -35,7 +32,6 @@ const skeletonClasses = computed(() => {
 
 	const styles = []
 
-	// Width and height styles
 	if (props.width) {
 		styles.push(`width: ${props.width}`)
 	}
@@ -49,7 +45,6 @@ const skeletonClasses = computed(() => {
 </script>
 
 <style scoped>
-/* Custom wave animation if needed later */
 @keyframes wave {
 	0% {
 		transform: translateX(-100%);

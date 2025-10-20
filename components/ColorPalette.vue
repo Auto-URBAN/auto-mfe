@@ -10,7 +10,6 @@
 			</span>
 		</div>
 
-		<!-- Selected Colors (Chips) -->
 		<div v-if="selectedColors.length > 0" class="flex flex-wrap gap-2">
 			<div
 				v-for="color in selectedColors"
@@ -32,7 +31,6 @@
 			</div>
 		</div>
 
-		<!-- Colors Palette -->
 		<div class="grid grid-cols-5 sm:grid-cols-6 gap-3">
 			<button
 				v-for="color in sortedColors"
@@ -50,19 +48,16 @@
 				:disabled="color.count === 0"
 				:title="`${color.name} (${color.count} veículos)`"
 			>
-				<!-- Selected Indicator -->
 				<div v-if="isSelected(color.id)" class="absolute inset-0 flex items-center justify-center">
 					<div class="w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-md">
 						<Icon name="heroicons:check-20-solid" class="w-4 h-4 text-gray-800" />
 					</div>
 				</div>
 
-				<!-- Hover Overlay -->
 				<div
 					class="absolute inset-0 rounded-full bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity"
 				/>
 
-				<!-- Special handling for white color -->
 				<div
 					v-if="color.hex === '#ffffff'"
 					class="absolute inset-1 rounded-full border border-gray-200"
@@ -70,7 +65,6 @@
 			</button>
 		</div>
 
-		<!-- Color Details -->
 		<div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
 			<div
 				v-for="color in visibleColors"
@@ -110,7 +104,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-// Computed properties
 const selectedColors = computed(() =>
 	props.colors.filter(color => props.modelValue.includes(color.id))
 )
@@ -119,16 +112,13 @@ const selectedCount = computed(() => props.modelValue.length)
 
 const sortedColors = computed(() => {
 	return [...props.colors].sort((a, b) => {
-		// Selected colors first
 		const aSelected = props.modelValue.includes(a.id)
 		const bSelected = props.modelValue.includes(b.id)
 		if (aSelected && !bSelected) return -1
 		if (!aSelected && bSelected) return 1
 
-		// Then by count (desc)
 		if (a.count !== b.count) return b.count - a.count
 
-		// Then by predefined order (common colors first)
 		const colorOrder = [
 			'branco',
 			'preto',
@@ -156,7 +146,6 @@ const visibleColors = computed(() => {
 	return props.showDetails ? sortedColors.value.slice(0, 6) : []
 })
 
-// Methods
 const isSelected = (colorId: string): boolean => {
 	return props.modelValue.includes(colorId)
 }
@@ -168,10 +157,8 @@ const toggleColor = (colorId: string) => {
 	let newSelection = [...props.modelValue]
 
 	if (isSelected(colorId)) {
-		// Remove color
 		newSelection = newSelection.filter(id => id !== colorId)
 	} else {
-		// Add color (check max selection)
 		if (props.maxSelection && newSelection.length >= props.maxSelection) {
 			return
 		}

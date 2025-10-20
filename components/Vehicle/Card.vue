@@ -36,7 +36,6 @@
 			</div>
 		</div>
 
-		<!-- Compact Layout (original) -->
 		<div v-if="!showSpecs" class="flex flex-col p-2 gap-2">
 			<div class="flex gap-2 items-center">
 				<div v-if="brand && showBrandLogo">
@@ -79,9 +78,7 @@
 			</div>
 		</div>
 
-		<!-- Expanded Layout (models page) -->
 		<div v-else class="p-6">
-			<!-- Brand Logo & Name -->
 			<div v-if="brand && showBrandLogo" class="flex items-center gap-3 mb-3">
 				<div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
 					<img
@@ -105,7 +102,6 @@
 				{{ title }}
 			</h3>
 
-			<!-- Specs with Icons -->
 			<div class="grid grid-cols-2 gap-3 mb-4">
 				<div v-if="horsepower" class="flex items-center gap-2 text-sm text-gray-600">
 					<Icon name="heroicons:bolt-20-solid" class="w-4 h-4 text-orange-500" />
@@ -125,7 +121,6 @@
 				</div>
 			</div>
 
-			<!-- Price -->
 			<div v-if="price !== undefined" class="pt-4 border-t border-gray-100">
 				<p v-if="priceLabel" class="text-sm text-gray-500 mb-1">{{ priceLabel }}</p>
 				<p class="text-2xl font-bold text-green-600">

@@ -1,11 +1,9 @@
 <template>
 	<div class="min-h-screen bg-gray-50">
-		<!-- Use the unified Header component -->
 		<Header />
 
 		<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
 			<div class="flex gap-8">
-				<!-- Sidebar -->
 				<aside class="w-64 flex-shrink-0">
 					<nav class="space-y-2">
 						<NuxtLink
@@ -43,7 +41,6 @@
 					</nav>
 				</aside>
 
-				<!-- Main Content -->
 				<main class="flex-1 min-w-0">
 					<slot />
 				</main>
@@ -64,13 +61,11 @@ const route = useRoute()
 const auth = useAuth()
 const { adminStats, loadAdminStats } = auth
 
-// Computed
 const pendingCount = computed(() => adminStats.value?.totals?.pending || 0)
 
 const activeClasses = 'bg-blue-50 border-blue-200 text-blue-700'
 const inactiveClasses = 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
 
-// Methods
 const isActive = (path: string) => {
 	if (path === '/admin') {
 		return route.path === '/admin'
@@ -78,7 +73,6 @@ const isActive = (path: string) => {
 	return route.path.startsWith(path)
 }
 
-// Load initial data
 onMounted(async () => {
 	try {
 		await loadAdminStats()

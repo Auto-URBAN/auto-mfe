@@ -2,11 +2,6 @@ import { z } from 'zod'
 import type { VehicleSummary, VehicleStatus } from './vehicle'
 import type { UserWithAds } from './user'
 
-/**
- * Admin schemas for Auto URBAN dashboard
- */
-
-// Admin metrics schemas
 export const AdminTotals = z.object({
 	vehicles: z.number().int().min(0),
 	approved: z.number().int().min(0),
@@ -23,7 +18,7 @@ export const BrandStats = z.object({
 export type BrandStats = z.infer<typeof BrandStats>
 
 export const UFStats = z.object({
-	uf: z.string().length(2), // Brazilian state code
+	uf: z.string().length(2),
 	count: z.number().int().min(0)
 })
 export type UFStats = z.infer<typeof UFStats>
@@ -35,7 +30,6 @@ export const AdminMetrics = z.object({
 })
 export type AdminMetrics = z.infer<typeof AdminMetrics>
 
-// Vehicle moderation schemas
 export const ApproveVehicleRequest = z.object({
 	vehicleId: z.string().min(1)
 })
@@ -56,7 +50,6 @@ export const ModerationResponse = z.object({
 })
 export type ModerationResponse = z.infer<typeof ModerationResponse>
 
-// Admin store state schema
 export const AdminState = z.object({
 	metrics: AdminMetrics.nullable(),
 	vehiclesByStatus: z.object({
@@ -74,7 +67,6 @@ export const AdminState = z.object({
 })
 export type AdminState = z.infer<typeof AdminState>
 
-// Query schemas for admin endpoints
 export const GetVehiclesByStatusQuery = z.object({
 	status: z.custom<VehicleStatus>(),
 	page: z.number().int().min(1).optional(),
@@ -82,7 +74,6 @@ export const GetVehiclesByStatusQuery = z.object({
 })
 export type GetVehiclesByStatusQuery = z.infer<typeof GetVehiclesByStatusQuery>
 
-// Admin dashboard card schemas (for big numbers display)
 export const DashboardCard = z.object({
 	title: z.string().min(1),
 	value: z.union([z.string(), z.number()]),
@@ -90,7 +81,7 @@ export const DashboardCard = z.object({
 		.object({
 			value: z.number(),
 			type: z.enum(['increase', 'decrease', 'neutral']),
-			period: z.string() // e.g., "vs last month"
+			period: z.string()
 		})
 		.optional(),
 	icon: z.string().optional(),

@@ -5,10 +5,8 @@ export default defineEventHandler(async event => {
 		const query = getQuery(event)
 		const status = query.status as string | undefined
 
-		// Simulate API delay
 		await new Promise(resolve => setTimeout(resolve, 300))
 
-		// Mock vehicles for moderation - Premium sports cars and high-end vehicles
 		const mockVehicles = [
 			{
 				id: 'vh001',
@@ -186,7 +184,6 @@ export default defineEventHandler(async event => {
 			}
 		]
 
-		// Filter by status if provided
 		let filteredVehicles = mockVehicles
 		if (status && status !== 'all' && ['PENDING', 'APPROVED', 'REJECTED'].includes(status)) {
 			filteredVehicles = mockVehicles.filter(vehicle => vehicle.status === status)

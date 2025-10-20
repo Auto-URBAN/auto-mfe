@@ -1,7 +1,6 @@
 <template>
 	<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
 		<div class="max-w-md w-full space-y-8">
-			<!-- Header -->
 			<div class="text-center">
 				<NuxtImg src="/imgs/Logo.svg" alt="Auto URBAN" class="mx-auto h-12 w-auto" />
 				<h2 class="mt-6 text-3xl font-bold text-gray-900">Verificar código</h2>
@@ -10,10 +9,8 @@
 				</p>
 			</div>
 
-			<!-- Verification Form -->
 			<UiCard>
 				<form @submit.prevent="handleVerification" class="space-y-6">
-					<!-- OTP Input -->
 					<div class="space-y-2">
 						<label class="block text-sm font-medium text-gray-700">Código de verificação</label>
 						<UiInput
@@ -28,7 +25,6 @@
 						<p class="text-xs text-gray-500">Digite o código de 6 dígitos recebido</p>
 					</div>
 
-					<!-- Submit Button -->
 					<UiButton
 						type="submit"
 						size="lg"
@@ -39,7 +35,6 @@
 						{{ loading ? 'Verificando...' : 'Verificar código' }}
 					</UiButton>
 
-					<!-- Resend -->
 					<div class="text-center">
 						<button
 							v-if="canResend"
@@ -53,7 +48,6 @@
 						<p v-else class="text-sm text-gray-500">Reenviar em {{ resendCountdown }}s</p>
 					</div>
 
-					<!-- Change Phone -->
 					<div class="text-center">
 						<NuxtLink to="/auth/login" class="text-sm text-gray-500 hover:text-gray-700">
 							Alterar telefone
@@ -62,7 +56,6 @@
 				</form>
 			</UiCard>
 
-			<!-- Demo Codes -->
 			<UiAlert variant="info" title="Códigos de demonstração">
 				<div class="text-sm space-y-1">
 					<p><strong>123456:</strong> Usuário normal</p>
@@ -82,20 +75,17 @@ definePageMeta({
 const route = useRoute()
 const router = useRouter()
 
-// Get phone from query or redirect
 const phone = route.query.phone as string
 if (!phone) {
 	await router.push('/auth/login')
 }
 
-// Reactive data
 const code = ref('')
 const loading = ref(false)
 const resendLoading = ref(false)
 const resendCountdown = ref(60)
 const canResend = ref(false)
 
-// Start resend countdown
 const startResendCountdown = () => {
 	canResend.value = false
 	resendCountdown.value = 60
@@ -110,7 +100,6 @@ const startResendCountdown = () => {
 	}, 1000)
 }
 
-// Methods
 const formatPhone = (phoneNumber: string) => {
 	if (phoneNumber?.length === 11) {
 		return phoneNumber.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
@@ -131,14 +120,12 @@ const handleVerification = async () => {
 		if (response.accessToken) {
 			console.log('Login realizado com sucesso!')
 
-			// Redirect to intended page or home
 			const redirectTo = (route.query.redirect as string) || '/'
 			await router.push(redirectTo)
 		}
 	} catch (error: any) {
 		console.error('Verification error:', error)
 
-		// Mensagem de erro mais específica
 		let errorMessage = 'Código inválido. Verifique o código e tente novamente.'
 
 		if (error?.statusCode === 401) {
@@ -151,7 +138,6 @@ const handleVerification = async () => {
 
 		alert(errorMessage)
 
-		// Clear code on error
 		code.value = ''
 	} finally {
 		loading.value = false
@@ -177,18 +163,15 @@ const resendCode = async () => {
 	}
 }
 
-// Auto-focus on code input
 onMounted(() => {
 	startResendCountdown()
 
-	// Focus the input after a short delay
 	setTimeout(() => {
 		const input = document.querySelector('input[type="text"]') as HTMLInputElement
 		input?.focus()
 	}, 100)
 })
 
-// Meta
 useHead({
 	title: 'Verificar código - Auto URBAN'
 })

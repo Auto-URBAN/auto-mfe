@@ -339,7 +339,6 @@ const filteredModels = ref<VehicleSummary[]>([])
 const selectedModels = ref<VehicleSummary[]>([])
 const sidebarFilters = ref<Partial<SearchFilters> & { category?: string }>({})
 
-// Get query params to auto-select a model
 const route = useRoute()
 const slugParam = route.query.slug as string | undefined
 
@@ -357,21 +356,18 @@ function getFieldEnabled(fieldId: string): boolean {
 	return comparisonFields.value.find(f => f.id === fieldId)?.enabled || false
 }
 
-// Calculate maintenance cost based on brand and horsepower (1-10 scale)
 function getMaintenanceCost(model: VehicleSummary): number {
 	const luxuryBrands = ['BMW', 'Mercedes-Benz', 'Porsche', 'Audi', 'Volvo', 'Land Rover']
 	const popularBrands = ['Volkswagen', 'Chevrolet', 'Fiat', 'Renault', 'Ford', 'Toyota', 'Honda']
 
-	let cost = 5 // Base cost
+	let cost = 5
 
-	// Adjust by brand
 	if (luxuryBrands.includes(model.brand)) {
 		cost += 3
 	} else if (popularBrands.includes(model.brand)) {
 		cost -= 1
 	}
 
-	// Adjust by horsepower
 	if (model.horsepower > 300) cost += 2
 	else if (model.horsepower > 200) cost += 1
 	else if (model.horsepower < 100) cost -= 1
@@ -379,12 +375,10 @@ function getMaintenanceCost(model: VehicleSummary): number {
 	return Math.min(10, Math.max(1, cost))
 }
 
-// Calculate insurance cost based on price and horsepower
 function getInsuranceCost(model: VehicleSummary): number {
-	const baseRate = 0.04 // 4% of vehicle value
+	const baseRate = 0.04
 	let multiplier = 1
 
-	// Higher horsepower = higher insurance
 	if (model.horsepower > 250) multiplier = 1.5
 	else if (model.horsepower > 150) multiplier = 1.2
 	else if (model.horsepower < 100) multiplier = 0.8
@@ -392,15 +386,13 @@ function getInsuranceCost(model: VehicleSummary): number {
 	return model.price * baseRate * multiplier
 }
 
-// Generate depreciation data for the last 5 years
 function getDepreciationData(model: VehicleSummary) {
 	const currentYear = new Date().getFullYear()
 	const years = []
 	const values = []
 
-	// Calculate depreciation rate based on brand
 	const luxuryBrands = ['BMW', 'Mercedes-Benz', 'Porsche', 'Audi']
-	const depreciationRate = luxuryBrands.includes(model.brand) ? 0.15 : 0.12 // 15% vs 12% per year
+	const depreciationRate = luxuryBrands.includes(model.brand) ? 0.15 : 0.12
 
 	for (let i = 0; i <= 5; i++) {
 		years.push((currentYear - 5 + i).toString())
@@ -462,7 +454,6 @@ async function loadModels() {
 		})
 
 		if (response?.items) {
-			// Group by model to avoid duplicates
 			const modelsMap = new Map()
 			response.items.forEach((vehicle: VehicleSummary) => {
 				const key = `${vehicle.brand}-${vehicle.model}`
@@ -473,7 +464,6 @@ async function loadModels() {
 			allModels.value = Array.from(modelsMap.values())
 			filterModels()
 
-			// Auto-select model from query param
 			if (slugParam && selectedModels.value.length === 0) {
 				const modelToSelect = allModels.value.find(m => m.slug === slugParam)
 				if (modelToSelect) {
@@ -488,13 +478,11 @@ async function loadModels() {
 	}
 }
 
-// Handle sidebar filter updates
 function handleFilterUpdate(filters: Partial<SearchFilters> & { category?: string }) {
 	sidebarFilters.value = filters
 	loadModels()
 }
 
-// Apply category filters from sidebar
 function filterModels() {
 	let results = [...allModels.value]
 
@@ -512,7 +500,7 @@ function filterModels() {
 				case 'suv':
 					return m.model.toLowerCase().includes('suv') || m.model.toLowerCase().includes('x')
 				case 'eletricos':
-					return false // Placeholder - adicionar quando houver campo fuel
+					return false
 				default:
 					return true
 			}
@@ -522,7 +510,6 @@ function filterModels() {
 	filteredModels.value = results
 }
 
-// Selection management
 function isSelected(modelId: string): boolean {
 	return selectedModels.value.some(m => m.id === modelId)
 }
@@ -545,7 +532,6 @@ function clearSelection() {
 	selectedModels.value = []
 }
 
-// Formatters
 function formatCurrency(value: number): string {
 	return new Intl.NumberFormat('pt-BR', {
 		style: 'currency',

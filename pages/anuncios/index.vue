@@ -89,7 +89,6 @@
 						/>
 					</div>
 
-					<!-- Empty state -->
 					<div v-else class="text-center py-12">
 						<Icon
 							name="heroicons:magnifying-glass-20-solid"
@@ -100,7 +99,6 @@
 						<UiButton variant="outline" @click="clearFiltersAndReload"> Limpar filtros </UiButton>
 					</div>
 
-					<!-- Pagination -->
 					<div v-if="vehicles.length > 0 && totalPages > 1" class="mt-8 flex justify-center">
 						<div class="flex items-center gap-2">
 							<UiButton
@@ -129,7 +127,6 @@
 				</div>
 			</div>
 
-			<!-- Mobile Filter Modal -->
 			<UiModal v-model="showMobileFilters" title="Filtros">
 				<VehicleFilterSidebar
 					:loading="loading"
@@ -161,15 +158,12 @@ const vehicles = ref<VehicleSummary[]>([])
 const loading = ref(false)
 const showMobileFilters = ref(false)
 
-// Pagination
 const currentPage = ref(1)
 const pageSize = ref(20)
 const total = ref(0)
 
-// Filters - usando o schema correto
 const filters = ref<Partial<SearchFilters>>({})
 
-// Computed
 const totalPages = computed(() => Math.ceil(total.value / pageSize.value))
 
 const activeFiltersCount = computed(() => {
@@ -185,7 +179,6 @@ const activeFiltersCount = computed(() => {
 	return count
 })
 
-// Methods
 const scrollToVehicles = () => {
 	const vehiclesSection = document.querySelector('.vehicles-section')
 	if (vehiclesSection) {
@@ -202,12 +195,10 @@ async function loadVehicles() {
 			pageSize: pageSize.value
 		}
 
-		// Search query
 		if (searchQuery.value) {
 			queryParams.q = searchQuery.value
 		}
 
-		// Add filters using correct schema names
 		if (filters.value.brand) queryParams.brand = filters.value.brand
 		if (filters.value.model) queryParams.model = filters.value.model
 		if (filters.value.uf) queryParams.uf = filters.value.uf
@@ -274,15 +265,13 @@ const goToPage = async (page: number) => {
 	}
 }
 
-// Load initial data
 onMounted(async () => {
-	// Check for initial filters from route query params
 	if (route.query.brand) {
 		filters.value.brand = route.query.brand as string
 	}
 	if (route.query.uf) {
 		const uf = route.query.uf as string
-		// Validate UF
+
 		const validStates: BrazilianState[] = [
 			'AC',
 			'AL',

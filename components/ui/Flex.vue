@@ -11,11 +11,11 @@ interface Props {
 	justify?: 'normal' | 'start' | 'end' | 'center' | 'between' | 'around' | 'evenly' | 'stretch'
 	align?: 'start' | 'end' | 'center' | 'baseline' | 'stretch'
 	gap?: number | 'none'
-	// Responsive direction
+
 	directionSm?: 'row' | 'row-reverse' | 'col' | 'col-reverse'
 	directionMd?: 'row' | 'row-reverse' | 'col' | 'col-reverse'
 	directionLg?: 'row' | 'row-reverse' | 'col' | 'col-reverse'
-	// Responsive gaps
+
 	gapSm?: number
 	gapMd?: number
 	gapLg?: number
@@ -28,11 +28,9 @@ const props = withDefaults(defineProps<Props>(), {
 	align: 'stretch'
 })
 
-// Computed classes
 const flexClasses = computed(() => {
 	const base = ['flex']
 
-	// Direction
 	const directions = {
 		row: 'flex-row',
 		'row-reverse': 'flex-row-reverse',
@@ -41,12 +39,10 @@ const flexClasses = computed(() => {
 	}
 	base.push(directions[props.direction])
 
-	// Responsive directions
 	if (props.directionSm) base.push(`sm:${directions[props.directionSm]}`)
 	if (props.directionMd) base.push(`md:${directions[props.directionMd]}`)
 	if (props.directionLg) base.push(`lg:${directions[props.directionLg]}`)
 
-	// Wrap
 	const wraps = {
 		nowrap: 'flex-nowrap',
 		wrap: 'flex-wrap',
@@ -54,7 +50,6 @@ const flexClasses = computed(() => {
 	}
 	base.push(wraps[props.wrap])
 
-	// Justify content
 	const justifies = {
 		normal: 'justify-normal',
 		start: 'justify-start',
@@ -67,7 +62,6 @@ const flexClasses = computed(() => {
 	}
 	base.push(justifies[props.justify])
 
-	// Align items
 	const aligns = {
 		start: 'items-start',
 		end: 'items-end',
@@ -77,14 +71,12 @@ const flexClasses = computed(() => {
 	}
 	base.push(aligns[props.align])
 
-	// Gap
 	if (props.gap === 'none') {
 		base.push('gap-0')
 	} else if (typeof props.gap === 'number') {
 		base.push(`gap-${props.gap}`)
 	}
 
-	// Responsive gaps
 	if (props.gapSm) base.push(`sm:gap-${props.gapSm}`)
 	if (props.gapMd) base.push(`md:gap-${props.gapMd}`)
 	if (props.gapLg) base.push(`lg:gap-${props.gapLg}`)

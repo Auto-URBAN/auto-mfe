@@ -5,7 +5,6 @@
 		:class="buttonClasses"
 		@click="$emit('click', $event)"
 	>
-		<!-- Loading Spinner -->
 		<svg
 			v-if="loading"
 			class="animate-spin -ml-1 mr-3 h-4 w-4"
@@ -21,13 +20,10 @@
 			/>
 		</svg>
 
-		<!-- Icon Left -->
 		<Icon v-if="iconLeft && !loading" :name="iconLeft" class="mr-2 h-4 w-4" />
 
-		<!-- Content -->
 		<slot />
 
-		<!-- Icon Right -->
 		<Icon v-if="iconRight" :name="iconRight" class="ml-2 h-4 w-4" />
 	</button>
 </template>
@@ -59,7 +55,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 defineEmits<Emits>()
 
-// Computed classes
 const buttonClasses = computed(() => {
 	const base = [
 		'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200',
@@ -68,7 +63,6 @@ const buttonClasses = computed(() => {
 		props.block ? 'w-full' : ''
 	]
 
-	// Size variants
 	const sizes = {
 		xs: 'px-2.5 py-1.5 text-xs',
 		sm: 'px-3 py-2 text-sm',
@@ -77,7 +71,6 @@ const buttonClasses = computed(() => {
 		xl: 'px-8 py-4 text-lg'
 	}
 
-	// Color variants
 	const variants = {
 		primary: 'bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500',
 		secondary: 'bg-gray-600 hover:bg-gray-700 text-white focus:ring-gray-500',

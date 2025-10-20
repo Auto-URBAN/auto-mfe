@@ -5,7 +5,6 @@
 				<h1 class="text-2xl font-bold text-gray-900 mb-6">Área do Usuário</h1>
 
 				<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-					<!-- User Info -->
 					<div class="space-y-4">
 						<h2 class="text-lg font-semibold text-gray-800">Informações do Usuário</h2>
 
@@ -30,7 +29,6 @@
 						</div>
 					</div>
 
-					<!-- Actions -->
 					<div class="space-y-4">
 						<h2 class="text-lg font-semibold text-gray-800">Ações Disponíveis</h2>
 
@@ -73,7 +71,6 @@
 					</div>
 				</div>
 
-				<!-- Login Status -->
 				<div class="mt-8 p-4 bg-green-50 border border-green-200 rounded-lg">
 					<div class="flex items-center">
 						<Icon name="heroicons:check-circle" class="w-5 h-5 text-green-500 mr-2" />
@@ -90,17 +87,14 @@
 </template>
 
 <script setup lang="ts">
-// Middleware de autenticação
 definePageMeta({
 	middleware: 'auth'
 })
 
 const router = useRouter()
 
-// Auth composable
 const { user, userName, userInitials, isAdmin, logout } = useAuth()
 
-// Methods
 const handleLogout = async () => {
 	try {
 		await logout()
@@ -110,7 +104,6 @@ const handleLogout = async () => {
 	}
 }
 
-// Meta
 useHead({
 	title: 'Área do Usuário - Auto URBAN'
 })

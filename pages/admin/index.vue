@@ -1,19 +1,16 @@
 <template>
 	<div>
-		<!-- Page Header -->
 		<div class="mb-8">
 			<h1 class="text-2xl font-bold text-gray-900">Dashboard Administrativo</h1>
 			<p class="mt-2 text-sm text-gray-600">Visão geral da plataforma Auto URBAN</p>
 		</div>
 
-		<!-- Loading State -->
 		<div v-if="adminLoading" class="space-y-6">
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 				<div v-for="i in 4" :key="i" class="h-24 bg-gray-200 rounded-lg animate-pulse" />
 			</div>
 		</div>
 
-		<!-- Error State -->
 		<div
 			v-else-if="adminError"
 			class="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded"
@@ -24,9 +21,7 @@
 			</div>
 		</div>
 
-		<!-- Dashboard Content -->
 		<div v-else class="space-y-8">
-			<!-- Metrics Cards -->
 			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 				<BigNumberCard
 					title="Total de Veículos"
@@ -61,9 +56,7 @@
 				/>
 			</div>
 
-			<!-- Charts Section -->
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-				<!-- Top Brands -->
 				<div class="bg-white rounded-lg shadow p-6">
 					<div class="mb-4">
 						<h3 class="text-lg font-semibold text-gray-900">Top Marcas</h3>
@@ -89,7 +82,6 @@
 					</div>
 				</div>
 
-				<!-- Top States -->
 				<div class="bg-white rounded-lg shadow p-6">
 					<div class="mb-4">
 						<h3 class="text-lg font-semibold text-gray-900">Estados com Mais Anúncios</h3>
@@ -112,7 +104,6 @@
 				</div>
 			</div>
 
-			<!-- Quick Actions -->
 			<div class="bg-white rounded-lg shadow p-6">
 				<div class="mb-4">
 					<h3 class="text-lg font-semibold text-gray-900">Ações Rápidas</h3>
@@ -159,7 +150,6 @@ definePageMeta({
 const auth = useAuth()
 const { adminStats, adminLoading, adminError, loadAdminStats } = auth
 
-// Computed
 const metrics = computed(() => adminStats.value)
 
 const topBrands = computed(() => {
@@ -180,7 +170,6 @@ const maxStateCount = computed(() => {
 	return Math.max(...(topStates.value.map(s => s.count) || [1]))
 })
 
-// Lifecycle
 onMounted(async () => {
 	try {
 		await loadAdminStats()
@@ -189,7 +178,6 @@ onMounted(async () => {
 	}
 })
 
-// Meta
 useHead({
 	title: 'Admin Dashboard - Auto URBAN'
 })
