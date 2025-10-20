@@ -5,8 +5,9 @@
 				<div class="lg:col-span-2">
 					<NuxtImg src="/imgs/Logo.svg" alt="Auto URBAN" class="h-8 w-auto mb-4" />
 					<p class="text-gray-300 text-sm mb-6 max-w-md">
-						O maior marketplace de veículos do Brasil. Encontre o carro dos seus sonhos com
-						segurança e transparência.
+						Mais que uma plataforma de carros — uma comunidade de gearheads. Conectamos histórias,
+						não apenas metal. Acompanhe preços FIPE em tempo real e encontre o carro que faz sentido
+						pra você.
 					</p>
 					<div class="flex space-x-4">
 						<button
@@ -20,23 +21,27 @@
 				</div>
 
 				<div>
-					<h4 class="font-semibold text-white mb-4">Comprar</h4>
+					<h4 class="font-semibold text-white mb-4">Explorar</h4>
 					<ul class="space-y-2">
 						<li>
-							<NuxtLink to="/cars" class="text-gray-300 hover:text-white text-sm transition-colors"
-								>Carros</NuxtLink
-							>
-						</li>
-						<li>
-							<NuxtLink to="/motos" class="text-gray-300 hover:text-white text-sm transition-colors"
-								>Motos</NuxtLink
+							<NuxtLink
+								to="/anuncios"
+								class="text-gray-300 hover:text-white text-sm transition-colors"
+								>Anúncios</NuxtLink
 							>
 						</li>
 						<li>
 							<NuxtLink
-								to="/caminhoes"
+								to="/carros"
 								class="text-gray-300 hover:text-white text-sm transition-colors"
-								>Caminhões</NuxtLink
+								>Carros</NuxtLink
+							>
+						</li>
+						<li>
+							<NuxtLink
+								to="/garagem"
+								class="text-gray-300 hover:text-white text-sm transition-colors"
+								>Minha Garagem</NuxtLink
 							>
 						</li>
 						<li>

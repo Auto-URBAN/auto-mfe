@@ -162,7 +162,7 @@
 										<button
 											v-if="!isAdmin"
 											class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-											@click="handleMenuClick('/profile')"
+											@click="handleMenuClick('/perfil')"
 										>
 											<Icon name="heroicons:user" class="w-4 h-4 mr-3" />
 											Meu perfil
