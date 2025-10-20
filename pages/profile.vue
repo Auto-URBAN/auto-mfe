@@ -35,8 +35,8 @@
 						<div class="space-y-3">
 							<button
 								v-if="!isAdmin"
-								@click="router.push('/sell')"
 								class="w-full flex items-center justify-center px-4 py-3 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+								@click="router.push('/sell')"
 							>
 								<Icon name="heroicons:plus" class="w-4 h-4 mr-2" />
 								Anunciar Veículo
@@ -44,8 +44,8 @@
 
 							<button
 								v-if="!isAdmin"
-								@click="router.push('/my-ads')"
 								class="w-full flex items-center justify-center px-4 py-3 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
+								@click="router.push('/anuncios/me')"
 							>
 								<Icon name="heroicons:document-text" class="w-4 h-4 mr-2" />
 								Meus Anúncios
@@ -53,16 +53,16 @@
 
 							<button
 								v-if="isAdmin"
-								@click="router.push('/admin')"
 								class="w-full flex items-center justify-center px-4 py-3 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 transition-colors"
+								@click="router.push('/admin')"
 							>
 								<Icon name="heroicons:shield-check" class="w-4 h-4 mr-2" />
 								Área Administrativa
 							</button>
 
 							<button
-								@click="handleLogout"
 								class="w-full flex items-center justify-center px-4 py-3 border border-red-300 text-sm font-medium rounded-md text-red-700 bg-white hover:bg-red-50 transition-colors"
+								@click="handleLogout"
 							>
 								<Icon name="heroicons:arrow-left-on-rectangle" class="w-4 h-4 mr-2" />
 								Sair

@@ -10,6 +10,7 @@ export * from './bank'
 export * from './brand'
 export * from './installments'
 export * from './ranking'
+export * from './garage'
 
 export const validateSchema = <T>(
 	schema: any,

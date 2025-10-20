@@ -20,24 +20,24 @@
 				<div class="flex items-center space-x-3">
 					<div v-if="!isAuthenticated" class="hidden md:flex items-center space-x-3">
 						<button
-							@click="router.push('/auth/login')"
 							class="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+							@click="router.push('/auth/login')"
 						>
 							Entrar
 						</button>
 						<button
-							@click="router.push('/auth/register')"
 							class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors"
+							@click="router.push('/auth/register')"
 						>
 							Anunciar
 						</button>
 					</div>
 
 					<div v-else class="flex items-center space-x-3">
-						<div class="relative" ref="notificationsRef">
+						<div ref="notificationsRef" class="relative">
 							<button
-								@click.stop="toggleNotifications"
 								class="p-2 text-gray-400 hover:text-gray-600 transition-colors relative"
+								@click.stop="toggleNotifications"
 							>
 								<Icon name="heroicons:bell" class="w-5 h-5" />
 
@@ -79,7 +79,7 @@
 													<div
 														class="w-2 h-2 rounded-full mt-2"
 														:class="notification.read ? 'bg-gray-300' : 'bg-blue-500'"
-													></div>
+													/>
 												</div>
 												<div class="flex-1 min-w-0">
 													<p class="text-sm text-gray-900 font-medium">{{ notification.title }}</p>
@@ -99,8 +99,8 @@
 
 										<div v-if="filteredNotifications.length > 0" class="border-t pt-3 mt-3">
 											<button
-												@click="markAllAsRead"
 												class="text-sm text-blue-600 hover:text-blue-500 font-medium transition-colors"
+												@click="markAllAsRead"
 											>
 												Marcar todas como lidas
 											</button>
@@ -112,17 +112,17 @@
 
 						<button
 							v-if="!isAdmin"
-							@click="router.push('/sell')"
 							class="hidden md:flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
+							@click="router.push('/sell')"
 						>
 							<Icon name="heroicons:plus" class="w-4 h-4 mr-1" />
 							<span>Anunciar</span>
 						</button>
 
-						<div class="relative" ref="dropdownRef">
+						<div ref="dropdownRef" class="relative">
 							<button
-								@click="toggleDropdown"
 								class="flex items-center cursor-pointer hover:bg-gray-50 rounded-lg px-3 py-2 transition-colors"
+								@click="toggleDropdown"
 							>
 								<div
 									class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium mr-2"
@@ -171,10 +171,19 @@
 										<button
 											v-if="!isAdmin"
 											class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-											@click="handleMenuClick('/my-ads')"
+											@click="handleMenuClick('/anuncios/me')"
 										>
 											<Icon name="heroicons:document-text" class="w-4 h-4 mr-3" />
 											Meus anúncios
+										</button>
+
+										<button
+											v-if="!isAdmin"
+											class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+											@click="handleMenuClick('/garagem')"
+										>
+											<Icon name="heroicons:home" class="w-4 h-4 mr-3" />
+											Minha garagem
 										</button>
 
 										<button
@@ -288,7 +297,7 @@ const handleNotificationClick = (notification: any) => {
 	if (notification.type === 'admin') {
 		router.push('/admin/vehicles')
 	} else {
-		router.push('/my-ads')
+		router.push('/anuncios')
 	}
 }
 

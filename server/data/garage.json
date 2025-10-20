@@ -1,0 +1,286 @@
+{
+	"currentCars": [
+		{
+			"id": "gc-001",
+			"brand": "BMW",
+			"model": "M240i",
+			"year": 2024,
+			"color": "Azul M Sport",
+			"km": 8500,
+			"fipeValue": 385000,
+			"variation12m": 2.3,
+			"plateVerified": true,
+			"mods": [
+				{
+					"type": "Performance",
+					"description": "Stage 1 - 380cv",
+					"date": "2024-03-15T00:00:00.000Z"
+				},
+				{
+					"type": "Estética",
+					"description": "Ponteiras Akrapovic",
+					"date": "2024-05-20T00:00:00.000Z"
+				}
+			],
+			"photos": [
+				"/imgs/garage/bmw-m240i-1.jpg",
+				"/imgs/garage/bmw-m240i-2.jpg",
+				"/imgs/garage/bmw-m240i-3.jpg"
+			],
+			"lastUpdate": "2025-10-15T00:00:00.000Z",
+			"purchaseDate": "2024-01-10T00:00:00.000Z",
+			"purchasePrice": 375000,
+			"notes": "Seis cilindros em linha, tração traseira. O ronco que nenhum elétrico vai copiar."
+		},
+		{
+			"id": "gc-002",
+			"brand": "Porsche",
+			"model": "Cayman GTS",
+			"year": 2022,
+			"color": "Preto Profundo",
+			"km": 15200,
+			"fipeValue": 620000,
+			"variation12m": 5.7,
+			"plateVerified": true,
+			"mods": [],
+			"photos": ["/imgs/garage/porsche-cayman-1.jpg", "/imgs/garage/porsche-cayman-2.jpg"],
+			"lastUpdate": "2025-10-18T00:00:00.000Z",
+			"purchaseDate": "2023-06-22T00:00:00.000Z",
+			"purchasePrice": 590000,
+			"notes": "Motor central, equilíbrio perfeito. Cada curva é uma conversa entre o carro e o asfalto."
+		}
+	],
+	"historyCars": [
+		{
+			"id": "gh-001",
+			"brand": "Volkswagen",
+			"model": "Golf GTI Mk7",
+			"year": 2018,
+			"purchaseDate": "2019-03-10T00:00:00.000Z",
+			"sellDate": "2023-11-20T00:00:00.000Z",
+			"purchasePrice": 98000,
+			"sellPrice": 115000,
+			"kmStart": 22000,
+			"kmEnd": 68000,
+			"mods": [
+				{
+					"type": "Performance",
+					"description": "Reprogramação Stage 2",
+					"date": "2020-06-15T00:00:00.000Z"
+				},
+				{
+					"type": "Suspensão",
+					"description": "Coilovers H&R",
+					"date": "2020-08-10T00:00:00.000Z"
+				}
+			],
+			"status": "SOLD",
+			"storyNote": "Meu primeiro hot hatch de verdade. Me ensinou o que é torque e tração dianteira no limite.",
+			"photos": ["/imgs/garage/golf-gti-1.jpg"],
+			"color": "Vermelho Tornado",
+			"profitLoss": 17000
+		},
+		{
+			"id": "gh-002",
+			"brand": "Honda",
+			"model": "Civic Si",
+			"year": 2015,
+			"purchaseDate": "2016-05-01T00:00:00.000Z",
+			"sellDate": "2019-02-15T00:00:00.000Z",
+			"purchasePrice": 85000,
+			"sellPrice": 72000,
+			"kmStart": 15000,
+			"kmEnd": 95000,
+			"mods": [
+				{
+					"type": "Estética",
+					"description": "Rodas 18' Enkei",
+					"date": "2017-03-20T00:00:00.000Z"
+				}
+			],
+			"status": "SOLD",
+			"storyNote": "O primeiro carro que eu realmente modifiquei. VTEC nunca decepciona.",
+			"photos": ["/imgs/garage/civic-si-1.jpg"],
+			"color": "Preto",
+			"profitLoss": -13000
+		},
+		{
+			"id": "gh-003",
+			"brand": "Ford",
+			"model": "Focus ST",
+			"year": 2016,
+			"purchaseDate": "2017-08-10T00:00:00.000Z",
+			"sellDate": "2018-12-05T00:00:00.000Z",
+			"purchasePrice": 92000,
+			"sellPrice": 85000,
+			"kmStart": 28000,
+			"kmEnd": 52000,
+			"mods": [],
+			"status": "CRASHED",
+			"storyNote": "Acidente em pista molhada. Aprendi a respeitar mais a tração dianteira sob chuva.",
+			"photos": [],
+			"color": "Azul Performance",
+			"profitLoss": -7000
+		}
+	],
+	"goals": [
+		{
+			"id": "gg-001",
+			"carModelSlug": "porsche-911-turbo",
+			"brand": "Porsche",
+			"model": "911 Turbo",
+			"targetPrice": 1200000,
+			"avgFipeValue": 1450000,
+			"variationAlerts": true,
+			"savedAds": ["ad-789", "ad-823"],
+			"createdAt": "2024-05-10T00:00:00.000Z",
+			"photo": "/imgs/models/porsche-911-turbo.jpg",
+			"year": 2023
+		},
+		{
+			"id": "gg-002",
+			"carModelSlug": "audi-rs3-sedan",
+			"brand": "Audi",
+			"model": "RS3 Sedan",
+			"targetPrice": 550000,
+			"avgFipeValue": 595000,
+			"variationAlerts": true,
+			"savedAds": ["ad-456"],
+			"createdAt": "2024-08-22T00:00:00.000Z",
+			"photo": "/imgs/models/audi-rs3.jpg",
+			"year": 2024
+		},
+		{
+			"id": "gg-003",
+			"carModelSlug": "mercedes-c63-amg",
+			"brand": "Mercedes-AMG",
+			"model": "C63 S",
+			"avgFipeValue": 720000,
+			"variationAlerts": false,
+			"savedAds": [],
+			"createdAt": "2024-09-05T00:00:00.000Z",
+			"photo": "/imgs/models/mercedes-c63.jpg",
+			"year": 2023
+		}
+	],
+	"notifications": [
+		{
+			"id": "gn-001",
+			"type": "APPRECIATION",
+			"message": "Seu BMW M240i valorizou 2,3% nos últimos 30 dias",
+			"carModelSlug": "bmw-m240i",
+			"carId": "gc-001",
+			"createdAt": "2025-10-18T10:30:00.000Z",
+			"read": false,
+			"metadata": {
+				"previousValue": 376000,
+				"currentValue": 385000,
+				"variation": 2.3
+			}
+		},
+		{
+			"id": "gn-002",
+			"type": "PRICE_ALERT",
+			"message": "Porsche 911 Turbo baixou 5,2% - aproximando do seu objetivo",
+			"carModelSlug": "porsche-911-turbo",
+			"carId": "gg-001",
+			"createdAt": "2025-10-17T14:22:00.000Z",
+			"read": false,
+			"metadata": {
+				"targetPrice": 1200000,
+				"currentAvg": 1450000,
+				"variation": -5.2
+			}
+		},
+		{
+			"id": "gn-003",
+			"type": "NEW_AD",
+			"message": "3 novos anúncios de Audi RS3 Sedan na sua faixa de preço",
+			"carModelSlug": "audi-rs3-sedan",
+			"carId": "gg-002",
+			"createdAt": "2025-10-16T09:15:00.000Z",
+			"read": true,
+			"metadata": {
+				"newAdsCount": 3,
+				"priceRange": "R$ 540k - R$ 570k"
+			}
+		},
+		{
+			"id": "gn-004",
+			"type": "INSIGHT",
+			"message": "Seu Porsche Cayman GTS está entre os 10% que mais valorizaram em 2025",
+			"carModelSlug": "porsche-cayman-gts",
+			"carId": "gc-002",
+			"createdAt": "2025-10-15T08:00:00.000Z",
+			"read": true,
+			"metadata": {
+				"ranking": "top 10%",
+				"categoryVariation": 5.7
+			}
+		},
+		{
+			"id": "gn-005",
+			"type": "DEPRECIATION",
+			"message": "Modelos similares ao seu Golf GTI depreciaram 3,1% no último trimestre",
+			"carModelSlug": "volkswagen-golf-gti",
+			"createdAt": "2025-10-10T12:45:00.000Z",
+			"read": true,
+			"metadata": {
+				"variation": -3.1,
+				"period": "Q3 2025"
+			}
+		}
+	],
+	"stats": {
+		"totalCars": 2,
+		"totalCurrentValue": 1005000,
+		"avgVariation": 4.0,
+		"totalHistoricalCars": 3,
+		"totalGoals": 3,
+		"valueHistory": [
+			{ "month": "2024-11", "value": 965000 },
+			{ "month": "2024-12", "value": 970000 },
+			{ "month": "2025-01", "value": 975000 },
+			{ "month": "2025-02", "value": 978000 },
+			{ "month": "2025-03", "value": 982000 },
+			{ "month": "2025-04", "value": 985000 },
+			{ "month": "2025-05", "value": 988000 },
+			{ "month": "2025-06", "value": 992000 },
+			{ "month": "2025-07", "value": 995000 },
+			{ "month": "2025-08", "value": 998000 },
+			{ "month": "2025-09", "value": 1002000 },
+			{ "month": "2025-10", "value": 1005000 }
+		],
+		"segmentBreakdown": [{ "type": "Cupê Esportivo", "count": 2, "percentage": 100 }],
+		"brandVariation": [
+			{ "brand": "BMW", "avgVariation": 2.3, "count": 1 },
+			{ "brand": "Porsche", "avgVariation": 5.7, "count": 1 }
+		],
+		"insights": [
+			{
+				"title": "Modelo mais valorizado",
+				"value": "Porsche Cayman GTS (+5,7%)",
+				"description": "Seu melhor investimento nos últimos 12 meses",
+				"type": "positive"
+			},
+			{
+				"title": "Maior prejuízo histórico",
+				"value": "Honda Civic Si (-R$ 13.000)",
+				"description": "Vendido em momento de desvalorização do mercado",
+				"type": "negative"
+			},
+			{
+				"title": "Ano mais ativo",
+				"value": "2019 (2 carros)",
+				"description": "Maior movimentação da sua garagem",
+				"type": "neutral"
+			},
+			{
+				"title": "Valorização total da garagem",
+				"value": "+4,0% em 12 meses",
+				"description": "Acima da média do mercado de seminovos premium",
+				"type": "positive"
+			}
+		]
+	}
+}
