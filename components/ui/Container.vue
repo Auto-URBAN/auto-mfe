@@ -12,7 +12,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  size: 'lg',
+  size: 'full',
   padding: 'md',
   center: true
 })
