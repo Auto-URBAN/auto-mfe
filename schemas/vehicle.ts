@@ -24,7 +24,18 @@ export const BrazilianState = z.enum([
 ])
 export type BrazilianState = z.infer<typeof BrazilianState>
 
-// Seller info schema
+export const Price = z.object({
+  month: z.string(),
+  value: z.number()
+})
+export type Price = z.infer<typeof Price>
+
+export const Partner = z.object({
+  name: z.string(),
+  value: z.number()
+})
+export type Partner = z.infer<typeof Partner>
+
 export const Seller = z.object({
   id: z.string().min(1),
   phone: z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number format'),
@@ -51,29 +62,39 @@ export const VehicleSummary = z.object({
 })
 export type VehicleSummary = z.infer<typeof VehicleSummary>
 
-// Extended Vehicle Detail schema (for individual vehicle pages)
 export const VehicleDetail = VehicleSummary.extend({
   description: z.string().max(1000).optional(),
   gearbox: Gearbox.optional(),
   fuel: FuelType.optional(),
   color: z.string().min(1).optional(),
   images: z.array(z.string().url('Invalid image URL')),
+  fipeCode: z.string().optional(),
+  slug: z.string().optional(),
+  averageValue: z.number().optional(),
+  minValue: z.number().optional(),
+  maxValue: z.number().optional(),
+  prices: z.array(Price).optional(),
+  partners: z.array(Partner).optional(),
   seller: Seller
 })
 export type VehicleDetail = z.infer<typeof VehicleDetail>
 
-// Search filters schema
 export const SearchFilters = z.object({
-  q: z.string().optional(), // General text search
-  make: z.string().optional(), // Brand filter
-  uf: BrazilianState.optional(), // State filter
+  q: z.string().optional(),
+  brand: z.string().optional(),
+  model: z.string().optional(),
+  uf: BrazilianState.optional(),
   priceMin: z.number().positive().optional(),
   priceMax: z.number().positive().optional(),
   yearMin: z.number().int().min(1900).optional(),
   yearMax: z.number().int().max(new Date().getFullYear() + 1).optional(),
   kmMax: z.number().int().min(0).optional(),
   fuel: FuelType.optional(),
-  gearbox: Gearbox.optional()
+  gearbox: Gearbox.optional(),
+  page: z.number().int().min(1).default(1),
+  pageSize: z.number().int().min(1).max(100).default(20),
+  featured: z.boolean().optional(),
+  ranking: z.enum(['valorizados', 'depreciados']).optional()
 }).refine((data) => {
   if (data.priceMin && data.priceMax) {
     return data.priceMin <= data.priceMax

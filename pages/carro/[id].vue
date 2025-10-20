@@ -101,8 +101,8 @@
                     </div>
                   </div>
                   <button
-                    @click="toggleContactExpanded"
                     class="p-1 hover:bg-white/20 rounded transition-colors"
+                    @click="toggleContactExpanded"
                   >
                     <Icon 
                       :name="contactExpanded ? 'heroicons:chevron-up' : 'heroicons:chevron-down'" 
@@ -165,16 +165,16 @@
                 
                 <div class="grid grid-cols-2 gap-2">
                   <button
-                    @click="shareVehicle"
                     class="flex items-center justify-center px-3 py-1.5 border border-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50 transition-colors"
+                    @click="shareVehicle"
                   >
                     <Icon name="heroicons:share" class="w-4 h-4 mr-1" />
                     Compartilhar
                   </button>
                   
                   <button
-                    @click="saveVehicle"
                     class="flex items-center justify-center px-3 py-1.5 border border-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50 transition-colors"
+                    @click="saveVehicle"
                   >
                     <Icon name="heroicons:heart" class="w-4 h-4 mr-1" />
                     Salvar
@@ -350,8 +350,8 @@
                       </div>
                     </div>
                     <button
-                      @click="toggleContactExpanded"
                       class="p-1 hover:bg-white/20 rounded transition-colors"
+                      @click="toggleContactExpanded"
                     >
                       <Icon 
                         :name="contactExpanded ? 'heroicons:chevron-up' : 'heroicons:chevron-down'" 
@@ -421,16 +421,16 @@
                     </a>
                     <div class="col-span-1 flex gap-2 justify-between">
                       <button
-                      @click="shareVehicle"
                       class="flex items-center justify-center px-3 py-1.5 border border-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50 transition-colors"
+                      @click="shareVehicle"
                     >
                       <Icon name="heroicons:share" class="w-4 h-4 mr-1" />
                       
                     </button>
                     
                     <button
-                      @click="saveVehicle"
                       class="flex items-center justify-center px-3 py-1.5 border border-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50 transition-colors"
+                      @click="saveVehicle"
                     >
                       <Icon name="heroicons:heart" class="w-4 h-4 mr-1" />
                       
@@ -597,35 +597,31 @@
 </template>
 
 <script setup lang="ts">
-// Get route params
 const route = useRoute()
 const vehicleId = route.params.id as string
 
-// Fetch vehicle data
-const { data: vehicle, pending, error, refresh } = await useFetch(`/api/vehicles/${vehicleId}`)
-
-// Fetch related vehicles
-const { data: relatedVehicles } = await useFetch(`/api/vehicles/${vehicleId}/related`, {
-  default: () => []
+const { data: vehicleData, pending, error, refresh } = await useFetch('/api/vehicles', {
+  query: { id: vehicleId }
 })
 
-// Fetch car market data for price comparison and chart
-const { data: carData } = await useFetch('/api/cars', {
-  query: {
-    slug: computed(() => {
-      if (!vehicle.value) return ''
-      // Create slug from vehicle data
-      return `${vehicle.value.brand.toLowerCase()}-${vehicle.value.model.toLowerCase()}-${vehicle.value.year}`
-        .replace(/\s+/g, '-')
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-    })
-  },
-  default: () => null,
-  server: false // Only fetch on client side since it depends on vehicle data
+const vehicle = computed(() => {
+  if (!vehicleData.value) return null
+  if ('items' in vehicleData.value) return null
+  return vehicleData.value
 })
 
-// Reactive data for financing simulator
+const { data: relatedData } = await useFetch('/api/vehicles', {
+  query: { brand: computed(() => vehicle.value?.brand), pageSize: 4 },
+  default: () => ({ items: [], page: 1, pageSize: 4, total: 0 })
+})
+
+const relatedVehicles = computed(() => {
+  if (!relatedData.value || !('items' in relatedData.value)) return []
+  return relatedData.value.items
+})
+
+const carData = computed(() => vehicle.value)
+
 const showFinancial = ref(false)
 
 // Sidebar state management
@@ -778,13 +774,13 @@ onMounted(() => {
   window.addEventListener('scroll', handleScroll)
   
   // Auto-expand contact on desktop, keep collapsed on mobile
-  if (process.client && window.innerWidth >= 1024) {
+  if (import.meta.client && window.innerWidth >= 1024) {
     contactExpanded.value = true
   }
 })
 
 onUnmounted(() => {
-  if (process.client) {
+  if (import.meta.client) {
     window.removeEventListener('scroll', handleScroll)
   }
 })
