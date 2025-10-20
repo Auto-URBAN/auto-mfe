@@ -3,7 +3,6 @@
     
       <UiContainer class="py-8 vehicles-section">
     <div class="flex gap-4">
-      <!-- Sidebar Filters (Desktop) -->
       <div class="hidden lg:block w-72 flex-shrink-0">
         <div class="sticky top-28">
           <VehicleFilterSidebar
@@ -12,10 +11,7 @@
           />
         </div>
       </div>
-
-      <!-- Main Content -->
       <div class="flex-1 min-w-0">
-        <!-- Mobile Filter Button -->
         <div class="lg:hidden mb-6">
           <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-4 shadow-lg">
             <UiButton 
@@ -30,7 +26,6 @@
               </UiBadge>
             </UiButton>
             
-            <!-- Quick filters preview -->
             <div v-if="activeFiltersCount > 0" class="mt-3 flex flex-wrap gap-2">
               <div 
                 v-if="filters.make" 
@@ -63,7 +58,6 @@
           </div>
         </div>
         
-        <!-- Loading -->
         <div v-if="loading" class="flex justify-center py-12">
           <div class="text-center">
             <Icon name="heroicons:arrow-path-20-solid" class="w-8 h-8 animate-spin text-blue-500 mx-auto mb-2" />
@@ -71,7 +65,6 @@
           </div>
         </div>
 
-        <!-- Vehicles grid -->
         <div 
           v-else-if="vehicles.length > 0" 
           class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-5 gap-3"
@@ -210,7 +203,6 @@ async function loadVehicles() {
       pageSize: pageSize.value
     }
 
-    // Add search query
     if (searchQuery.value) {
       queryParams.q = searchQuery.value
     }
