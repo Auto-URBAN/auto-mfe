@@ -73,7 +73,7 @@
             v-for="vehicle in vehicles" 
             :key="vehicle.id"
             :title="vehicle.title"
-            :href="`/carro/${vehicle.id}`"
+            :href="`/anuncios/${vehicle.id}`"
             :cover-image-url="vehicle.coverImageUrl"
             :brand="vehicle.brand"
             :price="vehicle.price"

@@ -293,6 +293,10 @@ const filteredModels = ref<VehicleSummary[]>([])
 const selectedModels = ref<VehicleSummary[]>([])
 const sidebarFilters = ref<Partial<SearchFilters> & { category?: string }>({})
 
+// Get query params to auto-select a model
+const route = useRoute()
+const slugParam = route.query.slug as string | undefined
+
 const comparisonFields = ref([
   { id: 'horsepower', label: 'Potência', enabled: true },
   { id: 'year', label: 'Ano', enabled: true },
@@ -422,6 +426,14 @@ async function loadModels() {
       })
       allModels.value = Array.from(modelsMap.values())
       filterModels()
+      
+      // Auto-select model from query param
+      if (slugParam && selectedModels.value.length === 0) {
+        const modelToSelect = allModels.value.find(m => m.slug === slugParam)
+        if (modelToSelect) {
+          selectedModels.value.push(modelToSelect)
+        }
+      }
     }
   } catch (error) {
     console.error('Error loading models:', error)

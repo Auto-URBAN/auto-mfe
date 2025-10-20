@@ -68,16 +68,42 @@
                 {{ vehicle.model }}
               </h1>
 
+              <!-- Year Selector -->
+              <div v-if="availableYears.length > 0" class="mb-4">
+                <label class="text-xs text-gray-400 mb-2 block">Selecione o ano do modelo</label>
+                <div class="flex flex-wrap gap-2">
+                  <button
+                    v-for="yearOption in availableYears"
+                    :key="yearOption.year"
+                    :class="[
+                      'px-4 py-2 rounded-lg font-medium text-sm transition-all',
+                      selectedYear === yearOption.year
+                        ? 'bg-blue-600 text-white shadow-lg scale-105'
+                        : 'bg-white/20 text-white hover:bg-white/30 border border-white/20'
+                    ]"
+                    @click="selectYear(yearOption.year)"
+                  >
+                    {{ yearOption.year }}
+                  </button>
+                </div>
+              </div>
+
+              <!-- Price for selected year -->
+              <div v-if="currentYearData" class="mb-4 p-4 bg-white/10 rounded-lg backdrop-blur-sm">
+                <p class="text-xs text-gray-400 mb-1">Valor FIPE {{ selectedYear }}</p>
+                <p class="text-3xl font-black text-white">{{ formatCurrency(currentYearData?.price || 0) }}</p>
+              </div>
+
               <!-- Badges -->
               <div class="flex flex-wrap gap-2 mb-4">
                 <UiBadge color="blue" variant="solid" size="md">
-                  {{ vehicle.year }}
+                  {{ selectedYear }}
                 </UiBadge>
-                <UiBadge color="gray" variant="soft" size="md">
-                  {{ vehicle.gearbox || 'Automático' }}
+                <UiBadge v-if="currentYearData" color="gray" variant="soft" size="md">
+                  {{ currentYearData?.gearbox || 'Automático' }}
                 </UiBadge>
-                <UiBadge color="yellow" variant="soft" size="md">
-                  {{ vehicle.horsepower }} cv
+                <UiBadge v-if="currentYearData" color="yellow" variant="soft" size="md">
+                  {{ currentYearData?.horsepower }} cv
                 </UiBadge>
               </div>
 
@@ -121,7 +147,7 @@
                   <UiBadge color="yellow" variant="soft" size="sm">Motor</UiBadge>
                 </div>
                 <p class="text-xs text-gray-600 mb-1">Potência</p>
-                <p class="text-2xl font-bold text-gray-900 mb-1">{{ vehicle.horsepower }}</p>
+                <p class="text-2xl font-bold text-gray-900 mb-1">{{ currentYearData?.horsepower || 0 }}</p>
                 <p class="text-xs text-gray-500">cavalos</p>
               </div>
 
@@ -133,8 +159,8 @@
                   <UiBadge color="blue" variant="soft" size="sm">Ano</UiBadge>
                 </div>
                 <p class="text-xs text-gray-600 mb-1">Modelo</p>
-                <p class="text-2xl font-bold text-gray-900 mb-1">{{ vehicle.year }}</p>
-                <p class="text-xs text-gray-500">{{ new Date().getFullYear() - vehicle.year }} anos</p>
+                <p class="text-2xl font-bold text-gray-900 mb-1">{{ selectedYear }}</p>
+                <p class="text-xs text-gray-500">{{ new Date().getFullYear() - selectedYear }} anos</p>
               </div>
 
               <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-4 border border-green-200">
@@ -145,7 +171,7 @@
                   <UiBadge color="green" variant="soft" size="sm">Câmbio</UiBadge>
                 </div>
                 <p class="text-xs text-gray-600 mb-1">Transmissão</p>
-                <p class="text-lg font-bold text-gray-900 mb-1">{{ vehicle.gearbox || 'Auto' }}</p>
+                <p class="text-lg font-bold text-gray-900 mb-1">{{ currentYearData?.gearbox || 'Auto' }}</p>
                 <p class="text-xs text-gray-500">tipo</p>
               </div>
 
@@ -157,7 +183,7 @@
                   <UiBadge color="purple" variant="soft" size="sm">Combustível</UiBadge>
                 </div>
                 <p class="text-xs text-gray-600 mb-1">Tipo</p>
-                <p class="text-lg font-bold text-gray-900 mb-1">{{ vehicle.fuel || 'Gasolina' }}</p>
+                <p class="text-lg font-bold text-gray-900 mb-1">{{ currentYearData?.fuel || 'Gasolina' }}</p>
                 <p class="text-xs text-gray-500">motor</p>
               </div>
 
@@ -169,7 +195,7 @@
                   <UiBadge color="yellow" variant="soft" size="sm">KM</UiBadge>
                 </div>
                 <p class="text-xs text-gray-600 mb-1">Rodagem</p>
-                <p class="text-2xl font-bold text-gray-900 mb-1">{{ formatKm(vehicle.km) }}</p>
+                <p class="text-2xl font-bold text-gray-900 mb-1">{{ formatKm(currentYearData?.km || 0) }}</p>
                 <p class="text-xs text-gray-500">total</p>
               </div>
 
@@ -181,7 +207,7 @@
                   <UiBadge color="red" variant="soft" size="sm">FIPE</UiBadge>
                 </div>
                 <p class="text-xs text-gray-600 mb-1">Código</p>
-                <p class="text-lg font-bold text-gray-900 mb-1">{{ vehicle.fipeCode || 'N/D' }}</p>
+                <p class="text-lg font-bold text-gray-900 mb-1">{{ currentYearData?.fipeCode || 'N/D' }}</p>
                 <p class="text-xs text-gray-500">ref.</p>
               </div>
             </div>
@@ -199,8 +225,8 @@
                 <p class="text-sm text-gray-600">Evolução do valor de mercado</p>
               </div>
               <div class="text-right">
-                <p class="text-xs text-gray-500 mb-1">Valor atual</p>
-                <p class="text-2xl font-bold text-green-600">{{ formatCurrency(vehicle.price) }}</p>
+                <p class="text-xs text-gray-500 mb-1">Valor atual ({{ selectedYear }})</p>
+                <p class="text-2xl font-bold text-green-600">{{ formatCurrency(currentYearData?.price || 0) }}</p>
                 <p
                   :class="[
                     'text-xs font-medium mt-1',
@@ -338,6 +364,20 @@
 <script setup lang="ts">
 import type { VehicleDetail, VehicleSummary } from '@/schemas/vehicle'
 
+interface YearVariant {
+  year: number
+  price: number
+  horsepower: number
+  gearbox?: string
+  fuel?: string
+  km: number
+  fipeCode?: string
+}
+
+interface ModelData extends Omit<VehicleDetail, 'year' | 'price' | 'horsepower' | 'km' | 'gearbox' | 'fuel' | 'fipeCode'> {
+  years: YearVariant[]
+}
+
 interface SearchResult {
   items: VehicleSummary[]
   total: number
@@ -349,10 +389,39 @@ const route = useRoute()
 const slug = route.params.slug as string
 
 const loading = ref(true)
-const vehicle = ref<VehicleDetail | null>(null)
+const vehicle = ref<ModelData | null>(null)
+const selectedYear = ref<number>(new Date().getFullYear())
 const relatedAds = ref<VehicleSummary[]>([])
 const similarModels = ref<VehicleSummary[]>([])
 const allModels = ref<VehicleSummary[]>([])
+
+// Available years for this model
+const availableYears = computed(() => {
+  if (!vehicle.value?.years) return []
+  return [...vehicle.value.years].sort((a, b) => b.year - a.year)
+})
+
+// Current year data based on selection
+const currentYearData = computed(() => {
+  if (!vehicle.value?.years) {
+    return {
+      year: selectedYear.value,
+      price: 0,
+      horsepower: 0,
+      gearbox: 'Automático' as string | undefined,
+      fuel: 'Gasolina' as string | undefined,
+      km: 0,
+      fipeCode: 'N/D' as string | undefined
+    }
+  }
+  
+  const yearData = vehicle.value.years.find(y => y.year === selectedYear.value)
+  return yearData || vehicle.value.years[0]
+})
+
+function selectYear(year: number) {
+  selectedYear.value = year
+}
 
 useHead({
   title: () => vehicle.value ? `${vehicle.value.brand} ${vehicle.value.model} - Auto URBAN` : 'Modelo - Auto URBAN',
@@ -363,14 +432,14 @@ useHead({
 
 // Generate price history data
 const priceHistory = computed(() => {
-  if (!vehicle.value) {
+  if (!currentYearData.value) {
     return {
       last6Months: [],
       variation: 0
     }
   }
 
-  const currentPrice = vehicle.value.price
+  const currentPrice = currentYearData.value.price
   const basePrice = currentPrice * 0.92 // 8% depreciation over 12 months
   
   const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
@@ -400,9 +469,9 @@ const priceHistory = computed(() => {
 
 // Chart data for full history
 const priceChartData = computed(() => {
-  if (!vehicle.value) return { labels: [], datasets: [] }
+  if (!currentYearData.value) return { labels: [], datasets: [] }
   
-  const currentPrice = vehicle.value.price
+  const currentPrice = currentYearData.value.price
   const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
   const currentMonth = new Date().getMonth()
   const currentYear = new Date().getFullYear()
@@ -486,23 +555,23 @@ const priceChartOptions = {
 
 // Mock ads data
 const mockAds = computed(() => {
-  if (!vehicle.value) return []
+  if (!vehicle.value || !currentYearData.value) return []
   
   const cities = ['São Paulo', 'Rio de Janeiro', 'Belo Horizonte', 'Curitiba', 'Porto Alegre', 'Brasília']
   const ufs = ['SP', 'RJ', 'MG', 'PR', 'RS', 'DF']
   
   return Array.from({ length: 5 }, (_, i) => ({
     id: `ad-${i}`,
-    title: `${vehicle.value!.brand} ${vehicle.value!.model} ${vehicle.value!.year}`,
+    title: `${vehicle.value!.brand} ${vehicle.value!.model} ${selectedYear.value}`,
     coverImageUrl: vehicle.value!.coverImageUrl,
     brand: vehicle.value!.brand,
     model: vehicle.value!.model,
-    price: vehicle.value!.price + (Math.random() * 10000 - 5000),
-    year: vehicle.value!.year - Math.floor(Math.random() * 2),
+    price: currentYearData.value!.price + (Math.random() * 10000 - 5000),
+    year: selectedYear.value - Math.floor(Math.random() * 2),
     km: Math.floor(Math.random() * 80000) + 10000,
     uf: ufs[i % ufs.length],
     city: cities[i % cities.length],
-    horsepower: vehicle.value!.horsepower
+    horsepower: currentYearData.value!.horsepower
   }))
 })
 
@@ -527,10 +596,49 @@ async function loadVehicle() {
     if (response?.items) {
       allModels.value = response.items
       
-      // Find vehicle by slug
-      vehicle.value = response.items.find((v: VehicleSummary) => v.slug === slug) as VehicleDetail || null
+      // Find vehicle by slug and group by model
+      const matchingVehicles = response.items.filter((v: VehicleSummary) => v.slug === slug)
       
-      if (vehicle.value) {
+      if (matchingVehicles.length > 0) {
+        const baseVehicle = matchingVehicles[0]
+        
+        if (!baseVehicle) return
+        
+        // Group all years of this model
+        const years: YearVariant[] = matchingVehicles.map((v: VehicleSummary) => ({
+          year: v.year,
+          price: v.price,
+          horsepower: v.horsepower,
+          gearbox: (v as VehicleDetail).gearbox,
+          fuel: (v as VehicleDetail).fuel,
+          km: v.km,
+          fipeCode: (v as VehicleDetail).fipeCode
+        }))
+        
+        // Use actual years from API (now includes multi-year data)
+        const allYears = years
+        
+        // Create model data with all years
+        vehicle.value = {
+          id: baseVehicle.id,
+          title: `${baseVehicle.brand} ${baseVehicle.model}`,
+          brand: baseVehicle.brand,
+          model: baseVehicle.model,
+          slug: baseVehicle.slug,
+          city: baseVehicle.city,
+          uf: baseVehicle.uf,
+          coverImageUrl: baseVehicle.coverImageUrl,
+          status: baseVehicle.status,
+          featured: baseVehicle.featured,
+          description: (baseVehicle as VehicleDetail).description,
+          images: (baseVehicle as VehicleDetail).images || [baseVehicle.coverImageUrl],
+          seller: (baseVehicle as VehicleDetail).seller,
+          years: allYears
+        }
+        
+        // Set initial selected year to the most recent
+        selectedYear.value = Math.max(...allYears.map(y => y.year))
+        
         // Load related ads (same brand and model)
         relatedAds.value = response.items
           .filter((v: VehicleSummary) => 

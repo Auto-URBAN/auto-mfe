@@ -364,5 +364,281 @@
       "whatsapp": "5571987654328"
     },
     "createdAt": "2025-09-20T10:00:00Z"
+  },
+  {
+    "id": "vh009",
+    "title": "Porsche 911 Turbo Cabriolet",
+    "brand": "Porsche",
+    "model": "911",
+    "year": 2024,
+    "price": 1549000,
+    "km": 850,
+    "horsepower": 650,
+    "city": "Campo Grande",
+    "uf": "MS",
+    "coverImageUrl": "https://s3.sa-east-1.amazonaws.com/revista.mobiauto/Porsche/911+Turbo+S/Porsche-911-Turbo-S-Traseira.jpg",
+    "status": "APPROVED",
+    "featured": true,
+    "slug": "porsche-911-turbo",
+    "fipeCode": "001-2",
+    "description": "Porsche 911 Turbo Cabriolet 2024 em estado impecável. Motor biturbo com 650cv, tração integral e acabamento premium.",
+    "gearbox": "AUTO",
+    "fuel": "GASOLINA",
+    "color": "Prata",
+    "images": [
+      "https://s3.sa-east-1.amazonaws.com/revista.mobiauto/Porsche/911+Turbo+S/Porsche-911-Turbo-S-Traseira.jpg"
+    ],
+    "averageValue": 1549000,
+    "minValue": 1500000,
+    "maxValue": 1600000,
+    "prices": [
+      { "month": "2024-01", "value": 1500000 },
+      { "month": "2024-02", "value": 1510000 },
+      { "month": "2024-03", "value": 1525000 },
+      { "month": "2024-04", "value": 1530000 },
+      { "month": "2024-05", "value": 1540000 },
+      { "month": "2024-06", "value": 1549000 }
+    ],
+    "partners": [
+      { "name": "Banco do Brasil", "value": 1520000 },
+      { "name": "Santander", "value": 1550000 },
+      { "name": "Itaú", "value": 1545000 }
+    ],
+    "seller": {
+      "id": "seller_001",
+      "phone": "67987654321",
+      "whatsapp": "5567987654321"
+    },
+    "createdAt": "2025-09-25T10:00:00Z"
+  },
+  {
+    "id": "vh010",
+    "title": "Porsche 911 Turbo Cabriolet",
+    "brand": "Porsche",
+    "model": "911",
+    "year": 2025,
+    "price": 1649000,
+    "km": 120,
+    "horsepower": 670,
+    "city": "Campo Grande",
+    "uf": "MS",
+    "coverImageUrl": "https://s3.sa-east-1.amazonaws.com/revista.mobiauto/Porsche/911+Turbo+S/Porsche-911-Turbo-S-Traseira.jpg",
+    "status": "APPROVED",
+    "featured": true,
+    "slug": "porsche-911-turbo",
+    "fipeCode": "001-3",
+    "description": "Porsche 911 Turbo Cabriolet 2025 zero km. Motor biturbo atualizado com 670cv, tração integral e acabamento premium.",
+    "gearbox": "AUTO",
+    "fuel": "GASOLINA",
+    "color": "Prata",
+    "images": [
+      "https://s3.sa-east-1.amazonaws.com/revista.mobiauto/Porsche/911+Turbo+S/Porsche-911-Turbo-S-Traseira.jpg"
+    ],
+    "averageValue": 1649000,
+    "minValue": 1600000,
+    "maxValue": 1700000,
+    "prices": [
+      { "month": "2024-01", "value": 1600000 },
+      { "month": "2024-02", "value": 1610000 },
+      { "month": "2024-03", "value": 1625000 },
+      { "month": "2024-04", "value": 1630000 },
+      { "month": "2024-05", "value": 1640000 },
+      { "month": "2024-06", "value": 1649000 }
+    ],
+    "partners": [
+      { "name": "Banco do Brasil", "value": 1620000 },
+      { "name": "Santander", "value": 1650000 },
+      { "name": "Itaú", "value": 1645000 }
+    ],
+    "seller": {
+      "id": "seller_001",
+      "phone": "67987654321",
+      "whatsapp": "5567987654321"
+    },
+    "createdAt": "2025-09-25T10:00:00Z"
+  },
+  {
+    "id": "vh011",
+    "title": "BMW M3 Competition",
+    "brand": "BMW",
+    "model": "M3",
+    "year": 2023,
+    "price": 735000,
+    "km": 3500,
+    "horsepower": 510,
+    "city": "São Paulo",
+    "uf": "SP",
+    "coverImageUrl": "https://s3.ecompletocarros.dev/images/lojas/108/veiculos/206897/veiculoInfoVeiculoImagesMobile/vehicle_image_1724358685_d41d8cd98f00b204e9800998ecf8427e.jpeg",
+    "status": "APPROVED",
+    "featured": true,
+    "slug": "bmw-m3-competition",
+    "fipeCode": "002-2",
+    "description": "BMW M3 Competition 2023 único dono. Motor 3.0 6 cilindros biturbo com 510cv, tração traseira e modo drift.",
+    "gearbox": "AUTO",
+    "fuel": "GASOLINA",
+    "color": "Azul",
+    "images": [
+      "https://s3.ecompletocarros.dev/images/lojas/108/veiculos/206897/veiculoInfoVeiculoImagesMobile/vehicle_image_1724358685_d41d8cd98f00b204e9800998ecf8427e.jpeg"
+    ],
+    "averageValue": 735000,
+    "minValue": 700000,
+    "maxValue": 750000,
+    "prices": [
+      { "month": "2024-01", "value": 700000 },
+      { "month": "2024-02", "value": 710000 },
+      { "month": "2024-03", "value": 720000 },
+      { "month": "2024-04", "value": 725000 },
+      { "month": "2024-05", "value": 730000 },
+      { "month": "2024-06", "value": 735000 }
+    ],
+    "partners": [
+      { "name": "Itaú", "value": 720000 },
+      { "name": "Bradesco", "value": 740000 },
+      { "name": "Santander", "value": 735000 }
+    ],
+    "seller": {
+      "id": "seller_002",
+      "phone": "11987654322",
+      "whatsapp": "5511987654322"
+    },
+    "createdAt": "2025-09-24T10:00:00Z"
+  },
+  {
+    "id": "vh012",
+    "title": "BMW M3 Competition",
+    "brand": "BMW",
+    "model": "M3",
+    "year": 2024,
+    "price": 785000,
+    "km": 500,
+    "horsepower": 530,
+    "city": "São Paulo",
+    "uf": "SP",
+    "coverImageUrl": "https://s3.ecompletocarros.dev/images/lojas/108/veiculos/206897/veiculoInfoVeiculoImagesMobile/vehicle_image_1724358685_d41d8cd98f00b204e9800998ecf8427e.jpeg",
+    "status": "APPROVED",
+    "featured": true,
+    "slug": "bmw-m3-competition",
+    "fipeCode": "002-3",
+    "description": "BMW M3 Competition 2024 atualizado. Motor 3.0 6 cilindros biturbo com 530cv, tração traseira e modo drift.",
+    "gearbox": "AUTO",
+    "fuel": "GASOLINA",
+    "color": "Azul",
+    "images": [
+      "https://s3.ecompletocarros.dev/images/lojas/108/veiculos/206897/veiculoInfoVeiculoImagesMobile/vehicle_image_1724358685_d41d8cd98f00b204e9800998ecf8427e.jpeg"
+    ],
+    "averageValue": 785000,
+    "minValue": 750000,
+    "maxValue": 800000,
+    "prices": [
+      { "month": "2024-01", "value": 750000 },
+      { "month": "2024-02", "value": 760000 },
+      { "month": "2024-03", "value": 770000 },
+      { "month": "2024-04", "value": 775000 },
+      { "month": "2024-05", "value": 780000 },
+      { "month": "2024-06", "value": 785000 }
+    ],
+    "partners": [
+      { "name": "Itaú", "value": 770000 },
+      { "name": "Bradesco", "value": 790000 },
+      { "name": "Santander", "value": 785000 }
+    ],
+    "seller": {
+      "id": "seller_002",
+      "phone": "11987654322",
+      "whatsapp": "5511987654322"
+    },
+    "createdAt": "2025-09-24T10:00:00Z"
+  },
+  {
+    "id": "vh013",
+    "title": "VW Golf GTI Performance",
+    "brand": "Volkswagen",
+    "model": "Golf GTI",
+    "year": 2023,
+    "price": 175000,
+    "km": 12000,
+    "horsepower": 245,
+    "city": "Porto Alegre",
+    "uf": "RS",
+    "coverImageUrl": "https://revistacarro.com.br/wp-content/uploads/2024/09/Golf4-1173x768.jpg",
+    "status": "APPROVED",
+    "featured": true,
+    "slug": "vw-golf-gti",
+    "fipeCode": "003-2",
+    "description": "VW Golf GTI Performance 2023. Motor 2.0 TSI com 245cv, câmbio DSG e modo Sport.",
+    "gearbox": "AUTO",
+    "fuel": "GASOLINA",
+    "color": "Vermelho",
+    "images": [
+      "https://revistacarro.com.br/wp-content/uploads/2024/09/Golf4-1173x768.jpg"
+    ],
+    "averageValue": 175000,
+    "minValue": 170000,
+    "maxValue": 180000,
+    "prices": [
+      { "month": "2024-01", "value": 170000 },
+      { "month": "2024-02", "value": 171000 },
+      { "month": "2024-03", "value": 172000 },
+      { "month": "2024-04", "value": 173000 },
+      { "month": "2024-05", "value": 174000 },
+      { "month": "2024-06", "value": 175000 }
+    ],
+    "partners": [
+      { "name": "Banco do Brasil", "value": 172000 },
+      { "name": "Caixa", "value": 178000 },
+      { "name": "Bradesco", "value": 175000 }
+    ],
+    "seller": {
+      "id": "seller_003",
+      "phone": "51987654323",
+      "whatsapp": "5551987654323"
+    },
+    "createdAt": "2025-09-23T10:00:00Z"
+  },
+  {
+    "id": "vh014",
+    "title": "VW Golf GTI Performance",
+    "brand": "Volkswagen",
+    "model": "Golf GTI",
+    "year": 2025,
+    "price": 195000,
+    "km": 0,
+    "horsepower": 265,
+    "city": "Porto Alegre",
+    "uf": "RS",
+    "coverImageUrl": "https://revistacarro.com.br/wp-content/uploads/2024/09/Golf4-1173x768.jpg",
+    "status": "APPROVED",
+    "featured": true,
+    "slug": "vw-golf-gti",
+    "fipeCode": "003-3",
+    "description": "VW Golf GTI Performance 2025 zero km. Motor 2.0 TSI atualizado com 265cv, câmbio DSG e modo Sport.",
+    "gearbox": "AUTO",
+    "fuel": "GASOLINA",
+    "color": "Vermelho",
+    "images": [
+      "https://revistacarro.com.br/wp-content/uploads/2024/09/Golf4-1173x768.jpg"
+    ],
+    "averageValue": 195000,
+    "minValue": 190000,
+    "maxValue": 200000,
+    "prices": [
+      { "month": "2024-01", "value": 190000 },
+      { "month": "2024-02", "value": 191000 },
+      { "month": "2024-03", "value": 192000 },
+      { "month": "2024-04", "value": 193000 },
+      { "month": "2024-05", "value": 194000 },
+      { "month": "2024-06", "value": 195000 }
+    ],
+    "partners": [
+      { "name": "Banco do Brasil", "value": 192000 },
+      { "name": "Caixa", "value": 198000 },
+      { "name": "Bradesco", "value": 195000 }
+    ],
+    "seller": {
+      "id": "seller_003",
+      "phone": "51987654323",
+      "whatsapp": "5551987654323"
+    },
+    "createdAt": "2025-09-23T10:00:00Z"
   }
 ]
