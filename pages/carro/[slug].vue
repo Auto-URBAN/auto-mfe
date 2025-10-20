@@ -76,7 +76,7 @@
                 <UiBadge color="gray" variant="soft" size="lg">
                   {{ vehicle.gearbox || 'Automático' }}
                 </UiBadge>
-                <UiBadge color="orange" variant="soft" size="lg">
+                <UiBadge color="yellow" variant="soft" size="lg">
                   {{ vehicle.horsepower }} cv
                 </UiBadge>
               </div>
@@ -290,24 +290,33 @@ v-if="priceVariation" :class="[
         <Icon name="heroicons:exclamation-circle-20-solid" class="w-20 h-20 text-red-500 mx-auto mb-4" />
         <h2 class="text-2xl font-bold text-gray-900 mb-2">Modelo não encontrado</h2>
         <p class="text-gray-600 mb-6">O modelo que você procura não existe ou foi removido.</p>
-        <UiButton @click="$router.push('/carro')">
-          Voltar para modelos
-        </UiButton>
+        <NuxtLink to="/carro">
+          <UiButton>
+            Voltar para modelos
+          </UiButton>
+        </NuxtLink>
       </UiContainer>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { VehicleDetail } from '@/schemas/vehicle'
+import type { VehicleDetail, VehicleSummary } from '@/schemas/vehicle'
+
+interface SearchResult {
+  items: VehicleSummary[]
+  total: number
+  page: number
+  pageSize: number
+}
 
 const route = useRoute()
 const slug = route.params.slug as string
 
 const loading = ref(true)
 const vehicle = ref<VehicleDetail | null>(null)
-const relatedAds = ref<any[]>([])
-const similarModels = ref<any[]>([])
+const relatedAds = ref<VehicleSummary[]>([])
+const similarModels = ref<VehicleSummary[]>([])
 
 useHead({
   title: () => vehicle.value ? `${vehicle.value.brand} ${vehicle.value.model} - Auto URBAN` : 'Modelo - Auto URBAN',
@@ -318,8 +327,9 @@ useHead({
 
 const priceVariation = computed(() => {
   if (!vehicle.value?.prices || vehicle.value.prices.length < 2) return null
-  const first = vehicle.value.prices[0].value
-  const last = vehicle.value.prices[vehicle.value.prices.length - 1].value
+  const first = vehicle.value.prices[0]?.value
+  const last = vehicle.value.prices[vehicle.value.prices.length - 1]?.value
+  if (!first || !last) return null
   return ((last - first) / first) * 100
 })
 
@@ -327,18 +337,18 @@ const priceVariation = computed(() => {
 async function loadVehicle() {
   loading.value = true
   try {
-    const response = await $fetch<any>('/api/vehicles', {
+    const response = await $fetch<SearchResult>('/api/vehicles', {
       query: { pageSize: 100 }
     })
 
     if (response?.items) {
       // Find vehicle by slug
-      vehicle.value = response.items.find((v: any) => v.slug === slug)
+      vehicle.value = response.items.find((v: VehicleSummary) => v.slug === slug) as VehicleDetail || null
       
       if (vehicle.value) {
         // Load related ads (same brand and model)
         relatedAds.value = response.items
-          .filter((v: any) => 
+          .filter((v: VehicleSummary) => 
             v.brand === vehicle.value!.brand && 
             v.model === vehicle.value!.model &&
             v.id !== vehicle.value!.id
@@ -347,7 +357,7 @@ async function loadVehicle() {
 
         // Load similar models (same brand, different model)
         similarModels.value = response.items
-          .filter((v: any) => 
+          .filter((v: VehicleSummary) => 
             v.brand === vehicle.value!.brand && 
             v.model !== vehicle.value!.model
           )
@@ -378,6 +388,7 @@ function formatKm(km: number): string {
 function formatMonth(month: string): string {
   const [year, monthNum] = month.split('-')
   const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+  if (!monthNum) return month
   return `${months[parseInt(monthNum) - 1]}/${year}`
 }
 
