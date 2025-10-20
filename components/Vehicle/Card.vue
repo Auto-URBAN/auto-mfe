@@ -33,46 +33,45 @@
     </div>
 
     <!-- Content -->
-    <div class="p-5">
-      <!-- Title -->
-      <h3 class="font-semibold text-gray-900 text-base line-clamp-2 mb-3 group-hover:text-blue-600 transition-colors">
-        {{ vehicle.title }}
-      </h3>
+    <div class="flex flex-col p-2 gap-2" id="vehicle-card-content">
+      <div class="flex gap-2 items-center">
+        <div>
+          <img 
+              :src="brandsData.find(combo => combo.name === vehicle.brand)?.logo || '/logos/default-car-logo.webp'" 
+              :alt="brandsData.find(combo => combo.name === vehicle.brand)?.name || 'Marca Desconhecida'"
+              class="w-8 h-8 object-contain"
+            />
+        </div>
+        <div class="flex-1">
+        <h3 class="font-semibold text-gray-900 text-base line-clamp-2 group-hover:text-blue-600 transition-colors">
+          {{ vehicle.title }}
+        </h3>
 
-      <!-- Price -->
-      <div class="mb-4">
-        <span class="text-2xl font-bold text-green-600">
-          {{ formatCurrency(vehicle.price) }}
-        </span>
+        <div>
+          <span class="text-xl font-bold text-green-600">
+            {{ formatCurrency(vehicle.price) }}
+          </span>
+        </div>
+
+        </div>
       </div>
-
-      <!-- Vehicle info -->
-      <div class="flex flex-wrap gap-2 mb-4">
-        <UiBadge color="gray" variant="soft" size="sm">
-          {{ vehicle.year }}
-        </UiBadge>
-        <UiBadge color="gray" variant="soft" size="sm">
-          {{ formatKm(vehicle.km) }}
-        </UiBadge>
-        <UiBadge color="blue" variant="soft" size="sm">
-          {{ vehicle.uf }}
-        </UiBadge>
-      </div>
-
-      <!-- Location -->
-      <p class="text-sm text-gray-600 mb-5">
-        <Icon name="heroicons:map-pin-20-solid" class="w-4 h-4 inline mr-1" />
-        {{ vehicle.city }}, {{ vehicle.uf }}
-      </p>
-
-      <!-- CTA Button -->
-      <div class="flex items-center justify-between">
-        <span class="text-blue-600 font-medium group-hover:text-blue-700">
-          Ver Detalhes
-        </span>
-        <Icon name="heroicons:arrow-right-20-solid" class="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
-      </div>
+      <hr>
+    <div class="flex flex-wrap gap-2">
+      <UiBadge color="gray" variant="soft" size="sm">
+        {{ vehicle.year }}
+      </UiBadge>
+      <UiBadge color="gray" variant="soft" size="sm">
+        {{ formatKm(vehicle.km) }}
+      </UiBadge>
+      <UiBadge color="blue" variant="soft" size="sm">
+        {{ vehicle.uf }}
+      </UiBadge>
+      <UiBadge color="red" variant="soft" size="sm">
+        {{ vehicle.horsepower }} HP
+      </UiBadge>
     </div>
+    </div>
+    
   </NuxtLink>
 </template>
 
@@ -99,6 +98,57 @@ function formatKm(km: number): string {
   if (km < 1000) return `${km} km`
   return `${(km / 1000).toFixed(0)}k km`
 }
+
+const brandsData = [
+        {
+            name: 'Audi',
+            logo: '/logos/audi.webp',
+        },
+        {
+            name: 'BMW',
+            logo: '/logos/bmw.webp',
+        },
+        {
+            name: 'Chevrolet',
+            logo: '/logos/chevrolet.webp',
+        },
+        {
+            name: 'Ford',
+            logo: '/logos/ford.webp'
+        },
+        {
+            name: 'Honda',
+            logo: '/logos/honda.webp',
+        },
+        {
+            name: 'Hyundai',
+            logo: '/logos/hyundai.webp',
+        },
+        {
+            name: 'Mercedes',
+            logo: '/logos/mercedes-benz.webp',
+        },
+        {
+            name: 'Nissan',
+            logo: '/logos/nissan.webp',
+        },
+        {
+            name: 'Porsche',
+            logo: '/logos/porsche.webp',
+        },
+        {
+            name: 'Renault',
+            logo: '/logos/renault.webp',
+        },
+        {
+            name: 'Toyota',
+            logo: '/logos/toyota.webp',
+        },
+        {
+            name: 'Volkswagen',
+            logo: '/logos/volkswagen.webp',
+        }
+    ]
 </script>
 
 <style scoped>
