@@ -185,7 +185,7 @@
 			<!-- CTA com Brilho -->
 			<div class="mt-12 text-center relative z-10 px-4">
 				<NuxtLink
-					to="/anuncios"
+					to="/carros"
 					class="group relative inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-500 hover:to-blue-600 transition-all duration-300 font-bold text-base shadow-xl hover:shadow-blue-500/50 hover:scale-105 overflow-hidden"
 				>
 					<!-- Animated Shine -->

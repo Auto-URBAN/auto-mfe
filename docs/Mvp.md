@@ -29,7 +29,7 @@ MVP **mobile-first**, SPA/PWA (Nuxt 3 sem SSR), com **Service Worker** para cach
 
 ```
 /                # Marketplace (busca + filtros)
-/carro/[id]    # Detalhes do veículo
+/carros[id]    # Detalhes do veículo
 /sell            # Publicar veículo
 /auth/login      # Autenticação OTP
 /account         # Meus anúncios
@@ -49,7 +49,7 @@ MVP **mobile-first**, SPA/PWA (Nuxt 3 sem SSR), com **Service Worker** para cach
 
 ```
 /                # Home (catálogo/lista + filtros)
-/carro/[id]    # Detalhes do veículo
+/carros[id]    # Detalhes do veículo
 /sell            # Publicar veículo (wizard 3 passos)
 /auth/login      # Login (telefone + OTP mock)
 /auth/register   # Cadastro simples
@@ -68,7 +68,7 @@ MVP **mobile-first**, SPA/PWA (Nuxt 3 sem SSR), com **Service Worker** para cach
 - **SWR** no endpoint `/api/search` (SW + IndexedDB).
 - Mostrar chips de filtros aplicados e “limpar tudo”.
 
-### Detalhes `/carro/[id]`
+### Detalhes `/carros[id]`
 
 - **Galeria tocável** (swipe), foto **full-width**.
 - Bloco “Especificações” (tabela simples).
@@ -236,7 +236,7 @@ interface VehicleDetail extends VehicleSummary {
 
 - [ ] `Home` com `SearchFilters` e `VehicleCard`.
 - [ ] `useSearch.ts` (SWR + IndexedDB).
-- [ ] `/carro/[id]` com galeria e CTA WhatsApp.
+- [ ] `/carros[id]` com galeria e CTA WhatsApp.
 
 ### Fase 2 — Autenticação & Publicação
 

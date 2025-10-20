@@ -4,7 +4,7 @@ import vehiclesData from '~/server/data/vehicles.json'
 export default defineEventHandler(async (event): Promise<SearchResult | VehicleDetail> => {
 	const query = getQuery(event)
 
-	const id = query.id as string | undefined
+	const slug = query.slug as string | undefined
 	const page = parseInt((query.page as string) || '1')
 	const pageSize = parseInt((query.pageSize as string) || '20')
 	const featured = query.featured === 'true'
@@ -12,8 +12,8 @@ export default defineEventHandler(async (event): Promise<SearchResult | VehicleD
 
 	const allVehicles = vehiclesData as any as VehicleDetail[]
 
-	if (id) {
-		const vehicle = allVehicles.find(v => v.id === id)
+	if (slug) {
+		const vehicle = allVehicles.find(v => v.slug === slug)
 		if (!vehicle) {
 			throw createError({
 				statusCode: 404,

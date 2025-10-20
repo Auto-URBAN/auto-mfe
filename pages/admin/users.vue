@@ -157,8 +157,8 @@
 							<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 								<div class="flex justify-end space-x-2">
 									<button
-										@click="viewUserAds(user.id)"
 										class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-blue-600 hover:text-blue-900 hover:bg-blue-50 transition-colors"
+										@click="viewUserAds(user.id)"
 									>
 										<Icon name="heroicons:eye" class="mr-1 w-4 h-4" />
 										Ver Anúncios
@@ -166,8 +166,8 @@
 
 									<div class="relative">
 										<button
-											@click="toggleDropdown(user.id)"
 											class="inline-flex items-center px-2 py-1 border border-transparent text-sm font-medium rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+											@click="toggleDropdown(user.id)"
 										>
 											<Icon name="heroicons:ellipsis-horizontal" class="w-4 h-4" />
 										</button>
@@ -179,11 +179,8 @@
 											<div class="p-2 space-y-1">
 												<button
 													v-if="user.role !== 'ADMIN'"
-													@click="
-														promoteToAdmin(user.id)
-														closeDropdown(user.id)
-													"
 													class="flex items-center w-full px-3 py-1 text-sm text-gray-700 hover:bg-gray-100 transition-colors rounded"
+													@click="(promoteToAdmin(user.id), closeDropdown(user.id))"
 												>
 													<Icon name="heroicons:shield-check" class="mr-2 w-4 h-4" />
 													Promover a Admin

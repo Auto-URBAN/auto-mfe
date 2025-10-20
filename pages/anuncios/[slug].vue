@@ -36,7 +36,7 @@
 		<!-- Error State -->
 		<UiAlert
 			v-else-if="error"
-			variant="danger"
+			variant="error"
 			:title="error.message || 'Erro ao carregar veículo'"
 			class="mb-6"
 		>
@@ -579,11 +579,20 @@
 			<div v-if="relatedVehicles.length > 0" class="mt-12">
 				<h2 class="text-xl font-semibold text-gray-900 mb-6">Anúncios Similares</h2>
 
-				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+				<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
 					<VehicleCard
 						v-for="related in relatedVehicles"
 						:key="related.id"
-						:vehicle="related"
+						:title="related.title"
+						:brand="related.brand"
+						:model="related.model"
+						:year="related.year"
+						:price="related.price"
+						:km="related.km"
+						:city="related.city"
+						:uf="related.uf"
+						:cover-image-url="related.coverImageUrl"
+						:slug="related.slug"
 						:show-seller="false"
 					/>
 				</div>
@@ -602,7 +611,7 @@
 
 <script setup lang="ts">
 const route = useRoute()
-const vehicleId = route.params.id as string
+const vehicleSlug = route.params.slug as string
 
 const {
 	data: vehicleData,
@@ -610,7 +619,7 @@ const {
 	error,
 	refresh
 } = await useFetch('/api/vehicles', {
-	query: { id: vehicleId }
+	query: { slug: vehicleSlug }
 })
 
 const vehicle = computed(() => {
@@ -621,7 +630,7 @@ const vehicle = computed(() => {
 
 const { data: relatedData } = await useFetch('/api/vehicles', {
 	query: { brand: computed(() => vehicle.value?.brand), pageSize: 4 },
-	default: () => ({ items: [], page: 1, pageSize: 4, total: 0 })
+	default: () => ({ items: [], page: 1, pageSize: 6, total: 0 })
 })
 
 const relatedVehicles = computed(() => {
@@ -631,17 +640,12 @@ const relatedVehicles = computed(() => {
 
 const carData = computed(() => vehicle.value)
 
-const showFinancial = ref(false)
-
-// Sidebar state management
 const contactExpanded = ref(false)
 const priceExpanded = ref(false)
 const financingExpanded = ref(false)
 
-// Sticky positioning
-const stickyTop = ref(112) // Default: header height (96px) + margin (16px)
+const stickyTop = ref(112)
 
-// Toggle functions
 const toggleContactExpanded = () => {
 	contactExpanded.value = !contactExpanded.value
 }
@@ -654,7 +658,6 @@ const toggleFinancingExpanded = () => {
 	financingExpanded.value = !financingExpanded.value
 }
 
-// Utility functions
 const formatPhone = (phone: string) => {
 	if (phone.length === 11) {
 		return phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
@@ -663,9 +666,8 @@ const formatPhone = (phone: string) => {
 }
 
 const formatPlate = (vehicleId: string) => {
-	// Generate a mock plate based on vehicle ID for privacy
 	const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
-	const nums = vehicleId.replace(/\D/g, '') + '000000' // Ensure we have enough digits
+	const nums = vehicleId.replace(/\D/g, '') + '000000'
 
 	const letter1 = letters[parseInt(nums[0]) % letters.length]
 	const letter2 = letters[parseInt(nums[1]) % letters.length]
@@ -676,7 +678,6 @@ const formatPlate = (vehicleId: string) => {
 }
 
 const formatSellerName = (sellerId: string) => {
-	// Generate consistent seller names based on ID
 	const firstNames = [
 		'João',
 		'Maria',
@@ -709,60 +710,7 @@ const formatSellerName = (sellerId: string) => {
 	return `${firstName} ${lastName}`
 }
 
-const getSellerInitials = (sellerId: string) => {
-	const name = formatSellerName(sellerId)
-	const names = name.split(' ')
-	return `${names[0][0]}${names[1][0]}`
-}
-
-const getStateFullName = (uf: string) => {
-	const states = {
-		AC: 'Acre',
-		AL: 'Alagoas',
-		AP: 'Amapá',
-		AM: 'Amazonas',
-		BA: 'Bahia',
-		CE: 'Ceará',
-		DF: 'Distrito Federal',
-		ES: 'Espírito Santo',
-		GO: 'Goiás',
-		MA: 'Maranhão',
-		MT: 'Mato Grosso',
-		MS: 'Mato Grosso do Sul',
-		MG: 'Minas Gerais',
-		PA: 'Pará',
-		PB: 'Paraíba',
-		PR: 'Paraná',
-		PE: 'Pernambuco',
-		PI: 'Piauí',
-		RJ: 'Rio de Janeiro',
-		RN: 'Rio Grande do Norte',
-		RS: 'Rio Grande do Sul',
-		RO: 'Rondônia',
-		RR: 'Roraima',
-		SC: 'Santa Catarina',
-		SP: 'São Paulo',
-		SE: 'Sergipe',
-		TO: 'Tocantins'
-	}
-	return states[uf as keyof typeof states] || uf
-}
-
-const getSellerRating = (sellerId: string) => {
-	// Generate consistent rating based on seller ID
-	const hash = sellerId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
-	const rating = ((hash % 21) + 40) / 10 // Rating between 4.0 and 6.0
-	return rating.toFixed(1)
-}
-
-const getSellerSales = (sellerId: string) => {
-	// Generate consistent sales count based on seller ID
-	const hash = sellerId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
-	return (hash % 50) + 5 // Sales between 5 and 54
-}
-
 const getViewCount = (vehicleId: string) => {
-	// Generate consistent view count based on vehicle ID
 	const hash = vehicleId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
 	return (hash % 200) + 50 // Views between 50 and 249
 }
@@ -781,7 +729,6 @@ const formatDate = (dateString: string) => {
 }
 
 const saveVehicle = () => {
-	// Mock save functionality
 	alert('Veículo salvo nos seus favoritos!')
 	console.log('Save vehicle:', vehicle.value?.id)
 }
@@ -806,13 +753,10 @@ const shareVehicle = async () => {
 	}
 }
 
-// Handle scroll for smart sticky positioning
 const handleScroll = () => {
 	const scrollY = window.scrollY
-	// Header has: py-4 (32px) + h-16 content (64px) = 96px total height
 	const headerHeight = 96
 
-	// Adjust sticky top based on scroll position
 	if (scrollY > 50) {
 		stickyTop.value = headerHeight + 8 // Header height + small margin when scrolled
 	} else {
@@ -820,11 +764,9 @@ const handleScroll = () => {
 	}
 }
 
-// Lifecycle hooks for scroll handling
 onMounted(() => {
 	window.addEventListener('scroll', handleScroll)
 
-	// Auto-expand contact on desktop, keep collapsed on mobile
 	if (import.meta.client && window.innerWidth >= 1024) {
 		contactExpanded.value = true
 	}
@@ -836,7 +778,6 @@ onUnmounted(() => {
 	}
 })
 
-// Computed properties for price chart
 const priceLabels = computed(() => {
 	if (!carData.value?.prices?.length) return []
 	return carData.value.prices
@@ -876,7 +817,6 @@ const priceComparison = computed(() => {
 	const vehiclePrice = vehicle.value.price
 	const marketAverage = averageMarketPrice.value
 	const difference = vehiclePrice - marketAverage
-	const percentageDiff = Math.abs((difference / marketAverage) * 100)
 
 	if (difference < -2000) {
 		// R$ 2.000 below average

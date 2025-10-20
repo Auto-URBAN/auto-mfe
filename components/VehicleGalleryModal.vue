@@ -276,14 +276,14 @@ const onImageError = () => {
 
 const goToDetails = () => {
 	if (props.vehicle) {
-		navigateTo(`/carro/${props.vehicle.id}`)
+		navigateTo(`/carros/${props.vehicle.id}`)
 		emit('close')
 	}
 }
 
 const openInNewTab = () => {
 	if (props.vehicle) {
-		window.open(`/carro/${props.vehicle.id}`, '_blank')
+		window.open(`/carros/${props.vehicle.id}`, '_blank')
 	}
 }
 
@@ -293,7 +293,7 @@ const shareVehicle = async () => {
 	const shareData = {
 		title: props.vehicle.title,
 		text: `Confira este ${props.vehicle.title} por ${formatCurrency(props.vehicle.price)}`,
-		url: `${window.location.origin}/carro/${props.vehicle.id}`
+		url: `${window.location.origin}/carros/${props.vehicle.id}`
 	}
 
 	if (navigator.share) {

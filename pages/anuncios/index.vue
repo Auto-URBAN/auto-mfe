@@ -30,17 +30,11 @@
 
 							<div v-if="activeFiltersCount > 0" class="mt-3 flex flex-wrap gap-2">
 								<div
-									v-if="filters.make"
+									v-if="filters.brand"
 									class="inline-flex items-center px-2 py-1 bg-white/20 rounded-full"
 								>
-									<span class="text-xs text-white">{{ filters.make }}</span>
-									<button
-										class="ml-1"
-										@click="
-											filters.make = ''
-											handleFiltersUpdate(filters)
-										"
-									>
+									<span class="text-xs text-white">{{ filters.brand }}</span>
+									<button class="ml-1" @click="clearFilter('brand')">
 										<Icon name="heroicons:x-mark-20-solid" class="w-3 h-3 text-white/80" />
 									</button>
 								</div>
@@ -49,28 +43,16 @@
 									class="inline-flex items-center px-2 py-1 bg-white/20 rounded-full"
 								>
 									<span class="text-xs text-white">{{ filters.uf }}</span>
-									<button
-										class="ml-1"
-										@click="
-											filters.uf = ''
-											handleFiltersUpdate(filters)
-										"
-									>
+									<button class="ml-1" @click="clearFilter('uf')">
 										<Icon name="heroicons:x-mark-20-solid" class="w-3 h-3 text-white/80" />
 									</button>
 								</div>
 								<div
-									v-if="filters.priceRange"
+									v-if="filters.priceMin || filters.priceMax"
 									class="inline-flex items-center px-2 py-1 bg-white/20 rounded-full"
 								>
 									<span class="text-xs text-white">Preço selecionado</span>
-									<button
-										class="ml-1"
-										@click="
-											filters.priceRange = ''
-											handleFiltersUpdate(filters)
-										"
-									>
+									<button class="ml-1" @click="clearPriceRange()">
 										<Icon name="heroicons:x-mark-20-solid" class="w-3 h-3 text-white/80" />
 									</button>
 								</div>
@@ -96,7 +78,7 @@
 							v-for="vehicle in vehicles"
 							:key="vehicle.id"
 							:title="vehicle.title"
-							:href="`/anuncios/${vehicle.id}`"
+							:href="`/anuncios/${vehicle.slug}`"
 							:cover-image-url="vehicle.coverImageUrl"
 							:brand="vehicle.brand"
 							:price="vehicle.price"
@@ -148,7 +130,7 @@
 			</div>
 
 			<!-- Mobile Filter Modal -->
-			<UiModal v-model="showMobileFilters" title="Filtros V2">
+			<UiModal v-model="showMobileFilters" title="Filtros">
 				<VehicleFilterSidebar
 					:loading="loading"
 					@update:filters="handleFiltersUpdate"
@@ -160,7 +142,7 @@
 </template>
 
 <script setup lang="ts">
-import type { SearchResult, VehicleSummary } from '@/schemas/vehicle'
+import type { SearchResult, VehicleSummary, SearchFilters, BrazilianState } from '@/schemas/vehicle'
 
 useHead({
 	title: 'Auto URBAN - Encontre o seu carro ideal',
@@ -173,22 +155,7 @@ useHead({
 	]
 })
 
-interface Filters {
-	sort?: string
-	make?: string
-	model?: string
-	yearMin?: string
-	yearMax?: string
-	priceMin?: string
-	priceMax?: string
-	priceRange?: string
-	kmRange?: string
-	kmMin?: string
-	kmMax?: string
-	uf?: string
-	color?: string
-}
-
+const route = useRoute()
 const searchQuery = ref('')
 const vehicles = ref<VehicleSummary[]>([])
 const loading = ref(false)
@@ -199,19 +166,23 @@ const currentPage = ref(1)
 const pageSize = ref(20)
 const total = ref(0)
 
-// Filters
-const filters = ref<Filters>({
-	sort: 'recent'
-})
+// Filters - usando o schema correto
+const filters = ref<Partial<SearchFilters>>({})
 
 // Computed
 const totalPages = computed(() => Math.ceil(total.value / pageSize.value))
 
 const activeFiltersCount = computed(() => {
-	return Object.keys(filters.value).filter(key => {
-		const value = filters.value[key as keyof Filters]
-		return value && value !== '' && key !== 'sort'
-	}).length
+	let count = 0
+	if (filters.value.brand) count++
+	if (filters.value.model) count++
+	if (filters.value.uf) count++
+	if (filters.value.priceMin || filters.value.priceMax) count++
+	if (filters.value.yearMin || filters.value.yearMax) count++
+	if (filters.value.kmMax) count++
+	if (filters.value.fuel) count++
+	if (filters.value.gearbox) count++
+	return count
 })
 
 // Methods
@@ -231,12 +202,13 @@ async function loadVehicles() {
 			pageSize: pageSize.value
 		}
 
+		// Search query
 		if (searchQuery.value) {
 			queryParams.q = searchQuery.value
 		}
 
-		// Add filters - mapeando para os nomes corretos do endpoint
-		if (filters.value.make) queryParams.brand = filters.value.make
+		// Add filters using correct schema names
+		if (filters.value.brand) queryParams.brand = filters.value.brand
 		if (filters.value.model) queryParams.model = filters.value.model
 		if (filters.value.uf) queryParams.uf = filters.value.uf
 		if (filters.value.yearMin) queryParams.yearMin = filters.value.yearMin
@@ -244,7 +216,8 @@ async function loadVehicles() {
 		if (filters.value.priceMin) queryParams.priceMin = filters.value.priceMin
 		if (filters.value.priceMax) queryParams.priceMax = filters.value.priceMax
 		if (filters.value.kmMax) queryParams.kmMax = filters.value.kmMax
-		if (filters.value.sort) queryParams.sort = filters.value.sort
+		if (filters.value.fuel) queryParams.fuel = filters.value.fuel
+		if (filters.value.gearbox) queryParams.gearbox = filters.value.gearbox
 
 		console.log('Loading vehicles with params:', queryParams)
 
@@ -265,14 +238,29 @@ async function loadVehicles() {
 	}
 }
 
-const handleFiltersUpdate = async (newFilters: Filters) => {
+const handleFiltersUpdate = async (newFilters: Partial<SearchFilters>) => {
+	console.log('Filters updated:', newFilters)
 	filters.value = { ...newFilters }
 	currentPage.value = 1
 	await loadVehicles()
+	showMobileFilters.value = false
+}
+
+const clearFilter = (filterKey: keyof SearchFilters) => {
+	const newFilters = { ...filters.value }
+	newFilters[filterKey] = undefined
+	handleFiltersUpdate(newFilters)
+}
+
+const clearPriceRange = () => {
+	const newFilters = { ...filters.value }
+	newFilters.priceMin = undefined
+	newFilters.priceMax = undefined
+	handleFiltersUpdate(newFilters)
 }
 
 const clearFiltersAndReload = async () => {
-	filters.value = { sort: 'recent' }
+	filters.value = {}
 	searchQuery.value = ''
 	currentPage.value = 1
 	await loadVehicles()
@@ -288,6 +276,50 @@ const goToPage = async (page: number) => {
 
 // Load initial data
 onMounted(async () => {
+	// Check for initial filters from route query params
+	if (route.query.brand) {
+		filters.value.brand = route.query.brand as string
+	}
+	if (route.query.uf) {
+		const uf = route.query.uf as string
+		// Validate UF
+		const validStates: BrazilianState[] = [
+			'AC',
+			'AL',
+			'AP',
+			'AM',
+			'BA',
+			'CE',
+			'DF',
+			'ES',
+			'GO',
+			'MA',
+			'MT',
+			'MS',
+			'MG',
+			'PA',
+			'PB',
+			'PR',
+			'PE',
+			'PI',
+			'RJ',
+			'RN',
+			'RS',
+			'RO',
+			'RR',
+			'SC',
+			'SP',
+			'SE',
+			'TO'
+		]
+		if (validStates.includes(uf as BrazilianState)) {
+			filters.value.uf = uf as BrazilianState
+		}
+	}
+	if (route.query.q) {
+		searchQuery.value = route.query.q as string
+	}
+
 	await loadVehicles()
 })
 </script>

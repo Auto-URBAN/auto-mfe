@@ -102,7 +102,7 @@
 
 ### Páginas de Detalhes:
 
-- `/carro/[id]` - Página completa de detalhes
+- `/carros[id]` - Página completa de detalhes
 - Galeria de imagens com lightbox e navegação
 - Especificações detalhadas e descrição
 - CTA WhatsApp com mensagem pré-formatada

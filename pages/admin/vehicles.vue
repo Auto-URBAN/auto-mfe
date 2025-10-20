@@ -303,7 +303,7 @@ const formatDate = (date: string) => {
 
 const viewVehicle = (vehicleId: string) => {
 	// Navigate to vehicle details (will be implemented in Sprint 2)
-	navigateTo(`/carro/${vehicleId}`)
+	navigateTo(`/carros/${vehicleId}`)
 }
 
 const approveVehicle = async (vehicleId: string) => {

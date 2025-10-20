@@ -212,7 +212,7 @@
 										</div>
 									</div>
 
-									<NuxtLink :to="`/carro/${model.slug}`" class="block mt-4">
+									<NuxtLink :to="`/carros/${model.slug}`" class="block mt-4">
 										<UiButton variant="outline" size="sm" class="w-full hover:bg-gray-50">
 											Ver Detalhes
 										</UiButton>
@@ -278,7 +278,7 @@
 
 							<VehicleCard
 								:title="`${model.brand} ${model.model}`"
-								:href="`/carro/${model.slug}`"
+								:href="`/carros/${model.slug}`"
 								:cover-image-url="model.coverImageUrl"
 								:brand="model.brand"
 								:price="model.price"

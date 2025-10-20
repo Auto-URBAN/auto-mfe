@@ -326,7 +326,7 @@
 								v-for="ad in mockAds"
 								:key="ad.id"
 								:title="ad.title"
-								:href="`/anuncios/${ad.id}`"
+								:href="`/anuncios/${ad.slug}`"
 								:cover-image-url="ad.coverImageUrl"
 								:brand="ad.brand"
 								:price="ad.price"
@@ -353,7 +353,7 @@
 							<NuxtLink
 								v-for="similar in randomSimilarModels"
 								:key="similar.id"
-								:to="`/carro/${similar.slug}`"
+								:to="`/carros/${similar.slug}`"
 								class="group bg-white rounded-lg overflow-hidden hover:shadow-xl transition-all duration-300 border border-gray-200"
 							>
 								<div class="aspect-video overflow-hidden bg-gray-100">
@@ -652,6 +652,7 @@ const mockAds = computed(() => {
 		title: `${vehicle.value!.brand} ${vehicle.value!.model} ${selectedYear.value}`,
 		coverImageUrl: vehicle.value!.coverImageUrl,
 		brand: vehicle.value!.brand,
+		slug: vehicle.value!.slug,
 		model: vehicle.value!.model,
 		price: currentYearData.value!.price + (Math.random() * 10000 - 5000),
 		year: selectedYear.value - Math.floor(Math.random() * 2),
