@@ -374,7 +374,7 @@
 				/>
 				<h2 class="text-2xl font-bold text-gray-900 mb-2">Modelo não encontrado</h2>
 				<p class="text-gray-600 mb-6">O modelo que você procura não existe ou foi removido.</p>
-				<NuxtLink to="/carro">
+				<NuxtLink to="/carros">
 					<UiButton> Voltar para modelos </UiButton>
 				</NuxtLink>
 			</UiContainer>

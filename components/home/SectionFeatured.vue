@@ -14,7 +14,7 @@
 					v-for="item in featuredVehicles"
 					:key="item.id"
 					:title="item.title"
-					:href="`/carro?slug=${item.slug}`"
+					:href="`/carros?slug=${item.slug}`"
 					:cover-image-url="item.coverImageUrl"
 					:brand="item.brand"
 					class="h-full transition-all duration-300 hover:shadow-xl"

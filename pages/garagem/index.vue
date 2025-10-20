@@ -226,7 +226,7 @@ function handleViewAds(slug: string) {
 }
 
 function handleCompare(slug: string) {
-	router.push(`/carro?compare=${slug}`)
+	router.push(`/anuncios?compare=${slug}`)
 }
 
 useHead({

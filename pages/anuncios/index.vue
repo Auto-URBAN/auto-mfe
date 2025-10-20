@@ -8,6 +8,15 @@
 					</div>
 				</div>
 				<div class="flex-1 min-w-0">
+					<div v-if="selectedVehicles.length > 0" class="mb-6">
+						<VehicleComparator
+							:selected-vehicles="selectedVehicles"
+							mode="vehicles"
+							@remove="removeVehicle"
+							@clear="clearSelection"
+						/>
+					</div>
+
 					<div class="lg:hidden mb-6">
 						<div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-4 shadow-lg">
 							<UiButton
@@ -74,19 +83,44 @@
 						v-else-if="vehicles.length > 0"
 						class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-5 gap-3"
 					>
-						<VehicleCard
-							v-for="vehicle in vehicles"
-							:key="vehicle.id"
-							:title="vehicle.title"
-							:href="`/anuncios/${vehicle.slug}`"
-							:cover-image-url="vehicle.coverImageUrl"
-							:brand="vehicle.brand"
-							:price="vehicle.price"
-							:year="vehicle.year"
-							:km="vehicle.km"
-							:uf="vehicle.uf"
-							:horsepower="vehicle.horsepower"
-						/>
+						<div v-for="vehicle in vehicles" :key="vehicle.id" class="relative">
+							<button
+								:class="[
+									'absolute top-3 left-3 z-10 w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 border-2 shadow-md',
+									isSelected(vehicle.id)
+										? 'bg-blue-600 border-blue-600 scale-110'
+										: 'bg-white/95 backdrop-blur-sm border-gray-300 hover:border-blue-500 hover:scale-105'
+								]"
+								:disabled="!isSelected(vehicle.id) && selectedVehicles.length >= 4"
+								@click.prevent="toggleSelection(vehicle)"
+							>
+								<Icon
+									v-if="isSelected(vehicle.id)"
+									name="heroicons:check-20-solid"
+									class="w-5 h-5 text-white"
+								/>
+								<Icon
+									v-else
+									name="heroicons:plus-20-solid"
+									:class="[
+										'w-5 h-5',
+										selectedVehicles.length >= 4 ? 'text-gray-400' : 'text-gray-700'
+									]"
+								/>
+							</button>
+
+							<VehicleCard
+								:title="vehicle.title"
+								:href="`/anuncios/${vehicle.slug}`"
+								:cover-image-url="vehicle.coverImageUrl"
+								:brand="vehicle.brand"
+								:price="vehicle.price"
+								:year="vehicle.year"
+								:km="vehicle.km"
+								:uf="vehicle.uf"
+								:horsepower="vehicle.horsepower"
+							/>
+						</div>
 					</div>
 
 					<div v-else class="text-center py-12">
@@ -155,6 +189,7 @@ useHead({
 const route = useRoute()
 const searchQuery = ref('')
 const vehicles = ref<VehicleSummary[]>([])
+const selectedVehicles = ref<VehicleSummary[]>([])
 const loading = ref(false)
 const showMobileFilters = ref(false)
 
@@ -265,6 +300,28 @@ const goToPage = async (page: number) => {
 	}
 }
 
+function isSelected(vehicleId: string): boolean {
+	return selectedVehicles.value.some(v => v.id === vehicleId)
+}
+
+function toggleSelection(vehicle: VehicleSummary) {
+	const index = selectedVehicles.value.findIndex(v => v.id === vehicle.id)
+
+	if (index > -1) {
+		selectedVehicles.value.splice(index, 1)
+	} else if (selectedVehicles.value.length < 4) {
+		selectedVehicles.value.push(vehicle)
+	}
+}
+
+function removeVehicle(vehicleId: string) {
+	selectedVehicles.value = selectedVehicles.value.filter(v => v.id !== vehicleId)
+}
+
+function clearSelection() {
+	selectedVehicles.value = []
+}
+
 onMounted(async () => {
 	if (route.query.brand) {
 		filters.value.brand = route.query.brand as string
@@ -310,6 +367,15 @@ onMounted(async () => {
 	}
 
 	await loadVehicles()
+
+	//Pré-selecionar veículo se vier do query param "compare"
+	if (route.query.compare) {
+		const compareSlug = route.query.compare as string
+		const vehicleToSelect = vehicles.value.find(v => v.slug === compareSlug)
+		if (vehicleToSelect && selectedVehicles.value.length < 4) {
+			selectedVehicles.value.push(vehicleToSelect)
+		}
+	}
 })
 </script>
 

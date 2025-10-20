@@ -24,7 +24,7 @@
 				v-for="vehicle in vehicles"
 				:key="vehicle.id"
 				:title="vehicle.title"
-				:href="`/carro?slug=${vehicle.slug}`"
+				:href="`/carros?slug=${vehicle.slug}`"
 				:cover-image-url="vehicle.coverImageUrl"
 				:brand="vehicle.brand"
 			/>
