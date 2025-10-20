@@ -45,7 +45,7 @@
 							<button
 								v-if="!isAdmin"
 								class="w-full flex items-center justify-center px-4 py-3 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors"
-								@click="router.push('/anuncios/me')"
+								@click="router.push('/anuncios/meus')"
 							>
 								<Icon name="heroicons:document-text" class="w-4 h-4 mr-2" />
 								Meus Anúncios
