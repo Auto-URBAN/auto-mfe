@@ -1,41 +1,45 @@
 <template>
 	<div
-		class="garage-header relative overflow-hidden rounded-2xl bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 p-8 shadow-2xl"
+		class="garage-header relative overflow-hidden rounded-xl bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 p-6 shadow-xl"
 	>
 		<div class="absolute inset-0 bg-[url('/textures/honeycomb.svg')] opacity-5" />
 
-		<div class="relative z-10">
-			<div class="mb-6">
-				<h1 class="mb-2 text-4xl font-bold text-white">{{ greeting }}, {{ userName }}.</h1>
-				<p class="text-lg text-zinc-400">{{ subtitle }}</p>
+		<div class="relative z-10 flex gap-6">
+			<div class="flex flex-col items-start justify-between gap-3 md:flex-row md:items-center">
+				<div>
+					<h1 class="text-2xl font-bold text-white md:text-3xl">{{ greeting }}, {{ userName }}.</h1>
+					<p class="text-sm text-zinc-400">{{ subtitle }}</p>
+				</div>
 			</div>
 
-			<div class="grid grid-cols-2 gap-4 md:grid-cols-5">
-				<div class="rounded-xl bg-zinc-800/50 p-4 backdrop-blur-sm">
-					<div class="mb-1 text-sm text-zinc-400">Carros Atuais</div>
-					<div class="text-2xl font-bold text-blue-400">{{ totalCars }}</div>
-				</div>
-
-				<div class="rounded-xl bg-zinc-800/50 p-4 backdrop-blur-sm">
-					<div class="mb-1 text-sm text-zinc-400">Valor Total</div>
-					<div class="text-2xl font-bold text-emerald-400">{{ formatCurrency(totalValue) }}</div>
-				</div>
-
-				<div class="rounded-xl bg-zinc-800/50 p-4 backdrop-blur-sm">
-					<div class="mb-1 text-sm text-zinc-400">Valorização 12m</div>
-					<div class="text-2xl font-bold" :class="variationClass">
-						{{ avgVariation >= 0 ? '+' : '' }}{{ avgVariation.toFixed(1) }}%
+			<div class="flex-1">
+				<div class="grid grid-cols-2 gap-3 md:grid-cols-5">
+					<div class="rounded-lg bg-zinc-800/50 p-3 backdrop-blur-sm">
+						<div class="mb-0.5 text-xs text-zinc-400">Carros Atuais</div>
+						<div class="text-xl font-bold text-blue-400">{{ totalCars }}</div>
 					</div>
-				</div>
 
-				<div class="rounded-xl bg-zinc-800/50 p-4 backdrop-blur-sm">
-					<div class="mb-1 text-sm text-zinc-400">Histórico</div>
-					<div class="text-2xl font-bold text-zinc-300">{{ totalHistory }}</div>
-				</div>
+					<div class="rounded-lg bg-zinc-800/50 p-3 backdrop-blur-sm">
+						<div class="mb-0.5 text-xs text-zinc-400">Valor Total</div>
+						<div class="text-xl font-bold text-emerald-400">{{ formatCurrency(totalValue) }}</div>
+					</div>
 
-				<div class="rounded-xl bg-zinc-800/50 p-4 backdrop-blur-sm">
-					<div class="mb-1 text-sm text-zinc-400">Objetivos</div>
-					<div class="text-2xl font-bold text-amber-400">{{ totalGoals }}</div>
+					<div class="rounded-lg bg-zinc-800/50 p-3 backdrop-blur-sm">
+						<div class="mb-0.5 text-xs text-zinc-400">Valorização 12m</div>
+						<div class="text-xl font-bold" :class="variationClass">
+							{{ avgVariation >= 0 ? '+' : '' }}{{ avgVariation.toFixed(1) }}%
+						</div>
+					</div>
+
+					<div class="rounded-lg bg-zinc-800/50 p-3 backdrop-blur-sm">
+						<div class="mb-0.5 text-xs text-zinc-400">Histórico</div>
+						<div class="text-xl font-bold text-zinc-300">{{ totalHistory }}</div>
+					</div>
+
+					<div class="rounded-lg bg-zinc-800/50 p-3 backdrop-blur-sm">
+						<div class="mb-0.5 text-xs text-zinc-400">Objetivos</div>
+						<div class="text-xl font-bold text-amber-400">{{ totalGoals }}</div>
+					</div>
 				</div>
 			</div>
 		</div>

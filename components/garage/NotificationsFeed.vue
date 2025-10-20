@@ -77,7 +77,11 @@ const emit = defineEmits<{
 const hasUnread = computed(() => props.notifications.some(n => !n.read))
 
 const sortedNotifications = computed(() => {
-	return [...props.notifications].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+	return [...props.notifications].sort((a, b) => {
+		const dateA = new Date(a.createdAt)
+		const dateB = new Date(b.createdAt)
+		return dateB.getTime() - dateA.getTime()
+	})
 })
 
 function markAsRead(id: string) {
@@ -120,9 +124,10 @@ function notificationBorderColorClass(type: NotificationType): string {
 	return colors[type]
 }
 
-function formatTimeAgo(date: Date): string {
+function formatTimeAgo(date: Date | string): string {
+	const d = typeof date === 'string' ? new Date(date) : date
 	const now = new Date()
-	const diffMs = now.getTime() - date.getTime()
+	const diffMs = now.getTime() - d.getTime()
 	const diffMins = Math.floor(diffMs / 60000)
 	const diffHours = Math.floor(diffMs / 3600000)
 	const diffDays = Math.floor(diffMs / 86400000)
@@ -132,6 +137,6 @@ function formatTimeAgo(date: Date): string {
 	if (diffHours < 24) return `${diffHours}h atrás`
 	if (diffDays < 7) return `${diffDays}d atrás`
 
-	return date.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })
+	return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' })
 }
 </script>

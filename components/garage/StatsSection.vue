@@ -1,6 +1,9 @@
 <template>
 	<div class="garage-stats space-y-6">
-		<h2 class="text-2xl font-bold text-white">Estatísticas da Garagem</h2>
+		<div>
+			<h2 class="text-2xl font-bold text-white">Estatísticas da Garagem</h2>
+			<p class="text-sm text-zinc-400">Análise da sua garagem ao longo do tempo</p>
+		</div>
 
 		<div
 			v-if="stats.valueHistory && stats.valueHistory.length > 0"
@@ -31,22 +34,6 @@
 				<div style="height: 200px">
 					<Chart type="bar" :data="brandChartData" :options="brandChartOptions" :height="200" />
 				</div>
-			</div>
-		</div>
-
-		<div
-			v-if="stats.insights && stats.insights.length > 0"
-			class="grid grid-cols-1 gap-4 md:grid-cols-2"
-		>
-			<div
-				v-for="insight in stats.insights"
-				:key="insight.title"
-				class="rounded-xl p-6"
-				:class="insightCardClass(insight.type)"
-			>
-				<div class="mb-1 text-sm font-medium opacity-80">{{ insight.title }}</div>
-				<div class="mb-2 text-2xl font-bold">{{ insight.value }}</div>
-				<p v-if="insight.description" class="text-sm opacity-70">{{ insight.description }}</p>
 			</div>
 		</div>
 	</div>

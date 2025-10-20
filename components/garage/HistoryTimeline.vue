@@ -1,5 +1,6 @@
 <template>
 	<div class="history-timeline space-y-6">
+		HISTORYTIMELINE CARREGOU
 		<div
 			v-for="car in sortedCars"
 			:key="car.id"
@@ -82,6 +83,11 @@
 				</div>
 			</div>
 		</div>
+		<div v-if="props.cars.length === 0" class="rounded-xl bg-zinc-800/30 p-12 text-center">
+			<Icon name="heroicons:clock" class="mx-auto mb-4 h-16 w-16 text-zinc-600" />
+			<h3 class="mb-2 text-xl font-semibold text-zinc-300">Nenhum histórico registrado</h3>
+			<p class="text-zinc-500">Os carros que você teve no passado aparecerão aqui.</p>
+		</div>
 	</div>
 </template>
 
@@ -94,17 +100,18 @@ const props = defineProps<{
 
 const sortedCars = computed(() => {
 	return [...props.cars].sort((a, b) => {
-		const dateA = a.sellDate || a.purchaseDate
-		const dateB = b.sellDate || b.purchaseDate
+		const dateA = new Date(a.sellDate || a.purchaseDate)
+		const dateB = new Date(b.sellDate || b.purchaseDate)
 		return dateB.getTime() - dateA.getTime()
 	})
 })
 
-function formatDate(date: Date): string {
+function formatDate(date: Date | string): string {
+	const d = typeof date === 'string' ? new Date(date) : date
 	return new Intl.DateTimeFormat('pt-BR', {
 		month: 'short',
 		year: 'numeric'
-	}).format(date)
+	}).format(d)
 }
 
 function formatCurrency(value: number): string {

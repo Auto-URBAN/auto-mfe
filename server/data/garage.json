@@ -23,9 +23,7 @@
 				}
 			],
 			"photos": [
-				"/imgs/garage/bmw-m240i-1.jpg",
-				"/imgs/garage/bmw-m240i-2.jpg",
-				"/imgs/garage/bmw-m240i-3.jpg"
+				"https://i.ytimg.com/vi/7AqMTC0C_XQ/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDmGdWf9iTnO5E0Vpjpg5pP30hK1w"
 			],
 			"lastUpdate": "2025-10-15T00:00:00.000Z",
 			"purchaseDate": "2024-01-10T00:00:00.000Z",
@@ -43,7 +41,9 @@
 			"variation12m": 5.7,
 			"plateVerified": true,
 			"mods": [],
-			"photos": ["/imgs/garage/porsche-cayman-1.jpg", "/imgs/garage/porsche-cayman-2.jpg"],
+			"photos": [
+				"https://s3.sa-east-1.amazonaws.com/revista.mobiauto/Porsche/911+Turbo+S/Porsche-911-Turbo-S-Traseira.jpg"
+			],
 			"lastUpdate": "2025-10-18T00:00:00.000Z",
 			"purchaseDate": "2023-06-22T00:00:00.000Z",
 			"purchasePrice": 590000,
@@ -76,7 +76,7 @@
 			],
 			"status": "SOLD",
 			"storyNote": "Meu primeiro hot hatch de verdade. Me ensinou o que é torque e tração dianteira no limite.",
-			"photos": ["/imgs/garage/golf-gti-1.jpg"],
+			"photos": ["https://revistacarro.com.br/wp-content/uploads/2024/09/Golf4-1173x768.jpg"],
 			"color": "Vermelho Tornado",
 			"profitLoss": 17000
 		},
@@ -100,7 +100,9 @@
 			],
 			"status": "SOLD",
 			"storyNote": "O primeiro carro que eu realmente modifiquei. VTEC nunca decepciona.",
-			"photos": ["/imgs/garage/civic-si-1.jpg"],
+			"photos": [
+				"https://s3.ecompletocarros.dev/images/lojas/108/veiculos/206897/veiculoInfoVeiculoImagesMobile/vehicle_image_1724358685_d41d8cd98f00b204e9800998ecf8427e.jpeg"
+			],
 			"color": "Preto",
 			"profitLoss": -13000
 		},
@@ -118,7 +120,9 @@
 			"mods": [],
 			"status": "CRASHED",
 			"storyNote": "Acidente em pista molhada. Aprendi a respeitar mais a tração dianteira sob chuva.",
-			"photos": [],
+			"photos": [
+				"https://image.webmotors.com.br/_fotos/anunciousados/gigante/2025/202509/20250921/nissan-gtr-3-8-premium-v6-24v-biturbo-gasolina-2p-automatico-wmimagem23532117213.webp"
+			],
 			"color": "Azul Performance",
 			"profitLoss": -7000
 		}
@@ -134,7 +138,7 @@
 			"variationAlerts": true,
 			"savedAds": ["ad-789", "ad-823"],
 			"createdAt": "2024-05-10T00:00:00.000Z",
-			"photo": "/imgs/models/porsche-911-turbo.jpg",
+			"photo": "https://s3.sa-east-1.amazonaws.com/revista.mobiauto/Porsche/911+Turbo+S/Porsche-911-Turbo-S-Traseira.jpg",
 			"year": 2023
 		},
 		{
@@ -147,7 +151,7 @@
 			"variationAlerts": true,
 			"savedAds": ["ad-456"],
 			"createdAt": "2024-08-22T00:00:00.000Z",
-			"photo": "/imgs/models/audi-rs3.jpg",
+			"photo": "https://cdn.motor1.com/images/mgl/jl9zy6/s3/vw-polo-gts-250tsi-2024.jpg",
 			"year": 2024
 		},
 		{
@@ -159,7 +163,7 @@
 			"variationAlerts": false,
 			"savedAds": [],
 			"createdAt": "2024-09-05T00:00:00.000Z",
-			"photo": "/imgs/models/mercedes-c63.jpg",
+			"photo": "https://editorial.pxcrush.net/carsales/general/editorial/2019-mercedes-c63-sandown-034.jpg?width=1024&height=682",
 			"year": 2023
 		}
 	],

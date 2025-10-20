@@ -53,9 +53,9 @@
 				</div>
 			</div>
 
-			<div v-if="car.mods && car.mods.length > 0" class="mb-4">
+			<div class="mb-4">
 				<div class="mb-2 text-sm font-medium text-zinc-400">Modificações</div>
-				<div class="flex flex-wrap gap-2">
+				<div v-if="car.mods && car.mods.length > 0" class="flex flex-wrap gap-2">
 					<span
 						v-for="mod in car.mods"
 						:key="mod.description"
@@ -64,6 +64,7 @@
 						{{ mod.description }}
 					</span>
 				</div>
+				<div v-else class="text-sm text-zinc-500">Nenhuma modificação adicionada.</div>
 			</div>
 
 			<div v-if="car.notes" class="mb-4 rounded-lg bg-zinc-800/50 p-3">
