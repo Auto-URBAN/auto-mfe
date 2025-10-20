@@ -2,6 +2,15 @@ import type { SearchResult, VehicleDetail } from '~/schemas/vehicle'
 import vehiclesData from '~/server/data/vehicles.json'
 
 export default defineEventHandler(async (event): Promise<SearchResult | VehicleDetail> => {
+	//Se não estiver usando mock, aqui você faria chamada para API real
+	//const config = useRuntimeConfig()
+	//if (!useMockData()) {
+	//return await $fetch(`${config.apiUrl}/vehicles`, { query: getQuery(event) })
+	//}
+
+	//Usando dados mockados
+	await mockDelay(300)
+
 	const query = getQuery(event)
 
 	const slug = query.slug as string | undefined
@@ -20,7 +29,6 @@ export default defineEventHandler(async (event): Promise<SearchResult | VehicleD
 				statusMessage: 'Vehicle not found'
 			})
 		}
-		await new Promise(resolve => setTimeout(resolve, 300))
 		return vehicle
 	}
 

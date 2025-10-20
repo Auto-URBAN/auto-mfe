@@ -1,20 +1,21 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
+//https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	modules: ['@nuxt/icon', '@vite-pwa/nuxt', '@nuxt/image', '@nuxtjs/tailwindcss', '@nuxt/eslint'],
 
 	compatibilityDate: '2024-11-01',
 	devtools: { enabled: true },
 
-	// CSS Configuration
+	//CSS Configuration
 	css: ['~/assets/css/main.css'],
 
 	runtimeConfig: {
 		apiUrl: process.env.NUXT_API_URL || 'http://localhost:3001',
 		public: {
 			apiBase: process.env.VITE_API_BASE || '/api',
-			whatsappPrefix: process.env.VITE_WHATSAPP_PREFIX || '55'
+			whatsappPrefix: process.env.VITE_WHATSAPP_PREFIX || '55',
+			useMockData: process.env.NUXT_PUBLIC_USE_MOCK_DATA !== 'false' //Mock por padrão
 		}
-	}, // PWA Configuration via module options
+	}, //PWA Configuration via module options
 	pwa: {
 		registerType: 'autoUpdate',
 		workbox: {
@@ -28,7 +29,7 @@ export default defineNuxtConfig({
 						cacheName: 'api-search-swr',
 						expiration: {
 							maxEntries: 200,
-							maxAgeSeconds: 3600 // 1 hour
+							maxAgeSeconds: 3600 //1 hour
 						}
 					}
 				},
@@ -39,7 +40,7 @@ export default defineNuxtConfig({
 						cacheName: 'images-cache',
 						expiration: {
 							maxEntries: 100,
-							maxAgeSeconds: 2592000 // 30 days
+							maxAgeSeconds: 2592000 //30 days
 						}
 					}
 				}
@@ -69,8 +70,36 @@ export default defineNuxtConfig({
 		compatibilityVersion: 4
 	},
 
-	// Auto-import composables and utils
+	//Auto-import composables and utils
 	imports: {
 		dirs: ['composables', 'utils']
+	},
+
+	//Configuração para Static Generation
+	nitro: {
+		preset: process.env.NUXT_PRESET || 'node-server',
+		prerender: {
+			//Pre-renderiza páginas estáticas no build
+			routes: [
+				'/',
+				'/como-comprar',
+				'/como-vender',
+				'/financiamento',
+				'/faq',
+				'/contato',
+				'/termos',
+				'/privacidade',
+				//Pre-renderiza as APIs como JSON estáticos
+				'/api/filters',
+				'/api/brands',
+				'/api/vehicles',
+				'/api/garage/stats',
+				'/api/garage/notifications',
+				'/api/garage/history',
+				'/api/garage/goals',
+				'/api/garage/current'
+			],
+			crawlLinks: true
+		}
 	}
 })

@@ -8,7 +8,7 @@
 			</div>
 
 			<UiCard>
-				<form @submit.prevent="handleLogin" class="space-y-6">
+				<form class="space-y-6" @submit.prevent="handleLogin">
 					<div class="space-y-2">
 						<label class="block text-sm font-medium text-gray-700">Telefone</label>
 						<UiInput
@@ -34,11 +34,11 @@
 						<div class="ml-3 text-sm">
 							<span class="text-gray-600">
 								Aceito os
-								<NuxtLink to="/terms" class="text-blue-600 hover:text-blue-500">
+								<NuxtLink to="/termos" class="text-blue-600 hover:text-blue-500">
 									Termos de Uso
 								</NuxtLink>
 								e
-								<NuxtLink to="/privacy" class="text-blue-600 hover:text-blue-500">
+								<NuxtLink to="/privacidade" class="text-blue-600 hover:text-blue-500">
 									Política de Privacidade
 								</NuxtLink>
 							</span>
@@ -64,11 +64,12 @@
 						</div>
 					</div>
 
-					<div class="text-center">
+					<!-- Registro temporariamente desabilitado -->
+					<!-- <div class="text-center">
 						<NuxtLink to="/auth/register" class="text-sm text-blue-600 hover:text-blue-500">
 							Primeira vez aqui? Criar conta
 						</NuxtLink>
-					</div>
+					</div> -->
 				</form>
 			</UiCard>
 
