@@ -1,36 +1,37 @@
-export default defineEventHandler(async (event) => {
-  try {
-    const vehicleId = getRouterParam(event, 'id')
-    
-    if (!vehicleId) {
-      throw createError({
-        statusCode: 400,
-        statusMessage: 'Vehicle ID is required'
-      })
-    }
+export default defineEventHandler(async event => {
+	try {
+		const vehicleId = getRouterParam(event, 'id')
 
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 600))
+		if (!vehicleId) {
+			throw createError({
+				statusCode: 400,
+				statusMessage: 'Vehicle ID is required'
+			})
+		}
 
-    // Mock vehicle details - in a real app this would come from database
-    const mockVehicle = {
-      id: vehicleId,
-      title: 'Honda Civic Type R 2021',
-      brand: 'Honda',
-      model: 'Civic',
-      year: 2021,
-      price: 350000,
-      km: 25000,
-      city: 'São Paulo',
-      uf: 'SP' as const,
-      status: 'APPROVED' as const,
-      coverImageUrl: 'https://hips.hearstapps.com/hmg-prod/images/103-2020-honda-civic-type-r-140-1590038142.jpg?crop=0.637xw:0.538xh;0.0684xw,0.438xh&resize=2048:*',
-      images: [
-        'https://hips.hearstapps.com/hmg-prod/images/103-2020-honda-civic-type-r-140-1590038142.jpg?crop=0.637xw:0.538xh;0.0684xw,0.438xh&resize=2048:*',
-        'https://cdn.motor1.com/images/mgl/zOOE9A/s3/2017-honda-civic-type-r.jpg',
-        'https://media.ed.edmunds-media.com/honda/civic-type-r/2017/oem/2017_honda_civic-type-r_hatchback_touring_fq_oem_3_1600.jpg'
-      ],
-      description: `Honda Civic Sport 1.5 Turbo 2021 em excelente estado de conservação.
+		// Simulate API delay
+		await new Promise(resolve => setTimeout(resolve, 600))
+
+		// Mock vehicle details - in a real app this would come from database
+		const mockVehicle = {
+			id: vehicleId,
+			title: 'Honda Civic Type R 2021',
+			brand: 'Honda',
+			model: 'Civic',
+			year: 2021,
+			price: 350000,
+			km: 25000,
+			city: 'São Paulo',
+			uf: 'SP' as const,
+			status: 'APPROVED' as const,
+			coverImageUrl:
+				'https://hips.hearstapps.com/hmg-prod/images/103-2020-honda-civic-type-r-140-1590038142.jpg?crop=0.637xw:0.538xh;0.0684xw,0.438xh&resize=2048:*',
+			images: [
+				'https://hips.hearstapps.com/hmg-prod/images/103-2020-honda-civic-type-r-140-1590038142.jpg?crop=0.637xw:0.538xh;0.0684xw,0.438xh&resize=2048:*',
+				'https://cdn.motor1.com/images/mgl/zOOE9A/s3/2017-honda-civic-type-r.jpg',
+				'https://media.ed.edmunds-media.com/honda/civic-type-r/2017/oem/2017_honda_civic-type-r_hatchback_touring_fq_oem_3_1600.jpg'
+			],
+			description: `Honda Civic Sport 1.5 Turbo 2021 em excelente estado de conservação.
 
 🔥 CARACTERÍSTICAS:
 • Motor 1.5 VTEC Turbo - 174cv
@@ -56,36 +57,36 @@ export default defineEventHandler(async (event) => {
 • Licenciamento em dia
 
 Carro impecável, sem sinistro, pronto para rodar. Aceito financiamento e consórcio.`,
-      gearbox: 'AUTO' as const,
-      fuel: 'GASOLINA' as const,
-      color: 'Branco Perolizado',
-      createdAt: '2025-09-20T14:30:00Z',
-      seller: {
-        id: 'seller_001',
-        phone: '11987654321',
-        whatsapp: '5511987654321'
-      }
-    }
+			gearbox: 'AUTO' as const,
+			fuel: 'GASOLINA' as const,
+			color: 'Branco Perolizado',
+			createdAt: '2025-09-20T14:30:00Z',
+			seller: {
+				id: 'seller_001',
+				phone: '11987654321',
+				whatsapp: '5511987654321'
+			}
+		}
 
-    // Validate vehicle exists (in a real app)
-    if (vehicleId === 'invalid') {
-      throw createError({
-        statusCode: 404,
-        statusMessage: 'Vehicle not found'
-      })
-    }
+		// Validate vehicle exists (in a real app)
+		if (vehicleId === 'invalid') {
+			throw createError({
+				statusCode: 404,
+				statusMessage: 'Vehicle not found'
+			})
+		}
 
-    return mockVehicle
-  } catch (error: any) {
-    console.error('Error fetching vehicle details:', error)
-    
-    if (error?.statusCode) {
-      throw error
-    }
-    
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Internal Server Error'
-    })
-  }
+		return mockVehicle
+	} catch (error: any) {
+		console.error('Error fetching vehicle details:', error)
+
+		if (error?.statusCode) {
+			throw error
+		}
+
+		throw createError({
+			statusCode: 500,
+			statusMessage: 'Internal Server Error'
+		})
+	}
 })

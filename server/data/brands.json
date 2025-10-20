@@ -1,86 +1,106 @@
 [
-  {
-    "id": "porsche",
-    "name": "Porsche",
-    "logo": "/logos/porsche.webp",
-    "models": ["911", "Boxster", "Cayman", "Panamera", "Cayenne", "Macan", "Taycan"],
-    "count": 1
-  },
-  {
-    "id": "bmw",
-    "name": "BMW",
-    "logo": "/logos/bmw.webp",
-    "models": ["Serie 1", "Serie 3", "Serie 5", "X1", "X3", "X5", "M2", "M3", "M4", "M5"],
-    "count": 2
-  },
-  {
-    "id": "volkswagen",
-    "name": "Volkswagen",
-    "logo": "/logos/volkswagen.webp",
-    "models": ["Gol", "Polo", "Virtus", "T-Cross", "Tiguan", "Amarok", "Golf", "Golf GTI", "Polo GTS"],
-    "count": 2
-  },
-  {
-    "id": "nissan",
-    "name": "Nissan",
-    "logo": "/logos/nissan.webp",
-    "models": ["March", "Versa", "Sentra", "Altima", "Kicks", "X-Trail", "GT-R", "370Z"],
-    "count": 1
-  },
-  {
-    "id": "renault",
-    "name": "Renault",
-    "logo": "/logos/renault.webp",
-    "models": ["Kwid", "Logan", "Sandero", "Duster", "Captur", "Koleos", "Sandero RS"],
-    "count": 1
-  },
-  {
-    "id": "mercedes",
-    "name": "Mercedes-Benz",
-    "logo": "/logos/mercedes-benz.webp",
-    "models": ["Classe A", "Classe C", "Classe E", "Classe S", "GLA", "GLC", "GLE", "AMG GT", "AMG C63"],
-    "count": 1
-  },
-  {
-    "id": "audi",
-    "name": "Audi",
-    "logo": "/logos/audi.webp",
-    "models": ["A3", "A4", "A6", "Q3", "Q5", "RS3", "RS4", "RS6"],
-    "count": 0
-  },
-  {
-    "id": "chevrolet",
-    "name": "Chevrolet",
-    "logo": "/logos/chevrolet.webp",
-    "models": ["Onix", "Prisma", "Cruze", "Equinox", "Camaro", "Corvette"],
-    "count": 0
-  },
-  {
-    "id": "ford",
-    "name": "Ford",
-    "logo": "/logos/ford.webp",
-    "models": ["Ka", "Fiesta", "Focus", "Fusion", "EcoSport", "Edge", "Mustang", "F-150"],
-    "count": 0
-  },
-  {
-    "id": "honda",
-    "name": "Honda",
-    "logo": "/logos/honda.webp",
-    "models": ["Fit", "City", "Civic", "Accord", "CR-V", "HR-V", "Civic Type R"],
-    "count": 0
-  },
-  {
-    "id": "hyundai",
-    "name": "Hyundai",
-    "logo": "/logos/hyundai.webp",
-    "models": ["HB20", "Creta", "Tucson", "Santa Fe", "Azera", "Veloster", "i30"],
-    "count": 0
-  },
-  {
-    "id": "toyota",
-    "name": "Toyota",
-    "logo": "/logos/toyota.webp",
-    "models": ["Etios", "Yaris", "Corolla", "Camry", "RAV4", "Hilux", "SW4", "Prius", "Supra"],
-    "count": 0
-  }
+	{
+		"id": "porsche",
+		"name": "Porsche",
+		"logo": "/logos/porsche.webp",
+		"models": ["911", "Boxster", "Cayman", "Panamera", "Cayenne", "Macan", "Taycan"],
+		"count": 1
+	},
+	{
+		"id": "bmw",
+		"name": "BMW",
+		"logo": "/logos/bmw.webp",
+		"models": ["Serie 1", "Serie 3", "Serie 5", "X1", "X3", "X5", "M2", "M3", "M4", "M5"],
+		"count": 2
+	},
+	{
+		"id": "volkswagen",
+		"name": "Volkswagen",
+		"logo": "/logos/volkswagen.webp",
+		"models": [
+			"Gol",
+			"Polo",
+			"Virtus",
+			"T-Cross",
+			"Tiguan",
+			"Amarok",
+			"Golf",
+			"Golf GTI",
+			"Polo GTS"
+		],
+		"count": 2
+	},
+	{
+		"id": "nissan",
+		"name": "Nissan",
+		"logo": "/logos/nissan.webp",
+		"models": ["March", "Versa", "Sentra", "Altima", "Kicks", "X-Trail", "GT-R", "370Z"],
+		"count": 1
+	},
+	{
+		"id": "renault",
+		"name": "Renault",
+		"logo": "/logos/renault.webp",
+		"models": ["Kwid", "Logan", "Sandero", "Duster", "Captur", "Koleos", "Sandero RS"],
+		"count": 1
+	},
+	{
+		"id": "mercedes",
+		"name": "Mercedes-Benz",
+		"logo": "/logos/mercedes-benz.webp",
+		"models": [
+			"Classe A",
+			"Classe C",
+			"Classe E",
+			"Classe S",
+			"GLA",
+			"GLC",
+			"GLE",
+			"AMG GT",
+			"AMG C63"
+		],
+		"count": 1
+	},
+	{
+		"id": "audi",
+		"name": "Audi",
+		"logo": "/logos/audi.webp",
+		"models": ["A3", "A4", "A6", "Q3", "Q5", "RS3", "RS4", "RS6"],
+		"count": 0
+	},
+	{
+		"id": "chevrolet",
+		"name": "Chevrolet",
+		"logo": "/logos/chevrolet.webp",
+		"models": ["Onix", "Prisma", "Cruze", "Equinox", "Camaro", "Corvette"],
+		"count": 0
+	},
+	{
+		"id": "ford",
+		"name": "Ford",
+		"logo": "/logos/ford.webp",
+		"models": ["Ka", "Fiesta", "Focus", "Fusion", "EcoSport", "Edge", "Mustang", "F-150"],
+		"count": 0
+	},
+	{
+		"id": "honda",
+		"name": "Honda",
+		"logo": "/logos/honda.webp",
+		"models": ["Fit", "City", "Civic", "Accord", "CR-V", "HR-V", "Civic Type R"],
+		"count": 0
+	},
+	{
+		"id": "hyundai",
+		"name": "Hyundai",
+		"logo": "/logos/hyundai.webp",
+		"models": ["HB20", "Creta", "Tucson", "Santa Fe", "Azera", "Veloster", "i30"],
+		"count": 0
+	},
+	{
+		"id": "toyota",
+		"name": "Toyota",
+		"logo": "/logos/toyota.webp",
+		"models": ["Etios", "Yaris", "Corolla", "Camry", "RAV4", "Hilux", "SW4", "Prius", "Supra"],
+		"count": 0
+	}
 ]
