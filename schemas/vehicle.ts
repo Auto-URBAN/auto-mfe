@@ -57,6 +57,7 @@ export const VehicleSummary = z.object({
   uf: BrazilianState,
   coverImageUrl: z.string().url('Invalid image URL'),
   status: VehicleStatus,
+  featured: z.boolean().optional(),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional()
 })

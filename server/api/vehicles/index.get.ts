@@ -26,6 +26,10 @@ export default defineEventHandler(async (event): Promise<SearchResult | VehicleD
 
   let filteredVehicles = [...allVehicles]
 
+  if (featured) {
+    filteredVehicles = filteredVehicles.filter(v => v.featured === true)
+  }
+
   if (query.q) {
     const searchTerm = (query.q as string).toLowerCase()
     filteredVehicles = filteredVehicles.filter(v =>
@@ -98,10 +102,6 @@ export default defineEventHandler(async (event): Promise<SearchResult | VehicleD
       break
   }
 
-  if (featured) {
-    filteredVehicles = filteredVehicles.slice(0, 4)
-  }
-
   if (ranking === 'valorizados') {
     filteredVehicles = filteredVehicles
       .filter(v => v.prices && v.prices.length > 0)
@@ -116,7 +116,7 @@ export default defineEventHandler(async (event): Promise<SearchResult | VehicleD
           : 0
         return bGrowth - aGrowth
       })
-      .slice(0, 4)
+      .slice(0, pageSize)
   }
 
   if (ranking === 'depreciados') {
@@ -133,7 +133,7 @@ export default defineEventHandler(async (event): Promise<SearchResult | VehicleD
           : 0
         return aGrowth - bGrowth
       })
-      .slice(0, 4)
+      .slice(0, pageSize)
   }
 
   const start = (page - 1) * pageSize
