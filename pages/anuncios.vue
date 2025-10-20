@@ -1,57 +1,12 @@
 <template>
   <div class="min-h-screen">
-    <!-- Hero Section -->
-    <div class="relative bg-[url('/imgs/background.jpg')] bg-cover bg-center">
-      <!-- Overlay -->
-      <div class="absolute inset-0 bg-black/0"></div>
-      
-      <!-- Content -->
-      <div class="relative py-10 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-4xl mx-auto text-center">
-          <h1 class="text-4xl sm:text-5xl lg:text-4xl font-black text-white mb-2 leading-tight">
-            Busque por 
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">
-              carros legais
-            </span>
-          </h1>
-          
-          <p class="text-md text-gray-200 mb-8 max-w-2xl mx-auto font-medium">
-            Carros esportivos, clássicos e únicos. 
-            <span class="text-blue-300">Chega de carros sem graça!</span>
-          </p>
-          
-          <!-- AI Search -->
-          <div class="max-w-2xl mx-auto mb-8">
-            <AISearchSuggestions
-              @search="handleAISearch"
-              @apply-filters="handleAIFilters"
-            />
-          </div>
-          
-          <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <NuxtLink to="/sell" class="group">
-              <button class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-2 px-4 rounded-xl text-md transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-blue-500/25">
-                <Icon name="heroicons:plus-20-solid" class="w-5 h-5 inline-block mr-2" />
-                Anuncie Grátis
-              </button>
-            </NuxtLink>
-            
-          </div>
-        </div>
-      </div>
-      
-      <!-- Scroll indicator -->
-      <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <Icon name="heroicons:chevron-down-20-solid" class="w-6 h-6 text-white/60" />
-      </div>
-    </div>
     
       <UiContainer class="py-8 vehicles-section">
     <div class="flex gap-4">
       <!-- Sidebar Filters (Desktop) -->
       <div class="hidden lg:block w-72 flex-shrink-0">
         <div class="sticky top-28">
-          <VehicleFilterSidebarV3
+          <VehicleFilterSidebar
             :loading="loading"
             @update:filters="handleFiltersUpdate"
           />
@@ -59,14 +14,14 @@
       </div>
 
       <!-- Main Content -->
-      <div class="flex-1 min-w-0 pt-2">
+      <div class="flex-1 min-w-0">
         <!-- Mobile Filter Button -->
         <div class="lg:hidden mb-6">
           <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-4 shadow-lg">
             <UiButton 
-              @click="showMobileFilters = true" 
               variant="ghost" 
-              class="w-full text-white hover:bg-white/20 border-white/30 font-medium"
+              class="w-full text-white hover:bg-white/20 border-white/30 font-medium" 
+              @click="showMobileFilters = true"
             >
               <Icon name="heroicons:funnel-20-solid" class="w-5 h-5 mr-2" />
               Filtros de Busca
@@ -82,7 +37,7 @@
                 class="inline-flex items-center px-2 py-1 bg-white/20 rounded-full"
               >
                 <span class="text-xs text-white">{{ filters.make }}</span>
-                <button @click="filters.make = ''; handleFiltersUpdate(filters)" class="ml-1">
+                <button class="ml-1" @click="filters.make = ''; handleFiltersUpdate(filters)">
                   <Icon name="heroicons:x-mark-20-solid" class="w-3 h-3 text-white/80" />
                 </button>
               </div>
@@ -91,7 +46,7 @@
                 class="inline-flex items-center px-2 py-1 bg-white/20 rounded-full"
               >
                 <span class="text-xs text-white">{{ filters.uf }}</span>
-                <button @click="filters.uf = ''; handleFiltersUpdate(filters)" class="ml-1">
+                <button class="ml-1" @click="filters.uf = ''; handleFiltersUpdate(filters)">
                   <Icon name="heroicons:x-mark-20-solid" class="w-3 h-3 text-white/80" />
                 </button>
               </div>
@@ -100,7 +55,7 @@
                 class="inline-flex items-center px-2 py-1 bg-white/20 rounded-full"
               >
                 <span class="text-xs text-white">Preço selecionado</span>
-                <button @click="filters.priceRange = ''; handleFiltersUpdate(filters)" class="ml-1">
+                <button class="ml-1" @click="filters.priceRange = ''; handleFiltersUpdate(filters)">
                   <Icon name="heroicons:x-mark-20-solid" class="w-3 h-3 text-white/80" />
                 </button>
               </div>
@@ -123,8 +78,16 @@
         >
           <VehicleCard 
             v-for="vehicle in vehicles" 
-            :key="vehicle.id" 
-            :vehicle="vehicle" 
+            :key="vehicle.id"
+            :title="vehicle.title"
+            :href="`/carro/${vehicle.id}`"
+            :cover-image-url="vehicle.coverImageUrl"
+            :brand="vehicle.brand"
+            :price="vehicle.price"
+            :year="vehicle.year"
+            :km="vehicle.km"
+            :uf="vehicle.uf"
+            :horsepower="vehicle.horsepower"
           />
         </div>
 
@@ -133,7 +96,7 @@
           <Icon name="heroicons:magnifying-glass-20-solid" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
           <h3 class="text-lg font-medium text-gray-900 mb-2">Nenhum veículo encontrado</h3>
           <p class="text-gray-500 mb-4">Tente ajustar os filtros ou buscar por outros termos.</p>
-          <UiButton @click="clearFiltersAndReload" variant="outline">
+          <UiButton variant="outline" @click="clearFiltersAndReload">
             Limpar filtros
           </UiButton>
         </div>
@@ -142,10 +105,10 @@
         <div v-if="vehicles.length > 0 && totalPages > 1" class="mt-8 flex justify-center">
           <div class="flex items-center gap-2">
             <UiButton 
-              @click="goToPage(currentPage - 1)"
               :disabled="currentPage === 1"
               variant="outline"
               size="sm"
+              @click="goToPage(currentPage - 1)"
             >
               <Icon name="heroicons:chevron-left-20-solid" class="w-4 h-4" />
             </UiButton>
@@ -155,10 +118,10 @@
             </span>
             
             <UiButton 
-              @click="goToPage(currentPage + 1)"
               :disabled="currentPage === totalPages"
               variant="outline"
               size="sm"
+              @click="goToPage(currentPage + 1)"
             >
               <Icon name="heroicons:chevron-right-20-solid" class="w-4 h-4" />
             </UiButton>
@@ -180,6 +143,8 @@
 </template>
 
 <script setup lang="ts">
+import type { SearchResult, VehicleSummary } from '@/schemas/vehicle'
+
 useHead({
   title: 'Auto URBAN - Encontre o seu carro ideal',
   meta: [
@@ -204,7 +169,7 @@ interface Filters {
 }
 
 const searchQuery = ref('')
-const vehicles = ref<any[]>([])
+const vehicles = ref<VehicleSummary[]>([])
 const loading = ref(false)
 const showMobileFilters = ref(false)
 
@@ -218,9 +183,6 @@ const filters = ref<Filters>({
   sort: 'recent'
 })
 
-// Auth
-const { isAuthenticated, userName, logout } = useAuth()
-
 // Computed
 const totalPages = computed(() => Math.ceil(total.value / pageSize.value))
 
@@ -232,14 +194,6 @@ const activeFiltersCount = computed(() => {
 })
 
 // Methods
-const handleLogout = async () => {
-  try {
-    await logout()
-  } catch (error) {
-    console.error('Logout error:', error)
-  }
-}
-
 const scrollToVehicles = () => {
   const vehiclesSection = document.querySelector('.vehicles-section')
   if (vehiclesSection) {
@@ -251,7 +205,7 @@ async function loadVehicles() {
   loading.value = true
   
   try {
-    const queryParams: any = {
+    const queryParams: Record<string, string | number> = {
       page: currentPage.value,
       pageSize: pageSize.value
     }
@@ -261,17 +215,20 @@ async function loadVehicles() {
       queryParams.q = searchQuery.value
     }
 
-    // Add filters
-    Object.keys(filters.value).forEach(key => {
-      const value = filters.value[key as keyof Filters]
-      if (value && value !== '') {
-        queryParams[key] = value
-      }
-    })
+    // Add filters - mapeando para os nomes corretos do endpoint
+    if (filters.value.make) queryParams.brand = filters.value.make
+    if (filters.value.model) queryParams.model = filters.value.model
+    if (filters.value.uf) queryParams.uf = filters.value.uf
+    if (filters.value.yearMin) queryParams.yearMin = filters.value.yearMin
+    if (filters.value.yearMax) queryParams.yearMax = filters.value.yearMax
+    if (filters.value.priceMin) queryParams.priceMin = filters.value.priceMin
+    if (filters.value.priceMax) queryParams.priceMax = filters.value.priceMax
+    if (filters.value.kmMax) queryParams.kmMax = filters.value.kmMax
+    if (filters.value.sort) queryParams.sort = filters.value.sort
     
     console.log('Loading vehicles with params:', queryParams)
     
-    const response = await $fetch('/api/cars/search', {
+    const response = await $fetch<SearchResult>('/api/vehicles', {
       query: queryParams
     })
     
@@ -281,7 +238,6 @@ async function loadVehicles() {
     total.value = response.total || 0
   } catch (error) {
     console.error('Load vehicles error:', error)
-    // Fallback para dados mock em caso de erro
     vehicles.value = []
     total.value = 0
   } finally {
@@ -289,27 +245,8 @@ async function loadVehicles() {
   }
 }
 
-async function performSearch() {
-  currentPage.value = 1
-  await loadVehicles()
-}
-
 const handleFiltersUpdate = async (newFilters: Filters) => {
   filters.value = { ...newFilters }
-  currentPage.value = 1
-  await loadVehicles()
-}
-
-// AI Search Methods
-const handleAISearch = async (query: string) => {
-  searchQuery.value = query
-  currentPage.value = 1
-  await loadVehicles()
-}
-
-const handleAIFilters = async (aiFilters: Record<string, any>) => {
-  // Merge AI filters with existing filters
-  filters.value = { ...filters.value, ...aiFilters }
   currentPage.value = 1
   await loadVehicles()
 }
@@ -327,25 +264,6 @@ const goToPage = async (page: number) => {
     await loadVehicles()
     scrollToVehicles()
   }
-}
-
-function goToVehicle(id: string) {
-  navigateTo(`/carro/${id}`)
-}
-
-// Formatters
-function formatCurrency(value: number): string {
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-    maximumFractionDigits: 0
-  }).format(value)
-}
-
-function formatKm(km: number): string {
-  if (km === 0) return '0 km'
-  if (km < 1000) return `${km} km`
-  return `${(km / 1000).toFixed(0)}k km`
 }
 
 // Load initial data
