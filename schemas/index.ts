@@ -22,6 +22,7 @@ export * from './car'
 export * from './installments'
 export * from './partner'
 export * from './price'
+export * from './ranking'
 
 // Utility function to validate data against schema
 export const validateSchema = <T>(schema: any, data: unknown): { success: true; data: T } | { success: false; error: string } => {

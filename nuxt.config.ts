@@ -4,7 +4,8 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@vite-pwa/nuxt',
     '@nuxt/image',
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
+    '@nuxt/eslint'
   ],
   
   compatibilityDate: '2024-11-01',
@@ -77,8 +78,5 @@ export default defineNuxtConfig({
   // Auto-import composables and utils
   imports: {
     dirs: ['composables', 'utils']
-  },
-
-  // Global CSS
-  css: ['~/assets/css/main.css']
+  }
 })
