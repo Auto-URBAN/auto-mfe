@@ -53,6 +53,7 @@ export const VehicleSummary = z.object({
   price: z.number().positive('Price must be positive'),
   km: z.number().int().min(0, 'Mileage cannot be negative'),
   horsepower: z.number().int().min(0, ''),
+  slug: z.string().min(1),
   city: z.string().min(1),
   uf: BrazilianState,
   coverImageUrl: z.string().url('Invalid image URL'),

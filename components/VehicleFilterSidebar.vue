@@ -44,6 +44,28 @@
     <!-- Filters Content -->
     <div v-else-if="filterOptions" class="p-4 space-y-6">
       
+      <!-- Category Filter (only for models mode) -->
+      <div v-if="props.mode === 'models'" class="space-y-3">
+        <div class="flex items-center gap-2">
+          <div class="w-6 h-6 bg-purple-100 rounded-lg flex items-center justify-center">
+            <Icon name="heroicons:tag-20-solid" class="w-3 h-3 text-purple-600" />
+          </div>
+          <label class="text-sm font-medium text-gray-800">Categoria</label>
+        </div>
+        
+        <div class="grid grid-cols-3 gap-2">
+          <div 
+            v-for="category in categories" 
+            :key="category.id"
+            class="p-1 text-center border rounded cursor-pointer transition-all duration-200"
+            :class="filters.category === category.id ? 'border-purple-500 bg-purple-50 text-purple-700 font-semibold' : 'border-gray-200 hover:border-gray-300'"
+            @click="toggleCategory(category.id)"
+          >
+            <span class="text-xs">{{ category.label }}</span>
+          </div>
+        </div>
+      </div>
+
       <!-- Brand/Model Flow -->
       <BrandModelFlow
         ref="brandModelFlow"
@@ -61,7 +83,7 @@
           <label class="text-sm font-medium text-gray-800">Anos</label>
         </div>
         
-        <div class="grid grid-cols-4 gap-2 overflow-y-scroll max-h-20">
+        <div class="grid grid-cols-5 gap-2 overflow-y-scroll max-h-20">
           <div 
             v-for="year in availableYears" 
             :key="year"
@@ -75,7 +97,7 @@
       </div>
 
       <!-- Colors -->
-      <div class="space-y-3">
+      <div v-if="props.mode === 'ads'" class="space-y-3">
         <div class="flex items-center gap-2">
           <div class="w-6 h-6 bg-pink-100 rounded-lg flex items-center justify-center">
             <Icon name="heroicons:swatch-20-solid" class="w-3 h-3 text-pink-600" />
@@ -83,7 +105,7 @@
           <label class="text-sm font-medium text-gray-800">Cores</label>
         </div>
         
-        <div class="grid grid-cols-4 gap-2 overflow-y-scroll max-h-24">
+        <div class="grid grid-cols-5 gap-2 overflow-y-scroll max-h-24">
           <div 
             v-for="color in filterOptions.colors" 
             :key="color.id"
@@ -114,6 +136,7 @@
 
       <!-- KM Range -->
       <UiRangeSlider
+        v-if="props.mode === 'ads'"
         ref="kmSlider"
         v-model="filters.kmRange"
         :config="kmSliderConfig"
@@ -133,6 +156,7 @@ import type { FiltersOptionsV2 } from '~/schemas/filters'
 
 interface Props {
   loading?: boolean
+  mode?: 'models' | 'ads' // models = página de modelos, ads = página de anúncios
 }
 
 interface Emits {
@@ -141,13 +165,15 @@ interface Emits {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  loading: false
+  loading: false,
+  mode: 'ads'
 })
 
 const emit = defineEmits<Emits>()
 
 // Estado local
 const filters = ref({
+  category: 'todos',
   brandModelCombos: [] as any[],
   years: [] as number[],
   colors: [] as string[],
@@ -155,6 +181,16 @@ const filters = ref({
   kmRange: { min: undefined, max: undefined } as any,
   sort: 'recent'
 })
+
+// Categories for models mode
+const categories = [
+  { id: 'todos', label: 'Todos' },
+  { id: 'esportivos', label: 'Esportivos' },
+  { id: 'luxo', label: 'Luxo' },
+  { id: 'compactos', label: 'Compactos' },
+  { id: 'suv', label: 'SUVs' },
+  { id: 'eletricos', label: 'Elétricos' }
+]
 
 // Slider configurations
 const priceSliderConfig = {
@@ -178,7 +214,8 @@ const kmSlider = ref()
 
 // Computed properties
 const hasActiveFilters = computed(() => {
-  return filters.value.brandModelCombos.length > 0 ||
+  return filters.value.category !== 'todos' ||
+         filters.value.brandModelCombos.length > 0 ||
          filters.value.years.length > 0 ||
          filters.value.colors.length > 0 ||
          (filters.value.priceRange && (filters.value.priceRange.min || filters.value.priceRange.max)) ||
@@ -231,6 +268,11 @@ const loadFilterOptions = async () => {
   }
 }
 
+const toggleCategory = (categoryId: string) => {
+  filters.value.category = categoryId
+  emitFilters()
+}
+
 const updateBrandModelSelection = (combos: any[]) => {
   filters.value.brandModelCombos = combos
   emitFilters()
@@ -268,6 +310,7 @@ const updateKmRange = (value: any) => {
 
 const clearAllFilters = () => {
   filters.value = {
+    category: 'todos',
     brandModelCombos: [],
     years: [],
     colors: [],
@@ -287,7 +330,8 @@ const clearAllFilters = () => {
 const emitFilters = () => {
   // Converter para formato compatível com a API existente
   const queryParams: any = {
-    sort: filters.value.sort
+    sort: filters.value.sort,
+    category: filters.value.category
   }
   
   if (filters.value.brandModelCombos.length > 0) {

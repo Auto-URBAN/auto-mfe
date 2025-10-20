@@ -1,18 +1,32 @@
 <template>
   <NuxtLink 
     :to="href"
-    class="block bg-white rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-lg transition-all duration-200 cursor-pointer group"
+    :class="[
+      'block bg-white rounded-lg overflow-hidden transition-all duration-200 cursor-pointer group',
+      showSpecs ? 'rounded-xl hover:shadow-2xl border border-gray-100' : 'rounded-lg hover:shadow-lg border border-gray-200 hover:border-gray-300'
+    ]"
   >
-    <div class="relative aspect-[4/3] rounded-t-lg overflow-hidden">
+    <div :class="['relative overflow-hidden', showSpecs ? 'aspect-video bg-gray-100' : 'aspect-[4/3] rounded-t-lg']">
       <img 
         :src="coverImageUrl || '/imgs/search-example.jpg'" 
         :alt="title"
-        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+        :class="[
+          'w-full h-full object-cover transition-transform duration-200',
+          showSpecs ? 'group-hover:scale-110 duration-500' : 'group-hover:scale-105'
+        ]"
         loading="lazy"
       >
-      <div v-if="status" class="absolute top-3 right-3">
+      <div v-if="status || featured" class="absolute top-3 right-3">
         <UiBadge 
-          v-if="status === 'PENDING'"
+          v-if="featured"
+          color="yellow" 
+          variant="solid"
+          :size="showSpecs ? 'sm' : 'xs'"
+        >
+          Destaque
+        </UiBadge>
+        <UiBadge 
+          v-else-if="status === 'PENDING'"
           color="yellow" 
           variant="solid"
           size="xs"
@@ -30,9 +44,10 @@
       </div>
     </div>
 
-    <div class="flex flex-col p-2 gap-2">
+    <!-- Compact Layout (original) -->
+    <div v-if="!showSpecs" class="flex flex-col p-2 gap-2">
       <div class="flex gap-2 items-center">
-        <div v-if="brand">
+        <div v-if="brand && showBrandLogo">
           <img 
             :src="brandsData.find(b => b.name === brand)?.logo || '/logos/default-car-logo.webp'" 
             :alt="brand"
@@ -69,6 +84,58 @@
         </UiBadge>
       </div>
     </div>
+
+    <!-- Expanded Layout (models page) -->
+    <div v-else class="p-6">
+      <!-- Brand Logo & Name -->
+      <div v-if="brand && showBrandLogo" class="flex items-center gap-3 mb-3">
+        <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+          <img 
+            :src="brandsData.find(b => b.name === brand)?.logo || '/logos/default-car-logo.webp'" 
+            :alt="brand"
+            class="w-6 h-6 object-contain"
+          >
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 font-medium">{{ brand }}</p>
+          <h3 class="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+            {{ title.replace(brand, '').trim() }}
+          </h3>
+        </div>
+      </div>
+
+      <h3 v-else class="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors mb-3">
+        {{ title }}
+      </h3>
+
+      <!-- Specs with Icons -->
+      <div class="grid grid-cols-2 gap-3 mb-4">
+        <div v-if="horsepower" class="flex items-center gap-2 text-sm text-gray-600">
+          <Icon name="heroicons:bolt-20-solid" class="w-4 h-4 text-orange-500" />
+          <span>{{ horsepower }} cv</span>
+        </div>
+        <div v-if="year" class="flex items-center gap-2 text-sm text-gray-600">
+          <Icon name="heroicons:calendar-20-solid" class="w-4 h-4 text-blue-500" />
+          <span>{{ year }}</span>
+        </div>
+        <div v-if="km !== undefined" class="flex items-center gap-2 text-sm text-gray-600">
+          <Icon name="heroicons:map-pin-20-solid" class="w-4 h-4 text-purple-500" />
+          <span>{{ formatKm(km) }}</span>
+        </div>
+        <div v-if="uf" class="flex items-center gap-2 text-sm text-gray-600">
+          <Icon name="heroicons:map-20-solid" class="w-4 h-4 text-green-500" />
+          <span>{{ uf }}</span>
+        </div>
+      </div>
+
+      <!-- Price -->
+      <div v-if="price !== undefined" class="pt-4 border-t border-gray-100">
+        <p v-if="priceLabel" class="text-sm text-gray-500 mb-1">{{ priceLabel }}</p>
+        <p class="text-2xl font-bold text-green-600">
+          {{ formatCurrency(price) }}
+        </p>
+      </div>
+    </div>
   </NuxtLink>
 </template>
 
@@ -84,9 +151,26 @@ interface Props {
   uf?: string
   horsepower?: number
   status?: 'PENDING' | 'APPROVED' | 'REJECTED'
+  featured?: boolean
+  showBrandLogo?: boolean
+  showSpecs?: boolean
+  priceLabel?: string
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  coverImageUrl: undefined,
+  brand: undefined,
+  price: undefined,
+  year: undefined,
+  km: undefined,
+  uf: undefined,
+  horsepower: undefined,
+  status: undefined,
+  featured: false,
+  showBrandLogo: true,
+  showSpecs: false,
+  priceLabel: undefined
+})
 
 const hasAnyBadge = computed(() => 
   props.year !== undefined || 

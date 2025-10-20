@@ -1,10 +1,10 @@
 <template>
   <UiModal 
     :model-value="modelValue" 
-    @update:model-value="$emit('update:modelValue', $event)"
     :title="`${vehicle?.title || 'Veículo'}`"
     size="full"
     :close-on-outside-click="true"
+    @update:model-value="$emit('update:modelValue', $event)"
   >
     <div v-if="vehicle" class="h-full flex flex-col lg:flex-row">
       <!-- Image Gallery Section -->
@@ -17,7 +17,7 @@
             class="w-full h-full object-contain"
             @load="onImageLoad"
             @error="onImageError"
-          />
+          >
           
           <!-- Loading overlay -->
           <div 
@@ -30,16 +30,16 @@
           <!-- Navigation arrows -->
           <button 
             v-if="images.length > 1"
-            @click="previousImage"
             class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-all"
+            @click="previousImage"
           >
             <Icon name="heroicons:chevron-left-20-solid" class="w-6 h-6" />
           </button>
           
           <button 
             v-if="images.length > 1"
-            @click="nextImage"
             class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-all"
+            @click="nextImage"
           >
             <Icon name="heroicons:chevron-right-20-solid" class="w-6 h-6" />
           </button>
@@ -54,8 +54,8 @@
 
           <!-- Zoom button -->
           <button 
-            @click="toggleZoom"
             class="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all"
+            @click="toggleZoom"
           >
             <Icon :name="isZoomed ? 'heroicons:magnifying-glass-minus-20-solid' : 'heroicons:magnifying-glass-plus-20-solid'" class="w-5 h-5" />
           </button>
@@ -70,15 +70,15 @@
             <button
               v-for="(image, index) in images"
               :key="index"
-              @click="setCurrentImage(index)"
               class="flex-shrink-0 w-16 h-12 rounded overflow-hidden border-2 transition-all"
               :class="currentImageIndex === index ? 'border-blue-500' : 'border-white/30 hover:border-white/60'"
+              @click="setCurrentImage(index)"
             >
               <img 
                 :src="image" 
                 :alt="`${vehicle.title} - foto ${index + 1}`"
                 class="w-full h-full object-cover"
-              />
+              >
             </button>
           </div>
         </div>
@@ -132,19 +132,19 @@
         <!-- Action buttons -->
         <div class="mt-auto space-y-3">
           <UiButton 
-            @click="goToDetails" 
-            class="w-full"
+            class="w-full" 
             size="lg"
+            @click="goToDetails"
           >
             <Icon name="heroicons:eye-20-solid" class="w-5 h-5 mr-2" />
             Ver Detalhes Completos
           </UiButton>
           
           <UiButton 
-            @click="openInNewTab" 
             variant="outline" 
-            class="w-full"
+            class="w-full" 
             size="lg"
+            @click="openInNewTab"
           >
             <Icon name="heroicons:arrow-top-right-on-square-20-solid" class="w-5 h-5 mr-2" />
             Abrir em Nova Aba
@@ -152,19 +152,19 @@
 
           <div class="flex gap-2">
             <UiButton 
-              @click="shareVehicle" 
               variant="outline" 
-              class="flex-1"
+              class="flex-1" 
+              @click="shareVehicle"
             >
               <Icon name="heroicons:share-20-solid" class="w-4 h-4 mr-1" />
               Compartilhar
             </UiButton>
             
             <UiButton 
-              @click="toggleFavorite" 
               variant="outline" 
-              class="flex-1"
+              class="flex-1" 
               :class="isFavorite ? 'text-red-600 border-red-300' : ''"
+              @click="toggleFavorite"
             >
               <Icon :name="isFavorite ? 'heroicons:heart-solid' : 'heroicons:heart-20-solid'" class="w-4 h-4 mr-1" />
               {{ isFavorite ? 'Favoritado' : 'Favoritar' }}
