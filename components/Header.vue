@@ -113,7 +113,7 @@
 						<button
 							v-if="!isAdmin"
 							class="hidden md:flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors"
-							@click="router.push('/sell')"
+							@click="router.push('/anuncios/criar')"
 						>
 							<Icon name="heroicons:plus" class="w-4 h-4 mr-1" />
 							<span>Anunciar</span>

@@ -36,7 +36,7 @@
 							<button
 								v-if="!isAdmin"
 								class="w-full flex items-center justify-center px-4 py-3 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-								@click="router.push('/sell')"
+								@click="router.push('/anuncios/criar')"
 							>
 								<Icon name="heroicons:plus" class="w-4 h-4 mr-2" />
 								Anunciar Veículo

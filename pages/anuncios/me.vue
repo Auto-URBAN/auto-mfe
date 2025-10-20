@@ -8,7 +8,7 @@
 					<Icon name="heroicons:document-text" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
 					<h3 class="text-lg font-medium text-gray-900 mb-2">Nenhum anúncio encontrado</h3>
 					<p class="text-gray-500 mb-6">Você ainda não possui anúncios publicados.</p>
-					<UiButton @click="$router.push('/sell')">
+					<UiButton @click="$router.push('/anuncios/criar')">
 						<Icon name="heroicons:plus" class="w-4 h-4 mr-2" />
 						Criar Primeiro Anúncio
 					</UiButton>
