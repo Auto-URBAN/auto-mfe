@@ -18,10 +18,7 @@ export * from './common'
 // Re-export existing schemas for compatibility
 export * from './bank'
 export * from './brand'
-export * from './car'
 export * from './installments'
-export * from './partner'
-export * from './price'
 export * from './ranking'
 
 // Utility function to validate data against schema
