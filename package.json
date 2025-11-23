@@ -29,12 +29,12 @@
 	"dependencies": {
 		"@nuxt/eslint": "^0.5.7",
 		"@nuxt/icon": "1.10.3",
-		"@vite-pwa/nuxt": "^1.0.4",
-		"chart.js": "^4.5.0",
+		"@vite-pwa/nuxt": "^1.0.7",
+		"chart.js": "^4.5.1",
 		"idb": "^8.0.3",
 		"maska": "^3.2.0",
 		"vue": "latest",
-		"vue-chartjs": "^5.3.2",
+		"vue-chartjs": "^5.3.3",
 		"zod": "^3.25.76"
 	},
 	"packageManager": "pnpm@9.10.0+sha512.73a29afa36a0d092ece5271de5177ecbf8318d454ecd701343131b8ebc0c1a91c487da46ab77c8e596d6acf1461e3594ced4becedf8921b074fbd8653ed7051c",
@@ -43,15 +43,15 @@
 		"@iconify-json/uil": "^1.2.3",
 		"@nuxt/image": "1.11.0",
 		"@nuxtjs/tailwindcss": "^6.14.0",
-		"autoprefixer": "^10.4.21",
+		"autoprefixer": "^10.4.22",
 		"cross-env": "^7.0.3",
 		"husky": "^9.1.7",
-		"lint-staged": "^16.2.4",
-		"nuxt": "^3.19.2",
+		"lint-staged": "^16.2.7",
+		"nuxt": "^3.20.1",
 		"prettier": "^3.6.2",
 		"strip-comments": "^2.0.1",
 		"tailwindcss": "3.4.15",
-		"typescript": "^5.9.2",
+		"typescript": "^5.9.3",
 		"vue-tsc": "^2.2.12"
 	}
 }
