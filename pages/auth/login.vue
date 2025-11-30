@@ -113,6 +113,8 @@ const formatPhone = (event: Event) => {
 	}
 }
 
+const { sendOtp } = useAuthSimple()
+
 const handleLogin = async () => {
 	if (!isFormValid.value) return
 
@@ -121,25 +123,20 @@ const handleLogin = async () => {
 	try {
 		const cleanPhone = phone.value.replace(/\D/g, '')
 
-		const response = await $fetch('/api/auth/login', {
-			method: 'POST',
-			body: { phone: cleanPhone }
+		await sendOtp(cleanPhone)
+
+		console.log('Código enviado com sucesso!')
+
+		await router.push({
+			path: '/auth/verify',
+			query: {
+				phone: cleanPhone,
+				redirect: route.query.redirect as string
+			}
 		})
-
-		if (response.otpSent) {
-			console.log('Código enviado com sucesso!')
-
-			await router.push({
-				path: '/auth/verify',
-				query: {
-					phone: cleanPhone,
-					redirect: route.query.redirect as string
-				}
-			})
-		}
 	} catch (error: any) {
 		console.error('Login error:', error)
-		alert('Erro no login. Tente novamente em alguns instantes.')
+		alert('Erro ao enviar código. Tente novamente.')
 	} finally {
 		loading.value = false
 	}

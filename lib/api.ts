@@ -10,9 +10,12 @@ export interface APIError extends Error {
 
 export class APIClient {
 	private baseURL: string
+	private useMockData: boolean
 
-	constructor(baseURL = '/api') {
-		this.baseURL = baseURL
+	constructor() {
+		const config = useRuntimeConfig()
+		this.useMockData = config.public.useMockData
+		this.baseURL = this.useMockData ? '/api' : config.public.apiBase
 	}
 
 	private async request<T = any>(
@@ -40,7 +43,7 @@ export class APIClient {
 			...customHeaders
 		}
 
-		// Add auth token if available and not skipped
+		//Add auth token if available and not skipped
 		if (!skipAuth && import.meta.client) {
 			const { useAuth } = await import('#imports')
 			const auth = useAuth()
@@ -59,17 +62,17 @@ export class APIClient {
 
 			return response
 		} catch (error: any) {
-			// Handle 401 - try refresh token
+			//Handle 401 - try refresh token
 			if (error.statusCode === 401 && retry && !skipAuth && import.meta.client) {
 				try {
 					const { useAuth } = await import('#imports')
 					const auth = useAuth()
 					await auth.refreshTokens()
 
-					// Retry original request
+					//Retry original request
 					return this.request<T>(url, { ...options, retry: false })
 				} catch (refreshError) {
-					// Refresh failed, redirect to login
+					//Refresh failed, redirect to login
 					const { useAuth } = await import('#imports')
 					const auth = useAuth()
 					auth.clearAuth()
@@ -82,7 +85,7 @@ export class APIClient {
 				}
 			}
 
-			// Re-throw other errors
+			//Re-throw other errors
 			const apiError: APIError = new Error(error.statusMessage || error.message || 'API Error')
 			apiError.statusCode = error.statusCode
 			apiError.statusMessage = error.statusMessage
@@ -146,10 +149,10 @@ export class APIClient {
 	}
 }
 
-// Export singleton instance
+//Export singleton instance
 export const apiClient = new APIClient()
 
-// Helper function for quick access
+//Helper function for quick access
 export const api = {
 	get: apiClient.get.bind(apiClient),
 	post: apiClient.post.bind(apiClient),

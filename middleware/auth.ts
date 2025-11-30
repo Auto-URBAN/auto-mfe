@@ -1,9 +1,9 @@
 export default defineNuxtRouteMiddleware(to => {
-	const { isAuthenticated } = useAuth()
+	const { isLoggedIn } = useAuthSimple()
 
 	if (import.meta.server) return
 
-	if (!isAuthenticated.value) {
+	if (!isLoggedIn.value) {
 		const redirectTo = to.fullPath
 
 		return navigateTo(`/auth/login?redirect=${encodeURIComponent(redirectTo)}`)

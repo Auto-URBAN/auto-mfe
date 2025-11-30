@@ -107,33 +107,27 @@ const formatPhone = (phoneNumber: string) => {
 	return phoneNumber
 }
 
+const { verifyOtp } = useAuthSimple()
+
 const handleVerification = async () => {
 	if (code.value?.length !== 6) return
 
 	loading.value = true
 
 	try {
-		const { verifyOTP } = useAuth()
+		await verifyOtp(phone, code.value)
 
-		const response = await verifyOTP(phone, code.value)
+		console.log('Login realizado com sucesso!')
 
-		if (response.accessToken) {
-			console.log('Login realizado com sucesso!')
-
-			const redirectTo = (route.query.redirect as string) || '/'
-			await router.push(redirectTo)
-		}
+		const redirectTo = (route.query.redirect as string) || '/garagem'
+		await router.push(redirectTo)
 	} catch (error: any) {
 		console.error('Verification error:', error)
 
 		let errorMessage = 'Código inválido. Verifique o código e tente novamente.'
 
-		if (error?.statusCode === 401) {
-			errorMessage = 'Código OTP inválido. Tente novamente.'
-		} else if (error?.message?.includes('Invalid phone')) {
-			errorMessage = 'Número de telefone inválido.'
-		} else if (error?.message?.includes('must be 6 digits')) {
-			errorMessage = 'O código deve ter 6 dígitos.'
+		if (error?.data?.error) {
+			errorMessage = error.data.error
 		}
 
 		alert(errorMessage)
@@ -144,14 +138,13 @@ const handleVerification = async () => {
 	}
 }
 
+const { sendOtp } = useAuthSimple()
+
 const resendCode = async () => {
 	resendLoading.value = true
 
 	try {
-		await $fetch('/api/auth/login', {
-			method: 'POST',
-			body: { phone }
-		})
+		await sendOtp(phone)
 
 		console.log('Código reenviado com sucesso!')
 
