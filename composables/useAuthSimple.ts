@@ -15,12 +15,6 @@ export const useAuthSimple = () => {
 	const isLoggedIn = computed(() => !!accessToken.value)
 
 	const sendOtp = async (phone: string, firstName?: string): Promise<void> => {
-		if (config.public.useMockData) {
-			await new Promise(resolve => setTimeout(resolve, 500))
-			console.log(`Mock OTP sent to ${phone}: 1234`)
-			return
-		}
-
 		await $fetch(`${config.public.apiBase}/auth/send-otp`, {
 			method: 'POST',
 			body: { phone, firstName }
@@ -28,19 +22,6 @@ export const useAuthSimple = () => {
 	}
 
 	const verifyOtp = async (phone: string, code: string): Promise<void> => {
-		if (config.public.useMockData) {
-			await new Promise(resolve => setTimeout(resolve, 1000))
-
-			user.value = {
-				id: '1',
-				phone: phone,
-				role: 'USER'
-			}
-
-			accessToken.value = 'mock-jwt-token'
-			return
-		}
-
 		const response = await $fetch<AuthResponse>(`${config.public.apiBase}/auth/verify-otp`, {
 			method: 'POST',
 			body: { phone, code }
@@ -59,7 +40,7 @@ export const useAuthSimple = () => {
 	}
 
 	const refreshTokens = async (): Promise<void> => {
-		if (config.public.useMockData || !refreshToken.value) return
+		if (!refreshToken.value) return
 
 		const response = await $fetch<AuthResponse>(`${config.public.apiBase}/auth/refresh`, {
 			method: 'POST',
