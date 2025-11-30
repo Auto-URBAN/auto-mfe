@@ -195,6 +195,10 @@ interface BankOption {
 	note?: string
 }
 
+//Busca taxas dos bancos via SSR
+const { data: bankOptionsData } = await useFetch<BankOption[]>('/api/banks/financing-rates')
+const bankOptions = computed(() => bankOptionsData.value || [])
+
 const vehicleValue = ref(0)
 const downPaymentPercentage = ref(0)
 const months = ref(48)
@@ -207,33 +211,6 @@ const maxDownPaymentPercent = 100
 
 //Opções de parcelamento
 const installmentOptions = [12, 24, 36, 48, 60]
-const bankOptions: BankOption[] = [
-	{
-		id: 'bb',
-		name: 'Banco do Brasil',
-		rate: 1.49
-	},
-	{
-		id: 'bradesco',
-		name: 'Bradesco',
-		rate: 1.55
-	},
-	{
-		id: 'itau',
-		name: 'Itaú',
-		rate: 1.59
-	},
-	{
-		id: 'santander',
-		name: 'Santander',
-		rate: 1.69
-	},
-	{
-		id: 'consorcio',
-		name: 'Consórcio',
-		rate: 0
-	}
-]
 
 //Computed values
 const downPayment = computed(() => {
@@ -287,7 +264,7 @@ const calculatePayment = (numMonths: number) => {
 }
 
 const getBankInfo = (bankId: string) => {
-	return bankOptions.find((bank: BankOption) => bank.id === bankId)
+	return bankOptions.value.find((bank: BankOption) => bank.id === bankId)
 }
 
 const updateInterestRate = () => {

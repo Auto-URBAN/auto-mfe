@@ -2,6 +2,7 @@
 	<div class="min-h-screen bg-white">
 		<HomeSectionHero />
 		<HomeSectionFeatured />
+		<HomeSectionFinancing />
 		<HomeSectionMarket />
 		<HomeSectionGarage />
 	</div>

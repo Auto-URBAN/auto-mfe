@@ -83,125 +83,30 @@
 					</h2>
 
 					<div class="grid md:grid-cols-3 gap-8 mb-12">
-						<!-- CDC -->
-						<UiCard class="hover:shadow-xl transition-shadow">
-							<div class="p-6">
-								<div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-									<svg
-										class="w-6 h-6 text-blue-600"
-										fill="none"
-										stroke="currentColor"
-										viewBox="0 0 24 24"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-										/>
-									</svg>
-								</div>
-								<h3 class="text-xl font-bold text-gray-900 mb-3">CDC</h3>
-								<p class="text-gray-600 mb-4">
-									Crédito Direto ao Consumidor. O mais comum no Brasil. Você financia direto com o
-									banco e o carro fica alienado até quitar.
-								</p>
-								<div class="space-y-2 text-sm">
-									<div class="flex items-start">
-										<span class="text-green-600 mr-2">✓</span>
-										<span class="text-gray-700">Liberação rápida</span>
-									</div>
-									<div class="flex items-start">
-										<span class="text-green-600 mr-2">✓</span>
-										<span class="text-gray-700">Pode quitar antecipado</span>
-									</div>
-									<div class="flex items-start">
-										<span class="text-red-600 mr-2">✗</span>
-										<span class="text-gray-700">Juros mais altos</span>
-									</div>
-								</div>
-							</div>
-						</UiCard>
-
-						<!-- Leasing -->
-						<UiCard class="hover:shadow-xl transition-shadow">
+						<UiCard
+							v-for="type in financingTypes"
+							:key="type.id"
+							class="hover:shadow-xl transition-shadow"
+						>
 							<div class="p-6">
 								<div
-									class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4"
+									:class="[
+										type.iconBg,
+										'w-12 h-12 rounded-lg flex items-center justify-center mb-4'
+									]"
 								>
-									<svg
-										class="w-6 h-6 text-purple-600"
-										fill="none"
-										stroke="currentColor"
-										viewBox="0 0 24 24"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-										/>
-									</svg>
+									<Icon :name="type.icon" :class="[type.iconColor, 'w-6 h-6']" />
 								</div>
-								<h3 class="text-xl font-bold text-gray-900 mb-3">Leasing</h3>
-								<p class="text-gray-600 mb-4">
-									Arrendamento mercantil. Você "aluga" o carro com opção de compra no final. Popular
-									para PJ.
-								</p>
+								<h3 class="text-xl font-bold text-gray-900 mb-3">{{ type.title }}</h3>
+								<p class="text-gray-600 mb-4">{{ type.description }}</p>
 								<div class="space-y-2 text-sm">
-									<div class="flex items-start">
+									<div v-for="pro in type.pros" :key="pro" class="flex items-start">
 										<span class="text-green-600 mr-2">✓</span>
-										<span class="text-gray-700">Vantagens fiscais (PJ)</span>
+										<span class="text-gray-700">{{ pro }}</span>
 									</div>
-									<div class="flex items-start">
-										<span class="text-green-600 mr-2">✓</span>
-										<span class="text-gray-700">Taxas menores</span>
-									</div>
-									<div class="flex items-start">
+									<div v-for="con in type.cons" :key="con" class="flex items-start">
 										<span class="text-red-600 mr-2">✗</span>
-										<span class="text-gray-700">Menos flexível</span>
-									</div>
-								</div>
-							</div>
-						</UiCard>
-
-						<!-- Consórcio -->
-						<UiCard class="hover:shadow-xl transition-shadow">
-							<div class="p-6">
-								<div
-									class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center mb-4"
-								>
-									<svg
-										class="w-6 h-6 text-amber-600"
-										fill="none"
-										stroke="currentColor"
-										viewBox="0 0 24 24"
-									>
-										<path
-											stroke-linecap="round"
-											stroke-linejoin="round"
-											stroke-width="2"
-											d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-										/>
-									</svg>
-								</div>
-								<h3 class="text-xl font-bold text-gray-900 mb-3">Consórcio</h3>
-								<p class="text-gray-600 mb-4">
-									Grupos de pessoas que se juntam para comprar. Sem juros, mas depende de sorteio ou
-									lance.
-								</p>
-								<div class="space-y-2 text-sm">
-									<div class="flex items-start">
-										<span class="text-green-600 mr-2">✓</span>
-										<span class="text-gray-700">Sem juros</span>
-									</div>
-									<div class="flex items-start">
-										<span class="text-green-600 mr-2">✓</span>
-										<span class="text-gray-700">Melhor custo total</span>
-									</div>
-									<div class="flex items-start">
-										<span class="text-red-600 mr-2">✗</span>
-										<span class="text-gray-700">Precisa esperar contemplação</span>
+										<span class="text-gray-700">{{ con }}</span>
 									</div>
 								</div>
 							</div>
@@ -241,40 +146,20 @@
 								</tr>
 							</thead>
 							<tbody class="divide-y divide-gray-200">
-								<tr class="hover:bg-gray-50">
-									<td class="px-6 py-4 font-medium">🟡 Banco do Brasil</td>
-									<td class="px-6 py-4">1,49%</td>
-									<td class="px-6 py-4">19,56%</td>
-									<td class="px-6 py-4">60 meses</td>
-									<td class="px-6 py-4 text-sm text-gray-600">Para correntistas</td>
-								</tr>
-								<tr class="hover:bg-gray-50">
-									<td class="px-6 py-4 font-medium">🔴 Bradesco</td>
-									<td class="px-6 py-4">1,55%</td>
-									<td class="px-6 py-4">20,33%</td>
-									<td class="px-6 py-4">60 meses</td>
-									<td class="px-6 py-4 text-sm text-gray-600">Para clientes Prime</td>
-								</tr>
-								<tr class="hover:bg-gray-50">
-									<td class="px-6 py-4 font-medium">🟠 Itaú</td>
-									<td class="px-6 py-4">1,59%</td>
-									<td class="px-6 py-4">20,89%</td>
-									<td class="px-6 py-4">60 meses</td>
-									<td class="px-6 py-4 text-sm text-gray-600">Análise de crédito</td>
-								</tr>
-								<tr class="hover:bg-gray-50">
-									<td class="px-6 py-4 font-medium">🔴 Santander</td>
-									<td class="px-6 py-4">1,69%</td>
-									<td class="px-6 py-4">22,28%</td>
-									<td class="px-6 py-4">60 meses</td>
-									<td class="px-6 py-4 text-sm text-gray-600">Liberação rápida</td>
-								</tr>
-								<tr class="hover:bg-gray-50 bg-green-50">
-									<td class="px-6 py-4 font-medium">👥 Consórcio</td>
-									<td class="px-6 py-4 font-bold text-green-600">0%</td>
-									<td class="px-6 py-4 font-bold text-green-600">0%</td>
-									<td class="px-6 py-4">Até 100 meses</td>
-									<td class="px-6 py-4 text-sm text-gray-600">Taxa administrativa ~10%</td>
+								<tr
+									v-for="bank in bankComparison"
+									:key="bank.id"
+									:class="['hover:bg-gray-50', bank.highlight ? 'bg-green-50' : '']"
+								>
+									<td class="px-6 py-4 font-medium">{{ bank.name }}</td>
+									<td :class="['px-6 py-4', bank.highlight ? 'font-bold text-green-600' : '']">
+										{{ bank.rateMonthly.toFixed(2).replace('.', ',') }}%
+									</td>
+									<td :class="['px-6 py-4', bank.highlight ? 'font-bold text-green-600' : '']">
+										{{ bank.rateYearly.toFixed(2).replace('.', ',') }}%
+									</td>
+									<td class="px-6 py-4">{{ bank.maxTerm }} meses</td>
+									<td class="px-6 py-4 text-sm text-gray-600">{{ bank.observation }}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -282,49 +167,36 @@
 
 					<!-- Mobile Cards -->
 					<div class="lg:hidden space-y-4">
-						<UiCard class="p-4 border-l-4 border-l-yellow-400">
+						<UiCard
+							v-for="bank in bankComparison"
+							:key="bank.id"
+							:class="[
+								'p-4 border-l-4',
+								getBorderColor(bank.color),
+								bank.highlight ? 'bg-green-50' : ''
+							]"
+						>
 							<div class="flex justify-between items-start mb-2">
-								<h3 class="font-bold text-gray-900">🟡 Banco do Brasil</h3>
-								<span class="text-lg font-bold text-blue-600">1,49% a.m.</span>
+								<h3 class="font-bold text-gray-900">{{ bank.name }}</h3>
+								<span
+									:class="[
+										'text-lg font-bold',
+										bank.highlight ? 'text-green-600' : 'text-blue-600'
+									]"
+								>
+									{{
+										bank.rateMonthly === 0
+											? '0% juros'
+											: `${bank.rateMonthly.toFixed(2).replace('.', ',')}% a.m.`
+									}}
+								</span>
 							</div>
-							<p class="text-sm text-gray-600 mb-2">Para correntistas • Até 60 meses</p>
-							<p class="text-xs text-gray-500">19,56% ao ano</p>
-						</UiCard>
-
-						<UiCard class="p-4 border-l-4 border-l-red-400">
-							<div class="flex justify-between items-start mb-2">
-								<h3 class="font-bold text-gray-900">🔴 Bradesco</h3>
-								<span class="text-lg font-bold text-blue-600">1,55% a.m.</span>
-							</div>
-							<p class="text-sm text-gray-600 mb-2">Para clientes Prime • Até 60 meses</p>
-							<p class="text-xs text-gray-500">20,33% ao ano</p>
-						</UiCard>
-
-						<UiCard class="p-4 border-l-4 border-l-orange-400">
-							<div class="flex justify-between items-start mb-2">
-								<h3 class="font-bold text-gray-900">🟠 Itaú</h3>
-								<span class="text-lg font-bold text-blue-600">1,59% a.m.</span>
-							</div>
-							<p class="text-sm text-gray-600 mb-2">Análise de crédito • Até 60 meses</p>
-							<p class="text-xs text-gray-500">20,89% ao ano</p>
-						</UiCard>
-
-						<UiCard class="p-4 border-l-4 border-l-red-500">
-							<div class="flex justify-between items-start mb-2">
-								<h3 class="font-bold text-gray-900">🔴 Santander</h3>
-								<span class="text-lg font-bold text-blue-600">1,69% a.m.</span>
-							</div>
-							<p class="text-sm text-gray-600 mb-2">Liberação rápida • Até 60 meses</p>
-							<p class="text-xs text-gray-500">22,28% ao ano</p>
-						</UiCard>
-
-						<UiCard class="p-4 border-l-4 border-l-green-500 bg-green-50">
-							<div class="flex justify-between items-start mb-2">
-								<h3 class="font-bold text-gray-900">👥 Consórcio</h3>
-								<span class="text-lg font-bold text-green-600">0% juros</span>
-							</div>
-							<p class="text-sm text-gray-600 mb-2">Taxa administrativa ~10% • Até 100 meses</p>
-							<p class="text-xs text-green-700">Precisa aguardar contemplação</p>
+							<p class="text-sm text-gray-600 mb-2">
+								{{ bank.observation }} • Até {{ bank.maxTerm }} meses
+							</p>
+							<p :class="['text-xs', bank.highlight ? 'text-green-700' : 'text-gray-500']">
+								{{ bank.rateYearly.toFixed(2).replace('.', ',') }}% ao ano
+							</p>
 						</UiCard>
 					</div>
 					<p class="text-sm text-gray-600 mt-4 text-center">
@@ -344,36 +216,13 @@
 					</h2>
 
 					<div class="grid md:grid-cols-2 gap-6">
-						<div class="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-							<h3 class="text-xl font-bold mb-3">💰 Dê a maior entrada possível</h3>
-							<p class="text-gray-200">
-								Quanto mais você paga na entrada, menos juros vai pagar no total. Tente dar pelo
-								menos 30% do valor.
-							</p>
-						</div>
-
-						<div class="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-							<h3 class="text-xl font-bold mb-3">📅 Escolha o prazo certo</h3>
-							<p class="text-gray-200">
-								Prazos longos = parcelas menores, mas muito mais juros. Equilibre com o que cabe no
-								seu bolso.
-							</p>
-						</div>
-
-						<div class="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-							<h3 class="text-xl font-bold mb-3">🔍 Compare as taxas</h3>
-							<p class="text-gray-200">
-								Não aceite a primeira proposta. Consulte pelo menos 3 bancos diferentes antes de
-								fechar.
-							</p>
-						</div>
-
-						<div class="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-							<h3 class="text-xl font-bold mb-3">⚡ Leia o contrato todo</h3>
-							<p class="text-gray-200">
-								Preste atenção em seguro obrigatório, TAC, IOF e outras taxas. Tudo isso aumenta o
-								custo final.
-							</p>
+						<div
+							v-for="tip in tips"
+							:key="tip.id"
+							class="bg-white/10 backdrop-blur-sm rounded-lg p-6"
+						>
+							<h3 class="text-xl font-bold mb-3">{{ tip.emoji }} {{ tip.title }}</h3>
+							<p class="text-gray-200">{{ tip.description }}</p>
 						</div>
 					</div>
 				</div>
@@ -413,4 +262,22 @@ definePageMeta({
 	title: 'Financiamento | Auto Urban',
 	description: 'Entenda o custo real de cada sonho. Simule seu financiamento com transparência.'
 })
+
+//Busca dados dinâmicos via SSR
+const { data: financingTypes } = await useFetch('/api/financing/types')
+const { data: tips } = await useFetch('/api/financing/tips')
+const { data: bankComparison } = await useFetch('/api/financing/bank-comparison')
+
+//Helper para cor do border
+const getBorderColor = (color: string) => {
+	const colors: Record<string, string> = {
+		yellow: 'border-l-yellow-400',
+		red: 'border-l-red-400',
+		orange: 'border-l-orange-400',
+		blue: 'border-l-blue-400',
+		green: 'border-l-green-500',
+		purple: 'border-l-purple-400'
+	}
+	return colors[color] || 'border-l-gray-400'
+}
 </script>
