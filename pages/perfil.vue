@@ -93,7 +93,23 @@ definePageMeta({
 
 const router = useRouter()
 
-const { user, userName, userInitials, isAdmin, logout } = useAuth()
+const { user, logout } = useAuthSimple()
+
+const userName = computed(() => {
+	if (user.value?.firstName && user.value?.lastName) {
+		return `${user.value.firstName} ${user.value.lastName}`
+	}
+	return user.value?.phone || 'Usuário'
+})
+
+const userInitials = computed(() => {
+	if (user.value?.firstName && user.value?.lastName) {
+		return `${user.value.firstName[0]}${user.value.lastName[0]}`
+	}
+	return user.value?.phone?.slice(-2) || 'U'
+})
+
+const isAdmin = computed(() => user.value?.role === 'ADMIN')
 
 const handleLogout = async () => {
 	try {

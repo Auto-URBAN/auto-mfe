@@ -55,14 +55,6 @@
 					</div>
 				</form>
 			</UiCard>
-
-			<UiAlert variant="info" title="Códigos de demonstração">
-				<div class="text-sm space-y-1">
-					<p><strong>123456:</strong> Usuário normal</p>
-					<p><strong>654321:</strong> Usuário admin</p>
-					<p><strong>000000:</strong> Código inválido (teste de erro)</p>
-				</div>
-			</UiAlert>
 		</div>
 	</div>
 </template>
@@ -119,7 +111,7 @@ const handleVerification = async () => {
 
 		console.log('Login realizado com sucesso!')
 
-		const redirectTo = (route.query.redirect as string) || '/garagem'
+		const redirectTo = (route.query.redirect as string) || '/perfil'
 		await router.push(redirectTo)
 	} catch (error: any) {
 		console.error('Verification error:', error)

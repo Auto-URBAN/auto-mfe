@@ -3,7 +3,15 @@ import type { User } from '~/schemas'
 interface AuthResponse {
 	token: string
 	refreshToken: string
-	user: User
+	user: {
+		id: number
+		firstName?: string
+		lastName?: string
+		phone: string
+		email?: string
+		phoneVerified?: boolean
+		roles?: string[]
+	}
 	expiresAt: string
 }
 
@@ -12,7 +20,17 @@ export const useAuthSimple = () => {
 	const user = ref<User | null>(null)
 	const accessToken = useCookie('auth-token', { maxAge: 60 * 60 * 24 * 7 })
 	const refreshToken = useCookie('refresh-token', { maxAge: 60 * 60 * 24 * 30 })
-	const isLoggedIn = computed(() => !!accessToken.value)
+	const userCookie = useCookie<User | null>('user-data', {
+		maxAge: 60 * 60 * 24 * 7,
+		default: () => null
+	})
+
+	// Inicializar estado do usuário a partir dos cookies
+	if (accessToken.value && userCookie.value) {
+		user.value = userCookie.value
+	}
+
+	const isLoggedIn = computed(() => !!accessToken.value && !!user.value)
 
 	const sendOtp = async (phone: string, firstName?: string): Promise<void> => {
 		await $fetch(`${config.public.apiBase}/auth/send-otp`, {
@@ -21,19 +39,35 @@ export const useAuthSimple = () => {
 		})
 	}
 
+	const transformUser = (apiUser: AuthResponse['user']): User => {
+		return {
+			id: String(apiUser.id),
+			firstName: apiUser.firstName,
+			lastName: apiUser.lastName,
+			phone: apiUser.phone,
+			email: apiUser.email,
+			phoneVerified: apiUser.phoneVerified,
+			roles: apiUser.roles as ('USER' | 'ADMIN')[],
+			role: (apiUser.roles?.[0] as 'USER' | 'ADMIN') || 'USER'
+		}
+	}
+
 	const verifyOtp = async (phone: string, code: string): Promise<void> => {
 		const response = await $fetch<AuthResponse>(`${config.public.apiBase}/auth/verify-otp`, {
 			method: 'POST',
 			body: { phone, code }
 		})
 
-		user.value = response.user
+		const transformedUser = transformUser(response.user)
+		user.value = transformedUser
+		userCookie.value = transformedUser
 		accessToken.value = response.token
 		refreshToken.value = response.refreshToken
 	}
 
 	const logout = async (): Promise<void> => {
 		user.value = null
+		userCookie.value = null
 		accessToken.value = null
 		refreshToken.value = null
 		await navigateTo('/auth/login')
@@ -47,9 +81,11 @@ export const useAuthSimple = () => {
 			body: { refreshToken: refreshToken.value }
 		})
 
+		const transformedUser = transformUser(response.user)
 		accessToken.value = response.token
 		refreshToken.value = response.refreshToken
-		user.value = response.user
+		user.value = transformedUser
+		userCookie.value = transformedUser
 	}
 
 	return {

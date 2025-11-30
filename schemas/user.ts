@@ -4,8 +4,13 @@ export const UserRole = z.enum(['USER', 'ADMIN'])
 export type UserRole = z.infer<typeof UserRole>
 
 export const User = z.object({
-	id: z.string().min(1),
+	id: z.union([z.string(), z.number()]).transform(val => String(val)),
+	firstName: z.string().optional(),
+	lastName: z.string().optional(),
 	phone: z.string().min(10).max(15),
+	email: z.string().email().optional(),
+	phoneVerified: z.boolean().optional(),
+	roles: z.array(UserRole).optional(),
 	role: UserRole.default('USER'),
 	createdAt: z.string().optional(),
 	updatedAt: z.string().optional()

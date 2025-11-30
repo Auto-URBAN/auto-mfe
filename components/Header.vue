@@ -264,7 +264,23 @@ const notifications = ref([
 	}
 ])
 
-const { isAuthenticated, userName, userInitials, isAdmin, logout, adminStats } = useAuth()
+const { isLoggedIn, user, logout } = useAuthSimple()
+
+const isAuthenticated = computed(() => isLoggedIn.value)
+const userName = computed(() => {
+	if (user.value?.firstName && user.value?.lastName) {
+		return `${user.value.firstName} ${user.value.lastName}`
+	}
+	return user.value?.phone || 'Usuário'
+})
+const userInitials = computed(() => {
+	if (user.value?.firstName && user.value?.lastName) {
+		return `${user.value.firstName[0]}${user.value.lastName[0]}`
+	}
+	return user.value?.phone?.slice(-2) || 'U'
+})
+const isAdmin = computed(() => user.value?.roles?.includes('ADMIN') || false)
+const adminStats = ref(null)
 
 const pendingCount = computed(() => adminStats.value?.totals?.pending || 0)
 const filteredNotifications = computed(() => {
