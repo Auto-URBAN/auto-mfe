@@ -17,7 +17,9 @@
 		"format": "pnpm strip-comments && prettier --write \"**/*.{js,ts,vue,json,css,scss,md}\"",
 		"format:check": "prettier --check \"**/*.{js,ts,vue,json,css,scss,md}\"",
 		"strip-comments": "node scripts/strip-comments.js",
-		"lint:fix": "eslint . --fix"
+		"lint:fix": "eslint . --fix",
+		"migrate:data": "node scripts/migrate-data.js",
+		"migrate:fipe": "powershell -ExecutionPolicy Bypass -File scripts/migrate-fipe.ps1"
 	},
 	"lint-staged": {
 		"*.{vue,ts,js,mjs}": [
