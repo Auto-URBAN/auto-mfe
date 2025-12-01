@@ -8,6 +8,7 @@ export const CarMod = z.object({
 
 export const GarageCurrentCar = z.object({
 	id: z.string(),
+	carModelSlug: z.string().optional(),
 	brand: z.string(),
 	model: z.string(),
 	year: z.number(),
@@ -21,42 +22,46 @@ export const GarageCurrentCar = z.object({
 	lastUpdate: z.date().optional(),
 	purchaseDate: z.date().optional(),
 	purchasePrice: z.number().optional(),
-	notes: z.string().optional()
+	notes: z.string().optional(),
+	isActive: z.boolean().default(true)
 })
 
 export const CarHistoryStatus = z.enum(['SOLD', 'CRASHED', 'STOLEN', 'DONATED', 'TOTALED'])
 
 export const GarageHistoryCar = z.object({
 	id: z.string(),
+	carModelSlug: z.string().optional(),
 	brand: z.string(),
 	model: z.string(),
 	year: z.number(),
 	purchaseDate: z.date(),
-	sellDate: z.date().optional(),
+	soldDate: z.date().optional(),
 	purchasePrice: z.number(),
-	sellPrice: z.number().optional(),
-	kmStart: z.number(),
-	kmEnd: z.number().optional(),
+	soldPrice: z.number().optional(),
+	km: z.number(),
 	mods: z.array(CarMod).default([]),
-	status: CarHistoryStatus,
-	storyNote: z.string().optional(),
+	soldReason: z.string().optional(),
+	notes: z.string().optional(),
 	photos: z.array(z.string()).default([]),
 	color: z.string().optional(),
-	profitLoss: z.number().optional()
+	profitLoss: z.number().optional(),
+	isActive: z.boolean().default(false)
 })
 
+// Substituído por UserWishlist no schema wishlist.ts
+// Mantido apenas para compatibilidade temporária
 export const GarageGoal = z.object({
 	id: z.string(),
 	carModelSlug: z.string(),
 	brand: z.string(),
 	model: z.string(),
-	targetPrice: z.number().optional(),
-	avgFipeValue: z.number(),
-	variationAlerts: z.boolean().default(false),
-	savedAds: z.array(z.string()).default([]),
-	createdAt: z.date(),
+	targetPriceMin: z.number().optional(),
+	targetPriceMax: z.number().optional(),
+	notificationsEnabled: z.boolean().default(true),
 	photo: z.string().optional(),
-	year: z.number().optional()
+	yearMin: z.number().optional(),
+	yearMax: z.number().optional(),
+	createdAt: z.date()
 })
 
 export const NotificationType = z.enum([

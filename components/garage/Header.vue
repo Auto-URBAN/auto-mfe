@@ -27,7 +27,7 @@
 					<div class="rounded-lg bg-zinc-800/50 p-3 backdrop-blur-sm">
 						<div class="mb-0.5 text-xs text-zinc-400">Valorização 12m</div>
 						<div class="text-xl font-bold" :class="variationClass">
-							{{ avgVariation >= 0 ? '+' : '' }}{{ avgVariation.toFixed(1) }}%
+							{{ safeAvgVariation >= 0 ? '+' : '' }}{{ (safeAvgVariation || 0).toFixed(1) }}%
 						</div>
 					</div>
 
@@ -47,14 +47,24 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
-	userName?: string
-	totalCars: number
-	totalValue: number
-	avgVariation: number
-	totalHistory: number
-	totalGoals: number
-}>()
+const props = withDefaults(
+	defineProps<{
+		userName?: string
+		totalCars: number
+		totalValue: number
+		avgVariation: number
+		totalHistory: number
+		totalGoals: number
+	}>(),
+	{
+		userName: 'Usuário',
+		totalCars: 0,
+		totalValue: 0,
+		avgVariation: 0,
+		totalHistory: 0,
+		totalGoals: 0
+	}
+)
 
 const greeting = computed(() => {
 	const hour = new Date().getHours()
@@ -74,17 +84,28 @@ const subtitle = computed(() => {
 	return subtitles[Math.floor(Math.random() * subtitles.length)]
 })
 
+const safeAvgVariation = computed(() => {
+	const value = props.avgVariation
+	// Garantir que sempre retornamos um número válido
+	if (typeof value !== 'number' || isNaN(value) || value === null || value === undefined) {
+		return 0
+	}
+	return value
+})
+
 const variationClass = computed(() => {
-	if (props.avgVariation > 0) return 'text-emerald-400'
-	if (props.avgVariation < 0) return 'text-red-400'
+	const variation = safeAvgVariation.value
+	if (variation > 0) return 'text-emerald-400'
+	if (variation < 0) return 'text-red-400'
 	return 'text-zinc-400'
 })
 
 function formatCurrency(value: number): string {
+	const safeValue = isNaN(value) || value === null || value === undefined ? 0 : value
 	return new Intl.NumberFormat('pt-BR', {
 		style: 'currency',
 		currency: 'BRL',
 		maximumFractionDigits: 0
-	}).format(value)
+	}).format(safeValue)
 }
 </script>

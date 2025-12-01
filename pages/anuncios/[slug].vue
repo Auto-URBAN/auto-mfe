@@ -161,11 +161,28 @@
 									</button>
 
 									<button
-										class="flex items-center justify-center px-3 py-1.5 border border-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50 transition-colors"
+										:class="[
+											'flex items-center justify-center px-3 py-1.5 text-sm font-medium rounded-md transition-colors',
+											isCurrentVehicleFavorite
+												? 'bg-red-100 border border-red-300 text-red-700 hover:bg-red-200'
+												: 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+										]"
 										@click="saveVehicle"
+										:disabled="favoritesLoading"
 									>
-										<Icon name="heroicons:heart" class="w-4 h-4 mr-1" />
-										Salvar
+										<Icon
+											v-if="!favoritesLoading"
+											:name="isCurrentVehicleFavorite ? 'heroicons:heart-solid' : 'heroicons:heart'"
+											class="w-4 h-4 mr-1"
+										/>
+										<Icon v-else name="heroicons:arrow-path" class="w-4 h-4 mr-1 animate-spin" />
+										{{
+											favoritesLoading
+												? 'Salvando...'
+												: isCurrentVehicleFavorite
+													? 'Salvo'
+													: 'Salvar'
+										}}
 									</button>
 								</div>
 							</div>
@@ -412,10 +429,28 @@
 											</button>
 
 											<button
-												class="flex items-center justify-center px-3 py-1.5 border border-gray-300 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-50 transition-colors"
+												:class="[
+													'flex items-center justify-center px-3 py-1.5 text-sm font-medium rounded-md transition-colors',
+													isCurrentVehicleFavorite
+														? 'bg-red-100 border border-red-300 text-red-700 hover:bg-red-200'
+														: 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+												]"
 												@click="saveVehicle"
+												:disabled="favoritesLoading"
+												:title="
+													isCurrentVehicleFavorite
+														? 'Remover dos favoritos'
+														: 'Adicionar aos favoritos'
+												"
 											>
-												<Icon name="heroicons:heart" class="w-4 h-4 mr-1" />
+												<Icon
+													v-if="!favoritesLoading"
+													:name="
+														isCurrentVehicleFavorite ? 'heroicons:heart-solid' : 'heroicons:heart'
+													"
+													class="w-4 h-4"
+												/>
+												<Icon v-else name="heroicons:arrow-path" class="w-4 h-4 animate-spin" />
 											</button>
 										</div>
 									</div>
@@ -697,9 +732,32 @@ const formatDate = (dateString: string) => {
 	return date.toLocaleDateString('pt-BR')
 }
 
-const saveVehicle = () => {
-	alert('Veículo salvo nos seus favoritos!')
-	console.log('Save vehicle:', vehicle.value?.id)
+//Sistema de favoritos
+const { isFavorite, toggleFavorite, isLoading: favoritesLoading } = useFavorites()
+
+const isCurrentVehicleFavorite = computed(() =>
+	vehicle.value ? isFavorite(vehicle.value.id) : false
+)
+
+const saveVehicle = async () => {
+	if (!vehicle.value) return
+
+	const wasLiked = isCurrentVehicleFavorite.value
+	const vehicleName = vehicle.value.title
+
+	try {
+		const result = await toggleFavorite(vehicle.value.id)
+
+		//Feedback visual de sucesso
+		const message = wasLiked
+			? `${vehicleName} removido dos favoritos!`
+			: `${vehicleName} adicionado aos favoritos!`
+
+		alert(message)
+	} catch (error) {
+		console.error('Erro ao alterar favorito:', error)
+		alert('Erro ao processar favorito. Tente novamente.')
+	}
 }
 
 const shareVehicle = async () => {

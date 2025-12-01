@@ -19,8 +19,13 @@
 				<div class="flex-1">
 					<div class="mb-1 text-sm font-medium text-zinc-400">{{ goal.brand }}</div>
 					<h3 class="mb-2 text-xl font-bold text-white">{{ goal.model }}</h3>
-					<span v-if="goal.year" class="rounded-full bg-zinc-800 px-3 py-1 text-xs text-zinc-300">
-						{{ goal.year }}
+					<span
+						v-if="goal.yearMin || goal.yearMax"
+						class="rounded-full bg-zinc-800 px-3 py-1 text-xs text-zinc-300"
+					>
+						<span v-if="goal.yearMin && goal.yearMax">{{ goal.yearMin }}-{{ goal.yearMax }}</span>
+						<span v-else-if="goal.yearMin">{{ goal.yearMin }}+</span>
+						<span v-else>até {{ goal.yearMax }}</span>
 					</span>
 				</div>
 
@@ -34,37 +39,30 @@
 			</div>
 
 			<div class="mb-4 space-y-3">
-				<div>
-					<div class="mb-1 text-sm text-zinc-400">Valor FIPE Médio</div>
-					<div class="text-xl font-bold text-white">{{ formatCurrency(goal.avgFipeValue) }}</div>
-				</div>
-
-				<div v-if="goal.targetPrice">
-					<div class="mb-1 text-sm text-zinc-400">Seu Objetivo</div>
-					<div class="flex items-baseline gap-2">
-						<div class="text-xl font-bold text-amber-400">
-							{{ formatCurrency(goal.targetPrice) }}
-						</div>
-						<div v-if="priceDistance" class="text-sm" :class="priceDistanceClass">
-							{{ priceDistance > 0 ? '-' : '+' }}{{ Math.abs(priceDistance).toFixed(1) }}%
-						</div>
+				<!-- Valor FIPE não disponível no UserWishlist -->
+				<div v-if="goal.targetPriceMin || goal.targetPriceMax">
+					<div class="mb-1 text-sm text-zinc-400">Faixa de Preço</div>
+					<div class="text-xl font-bold text-amber-400">
+						<span v-if="goal.targetPriceMin && goal.targetPriceMax">
+							{{ formatCurrency(goal.targetPriceMin) }} - {{ formatCurrency(goal.targetPriceMax) }}
+						</span>
+						<span v-else-if="goal.targetPriceMin">
+							A partir de {{ formatCurrency(goal.targetPriceMin) }}
+						</span>
+						<span v-else-if="goal.targetPriceMax">
+							Até {{ formatCurrency(goal.targetPriceMax) }}
+						</span>
 					</div>
 				</div>
-
-				<div v-if="goal.savedAds.length > 0" class="flex items-center gap-2 text-sm text-blue-400">
-					<Icon name="heroicons:bookmark-solid" class="h-4 w-4" />
-					{{ goal.savedAds.length }} anúncio{{ goal.savedAds.length !== 1 ? 's' : '' }} salvo{{
-						goal.savedAds.length !== 1 ? 's' : ''
-					}}
-				</div>
+				<!-- Informação de anúncios salvos será implementada futuramente -->
 			</div>
 
 			<div
-				v-if="goal.variationAlerts"
+				v-if="goal.notificationsEnabled"
 				class="mb-4 flex items-center gap-2 rounded-lg bg-amber-900/20 p-3"
 			>
 				<Icon name="heroicons:bell" class="h-5 w-5 text-amber-400" />
-				<span class="text-sm text-amber-300">Monitorando variações de preço</span>
+				<span class="text-sm text-amber-300">Notificações ativadas</span>
 			</div>
 
 			<div class="flex flex-wrap gap-2">
@@ -74,6 +72,14 @@
 				>
 					<Icon name="heroicons:magnifying-glass" class="h-4 w-4" />
 					Ver Anúncios
+				</button>
+
+				<button
+					class="flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700"
+					@click="$emit('achieved', goal)"
+				>
+					<Icon name="heroicons:check-circle" class="h-4 w-4" />
+					Objetivo Alcançado
 				</button>
 
 				<button
@@ -89,29 +95,20 @@
 </template>
 
 <script setup lang="ts">
-import type { GarageGoal } from '@/schemas/garage'
+import type { UserWishlist } from '@/schemas/wishlist'
 
 const props = defineProps<{
-	goal: GarageGoal
+	goal: UserWishlist
 }>()
 
 defineEmits<{
 	remove: [id: string]
 	viewAds: [slug: string]
 	compare: [slug: string]
+	achieved: [goal: UserWishlist]
 }>()
 
-const priceDistance = computed(() => {
-	if (!props.goal.targetPrice) return null
-	const diff = props.goal.avgFipeValue - props.goal.targetPrice
-	return (diff / props.goal.targetPrice) * 100
-})
-
-const priceDistanceClass = computed(() => {
-	if (!priceDistance.value) return 'text-zinc-400'
-	if (priceDistance.value > 0) return 'text-red-400'
-	return 'text-emerald-400'
-})
+// Removed price distance calculations as UserWishlist doesn't have avgFipeValue and targetPrice
 
 function formatCurrency(value: number): string {
 	return new Intl.NumberFormat('pt-BR', {

@@ -11,6 +11,9 @@ export * from './brand'
 export * from './installments'
 export * from './ranking'
 export * from './garage'
+export * from './advertisement'
+export * from './favorites'
+export * from './wishlist'
 
 export const validateSchema = <T>(
 	schema: any,

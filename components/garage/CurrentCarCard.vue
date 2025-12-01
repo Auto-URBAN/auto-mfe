@@ -48,7 +48,7 @@
 				<div>
 					<div class="mb-1 text-sm text-zinc-400">Variação 12 meses</div>
 					<div class="text-2xl font-bold" :class="variationClass">
-						{{ car.variation12m >= 0 ? '+' : '' }}{{ car.variation12m.toFixed(1) }}%
+						{{ safeVariation >= 0 ? '+' : '' }}{{ (safeVariation || 0).toFixed(1) }}%
 					</div>
 				</div>
 			</div>
@@ -89,11 +89,11 @@
 				</button>
 
 				<button
-					class="flex items-center gap-2 rounded-lg bg-zinc-700 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-zinc-600"
-					@click="$emit('moveToHistory', car.id)"
+					class="flex items-center gap-2 rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-700"
+					@click="$emit('sold', car)"
 				>
-					<Icon name="heroicons:clock" class="h-4 w-4" />
-					Mover para História
+					<Icon name="heroicons:banknotes" class="h-4 w-4" />
+					Vendi
 				</button>
 			</div>
 		</div>
@@ -111,10 +111,19 @@ defineEmits<{
 	edit: [id: string]
 	viewHistory: [id: string]
 	moveToHistory: [id: string]
+	sold: [car: GarageCurrentCar]
 }>()
 
+const safeVariation = computed(() => {
+	const value = props.car.variation12m
+	if (typeof value !== 'number' || isNaN(value) || value === null || value === undefined) {
+		return 0
+	}
+	return value
+})
+
 const variationClass = computed(() => {
-	const variation = props.car.variation12m
+	const variation = safeVariation.value
 	if (variation > 0) return 'text-emerald-400'
 	if (variation < 0) return 'text-red-400'
 	return 'text-zinc-400'

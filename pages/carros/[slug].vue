@@ -107,14 +107,35 @@
 							</p>
 
 							<div class="flex gap-3">
-								<UiButton size="md" class="bg-gradient-to-r from-blue-600 to-purple-600">
-									<Icon name="heroicons:heart-20-solid" class="w-4 h-4" />
-									Adicionar à Garagem
+								<UiButton
+									size="md"
+									:class="
+										isCurrentModelInWishlist
+											? 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700'
+											: 'bg-gradient-to-r from-blue-600 to-purple-600'
+									"
+									@click="handleObjectiveClick"
+									:disabled="wishlistLoading"
+								>
+									<Icon
+										v-if="!wishlistLoading"
+										:name="isCurrentModelInWishlist ? 'heroicons:star-solid' : 'heroicons:star'"
+										class="w-4 h-4"
+									/>
+									<Icon v-else name="heroicons:arrow-path" class="w-4 h-4 animate-spin" />
+									{{
+										wishlistLoading
+											? 'Processando...'
+											: isCurrentModelInWishlist
+												? 'Remover dos Objetivos'
+												: 'Adicionar aos Objetivos'
+									}}
 								</UiButton>
 								<UiButton
 									variant="outline"
 									size="md"
 									class="border-white/30 text-white hover:bg-white/10"
+									@click="shareVehicle"
 								>
 									<Icon name="heroicons:share-20-solid" class="w-4 h-4" />
 									Compartilhar
@@ -254,8 +275,16 @@
 									]"
 								>
 									{{ priceHistory.variation > 0 ? '+' : ''
-									}}{{ priceHistory.variation.toFixed(2) }}% (12 meses)
+									}}{{ (priceHistory.variation || 0).toFixed(2) }}% (12 meses)
 								</p>
+								<UiButton
+									class="mt-3 bg-gradient-to-r from-green-500 to-emerald-600"
+									size="sm"
+									@click="showSimulationModal = true"
+								>
+									<Icon name="heroicons:calculator-20-solid" class="w-4 h-4 mr-2" />
+									Simular Financiamento
+								</UiButton>
 							</div>
 						</div>
 
@@ -276,7 +305,7 @@
 											price.change > 0 ? 'text-green-600' : 'text-red-600'
 										]"
 									>
-										{{ price.change > 0 ? '▲' : '▼' }} {{ Math.abs(price.change).toFixed(1) }}%
+										{{ price.change > 0 ? '▲' : '▼' }} {{ Math.abs(price.change || 0).toFixed(1) }}%
 									</p>
 								</div>
 							</div>
@@ -379,6 +408,21 @@
 				</NuxtLink>
 			</UiContainer>
 		</div>
+
+		<!-- Modal de Simulação -->
+		<VehicleSimulationModal
+			v-if="vehicle"
+			v-model="showSimulationModal"
+			:vehicle="vehicle"
+			:price="currentYearData?.price"
+		/>
+
+		<!-- Modal de Compartilhamento -->
+		<ShareModal
+			v-model="showShareModal"
+			:share-data="shareData"
+			@shared="platform => console.log(`Compartilhado via ${platform}`)"
+		/>
 	</div>
 </template>
 
@@ -419,6 +463,29 @@ const selectedYear = ref<number>(new Date().getFullYear())
 const relatedAds = ref<VehicleSummary[]>([])
 const similarModels = ref<VehicleSummary[]>([])
 const allModels = ref<VehicleSummary[]>([])
+
+//Sistema de wishlist (objetivos) para modelos
+const { isInWishlist, addToWishlist, removeFromWishlist, loading: wishlistLoading } = useWishlist()
+const isCurrentModelInWishlist = computed(() =>
+	vehicle.value ? isInWishlist(vehicle.value.slug) : false
+)
+
+// Modal de simulação
+const showSimulationModal = ref(false)
+
+// Sistema de compartilhamento
+const { createVehicleShareData } = useShare()
+const showShareModal = ref(false)
+const shareData = computed(() => {
+	if (!vehicle.value) return { title: '', text: '', url: '' }
+	return createVehicleShareData({
+		brand: vehicle.value.brand,
+		model: vehicle.value.model,
+		year: selectedYear.value,
+		price: currentYearData.value?.price || 0,
+		slug: vehicle.value.slug
+	})
+})
 
 const availableYears = computed(() => {
 	if (!vehicle.value?.years) return []
@@ -647,70 +714,77 @@ const randomSimilarModels = computed(() => {
 async function loadVehicle() {
 	loading.value = true
 	try {
-		const response = await $fetch<SearchResult>('/api/vehicles', {
-			query: { pageSize: 100 }
-		})
+		// Buscar veículo específico pelo slug
+		const vehicleDetail = await $fetch<VehicleDetail>(`/api/vehicles/${slug}`)
 
-		if (response?.items) {
-			allModels.value = response.items
-
-			const matchingVehicles = response.items.filter((v: VehicleSummary) => v.slug === slug)
-
-			if (matchingVehicles.length > 0) {
-				const baseVehicle = matchingVehicles[0]
-
-				if (!baseVehicle) return
-
-				const years: YearVariant[] = matchingVehicles.map((v: VehicleSummary) => ({
-					year: v.year,
-					price: v.price,
-					horsepower: v.horsepower,
-					gearbox: (v as VehicleDetail).gearbox,
-					fuel: (v as VehicleDetail).fuel,
-					km: v.km,
-					fipeCode: (v as VehicleDetail).fipeCode
-				}))
-
-				const allYears = years
-
-				vehicle.value = {
-					id: baseVehicle.id,
-					title: `${baseVehicle.brand} ${baseVehicle.model}`,
-					brand: baseVehicle.brand,
-					model: baseVehicle.model,
-					slug: baseVehicle.slug,
-					city: baseVehicle.city,
-					uf: baseVehicle.uf,
-					coverImageUrl: baseVehicle.coverImageUrl,
-					status: baseVehicle.status,
-					featured: baseVehicle.featured,
-					description: (baseVehicle as VehicleDetail).description,
-					images: (baseVehicle as VehicleDetail).images || [baseVehicle.coverImageUrl],
-					seller: (baseVehicle as VehicleDetail).seller,
-					years: allYears
+		if (vehicleDetail) {
+			// Criar dados do modelo baseado no veículo encontrado
+			const years: YearVariant[] = [
+				{
+					year: vehicleDetail.year,
+					price: vehicleDetail.price,
+					horsepower: vehicleDetail.horsepower,
+					gearbox: vehicleDetail.gearbox,
+					fuel: vehicleDetail.fuel,
+					km: vehicleDetail.km,
+					fipeCode: vehicleDetail.fipeCode
 				}
+			]
 
-				selectedYear.value = Math.max(...allYears.map(y => y.year))
+			vehicle.value = {
+				id: vehicleDetail.id,
+				title: vehicleDetail.title,
+				brand: vehicleDetail.brand,
+				model: vehicleDetail.model,
+				slug: vehicleDetail.slug,
+				city: vehicleDetail.city,
+				uf: vehicleDetail.uf,
+				coverImageUrl: vehicleDetail.coverImageUrl,
+				status: vehicleDetail.status,
+				featured: vehicleDetail.featured,
+				description: vehicleDetail.description,
+				images: vehicleDetail.images || [vehicleDetail.coverImageUrl],
+				seller: vehicleDetail.seller,
+				years: years
+			}
 
-				relatedAds.value = response.items
-					.filter(
-						(v: VehicleSummary) =>
-							v.brand === vehicle.value!.brand &&
-							v.model === vehicle.value!.model &&
-							v.id !== vehicle.value!.id
-					)
-					.slice(0, 6)
+			selectedYear.value = vehicleDetail.year
 
-				similarModels.value = response.items
-					.filter(
-						(v: VehicleSummary) =>
-							v.brand === vehicle.value!.brand && v.model !== vehicle.value!.model
-					)
-					.slice(0, 3)
+			// Carregar todos os modelos para relacionados e similares
+			try {
+				const searchResponse = await $fetch<SearchResult>('/api/vehicles', {
+					query: { pageSize: 100 }
+				})
+
+				if (searchResponse?.items) {
+					allModels.value = searchResponse.items
+
+					relatedAds.value = searchResponse.items
+						.filter(
+							(v: VehicleSummary) =>
+								v.brand === vehicle.value!.brand &&
+								v.model === vehicle.value!.model &&
+								v.id !== vehicle.value!.id
+						)
+						.slice(0, 6)
+
+					similarModels.value = searchResponse.items
+						.filter(
+							(v: VehicleSummary) =>
+								v.brand === vehicle.value!.brand && v.model !== vehicle.value!.model
+						)
+						.slice(0, 3)
+				}
+			} catch (searchError) {
+				console.warn('Error loading related models:', searchError)
+				allModels.value = []
+				relatedAds.value = []
+				similarModels.value = []
 			}
 		}
 	} catch (error) {
 		console.error('Error loading vehicle:', error)
+		vehicle.value = null
 	} finally {
 		loading.value = false
 	}
@@ -746,6 +820,54 @@ function getBrandLogo(brand: string): string {
 		Volkswagen: '/logos/volkswagen.webp'
 	}
 	return logos[brand] || '/logos/default-car-logo.webp'
+}
+
+//Função para lidar com clique nos objetivos
+async function handleObjectiveClick() {
+	if (!vehicle.value || !currentYearData.value) return
+
+	const wasInWishlist = isCurrentModelInWishlist.value
+	const action = wasInWishlist ? 'remover dos' : 'adicionar aos'
+	const vehicleName = `${vehicle.value.brand} ${vehicle.value.model}`
+
+	try {
+		if (wasInWishlist) {
+			//Encontrar o item da wishlist para remover
+			const wishlistItem = await $fetch(`/api/v1/wishlist?carModelSlug=${vehicle.value.slug}`, {
+				headers: { 'X-User-Id': '1' }
+			})
+			if (wishlistItem && wishlistItem[0]) {
+				await removeFromWishlist(wishlistItem[0].id)
+			}
+		} else {
+			//Adicionar aos objetivos
+			await addToWishlist({
+				carModelSlug: vehicle.value.slug,
+				brand: vehicle.value.brand,
+				model: vehicle.value.model,
+				targetPriceMin: currentYearData.value.price * 0.8,
+				targetPriceMax: currentYearData.value.price * 1.2,
+				notificationsEnabled: true,
+				yearMin: selectedYear.value - 2,
+				yearMax: selectedYear.value + 2
+			})
+		}
+
+		//Feedback visual de sucesso
+		const message = wasInWishlist
+			? `${vehicleName} removido dos objetivos!`
+			: `${vehicleName} adicionado aos seus objetivos!`
+
+		console.log(message)
+	} catch (error) {
+		console.error('Erro ao alterar objetivo:', error)
+		alert(`Erro ao ${action} objetivos. Tente novamente.`)
+	}
+}
+
+// Função de compartilhamento
+function shareVehicle() {
+	showShareModal.value = true
 }
 
 onMounted(() => {
